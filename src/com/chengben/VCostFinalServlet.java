@@ -127,10 +127,10 @@ public class VCostFinalServlet extends AbstractBaseServletTemplate
 		IBaseDAO vCostFinalSumbyCosttypeDAO = new DefaultBaseDAO(VCostFinalSumbyCosttypeObj.class);
 		VCostFinalSumbyCosttypeObj vCostFinalSumbyCosttypeObj = new VCostFinalSumbyCosttypeObj();
 		vCostFinalSumbyCosttypeObj.setDate_month(date_month);
-		PaginationObj sumPaginationObj = vCostFinalSumbyCosttypeDAO.searchPaginationByDomainInstance(vCostFinalSumbyCosttypeObj, null, 0, Integer.MAX_VALUE);
-		if (sumPaginationObj.getDataList().size() > 0)
+		List<VCostFinalSumbyCosttypeObj> sumList = vCostFinalSumbyCosttypeDAO.searchByClause(VCostFinalSumbyCosttypeObj.class, "date_month='"+date_month+"'", null, 0, Integer.MAX_VALUE);
+		if (sumList.size() > 0)
 		{
-			vCostFinalSumbyCosttypeObj = (VCostFinalSumbyCosttypeObj) sumPaginationObj.getDataList().get(0);
+			vCostFinalSumbyCosttypeObj = (VCostFinalSumbyCosttypeObj) sumList.get(0);
 		}
 		request.setAttribute("vCostFinalSumbyCosttypeObj", vCostFinalSumbyCosttypeObj);
 
