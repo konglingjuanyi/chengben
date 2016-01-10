@@ -69,21 +69,13 @@
 			for(int i=1; i<=3; i++)
 			{
 			%> 			
-				if($("#level<%=i%>_total").text()=='NaN')
+
+				if(Number($("#level<%=i%>_total").text())!=100)
 				{
-					alert("<%=i%>级分摊存在非数字项，不能保存。");
-					return false;
-				}
-				if(Number($("#level<%=i%>_total").text())<100)
-				{
-					alert("<%=i%>级分摊合计不足100，不能保存。");
+					alert("<%=i%>级分摊合计不等于100%，不能保存。");
 					return false;
 				} 
-				if(Number($("#level<%=i%>_total").text())>100)
-				{
-					alert("<%=i%>级分摊合计超过100，不能保存。");
-					return false;
-				} 
+
 				
 			<%}%>
 					
