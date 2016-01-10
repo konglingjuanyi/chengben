@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="gb2312"?>
+<Config>
+	
+	<!-- 默认数据库 -->
+	<db>
+		<dbDriverClassName>com.microsoft.sqlserver.jdbc.SQLServerDriver</dbDriverClassName>
+		<dbUrl>jdbc:sqlserver://127.0.0.1:1433;DatabaseName=chengben</dbUrl>
+		<dbUser>sa</dbUser>
+		<dbPassword>Wyg2461290!</dbPassword>
+	</db>
+	
+	<!--
+	<db>
+		<dbDriverClassName>
+			oracle.jdbc.driver.OracleDriver
+		</dbDriverClassName>
+		<dbUrl>jdbc:oracle:thin:@127.0.0.1:1521:orcl</dbUrl>
+		<dbUser>u10088</dbUser>
+		<dbPassword>10088</dbPassword>
+
+	</db>
+	-->
+
+	<!-- 
+		<db>
+		<dbDriverClassName>com.mysql.jdbc.Driver</dbDriverClassName>
+		<dbUrl>jdbc:mysql://localhost:3306/10088</dbUrl>
+		<dbUser>lsh</dbUser>
+		<dbPassword>lsh123</dbPassword>
+		</db>
+	-->
+</Config>
