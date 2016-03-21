@@ -33,7 +33,7 @@ function initTdSelectWithAttrName(selName, attrName, inputName) {
 
 // 打开页面
 function winOpen(url) {
-	window.open(url, '_self');
+	window.open(url, '_blank');
 }
 
 // 检查是否为空

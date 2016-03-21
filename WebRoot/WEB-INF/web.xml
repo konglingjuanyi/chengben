@@ -87,6 +87,133 @@
 		<url-pattern>/VDepartmentIncome/Servlet</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>HrHiPersonServlet</servlet-name>
+		<servlet-class>com.hr.HrHiPersonServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HrHiPersonServlet</servlet-name>
+		<url-pattern>/HrHiPerson/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SysMapInfoServlet</servlet-name>
+		<servlet-class>com.wuyg.system.SysMapInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SysMapInfoServlet</servlet-name>
+		<url-pattern>/SysMapInfo/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SysMapItemsServlet</servlet-name>
+		<servlet-class>com.wuyg.system.SysMapItemsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SysMapItemsServlet</servlet-name>
+		<url-pattern>/SysMapItems/Servlet</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>EfCostChargeitemServlet</servlet-name>
+		<servlet-class>com.cost.EfCostChargeitemServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostChargeitemServlet</servlet-name>
+		<url-pattern>/EfCostChargeitem/Servlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EfCostCostkindServlet</servlet-name>
+		<servlet-class>com.cost.EfCostCostkindServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostCostkindServlet</servlet-name>
+		<url-pattern>/EfCostCostkind/Servlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EfCostCostitemServlet</servlet-name>
+		<servlet-class>com.cost.EfCostCostitemServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostCostitemServlet</servlet-name>
+		<url-pattern>/EfCostCostitem/Servlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EfCostServiceitemServlet</servlet-name>
+		<servlet-class>com.cost.EfCostServiceitemServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostServiceitemServlet</servlet-name>
+		<url-pattern>/EfCostServiceitem/Servlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EfCostWorkitemServlet</servlet-name>
+		<servlet-class>com.cost.EfCostWorkitemServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostWorkitemServlet</servlet-name>
+		<url-pattern>/EfCostWorkitem/Servlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EfCostChargekindServlet</servlet-name>
+		<servlet-class>com.cost.EfCostChargekindServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostChargekindServlet</servlet-name>
+		<url-pattern>/EfCostChargekind/Servlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EfCostSharekindServlet</servlet-name>
+		<servlet-class>com.cost.EfCostSharekindServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostSharekindServlet</servlet-name>
+		<url-pattern>/EfCostSharekind/Servlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EfCostSharelevelServlet</servlet-name>
+		<servlet-class>com.cost.EfCostSharelevelServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostSharelevelServlet</servlet-name>
+		<url-pattern>/EfCostSharelevel/Servlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EfCostDeptServlet</servlet-name>
+		<servlet-class>com.cost.EfCostDeptServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostDeptServlet</servlet-name>
+		<url-pattern>/EfCostDept/Servlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EfCostDeptkindServlet</servlet-name>
+		<servlet-class>com.cost.EfCostDeptkindServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostDeptkindServlet</servlet-name>
+		<url-pattern>/EfCostDeptkind/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ExcelParserServlet</servlet-name>
+		<servlet-class>com.excelparser.ExcelParserServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExcelParserServlet</servlet-name>
+		<url-pattern>/ExcelParser/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>EfCostWbsourceServlet</servlet-name>
+		<servlet-class>com.cost.EfCostWbsourceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostWbsourceServlet</servlet-name>
+		<url-pattern>/EfCostWbsource/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	
 	
 	<!-- ==session超时时间，单位秒== -->
 	<session-config>

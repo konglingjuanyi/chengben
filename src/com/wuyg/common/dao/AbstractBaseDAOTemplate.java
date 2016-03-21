@@ -74,6 +74,18 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		Connection conn = null;
 		try
 		{
+			// 判断是否需要补充对象ID值
+			BaseDbObj firstInstance = (BaseDbObj) instances.get(0);
+			if (firstInstance.getKeyValue() <= 0)
+			{
+				long maxKeyValue = getMaxKeyValue();
+				
+				for (int i = 0; i < instances.size(); i++)
+				{
+					((BaseDbObj) instances.get(i)).setId(maxKeyValue++);
+				}
+			}
+
 			conn = this.getDbConnection();
 
 			// 获取java db对象的所有字段
@@ -87,8 +99,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			}
 
 			// 构造sql
-			String sql = "insert into " + getTalbName() + " (" + StringUtil.getStringByListNoQuotation(columnList) + ") values ("
-					+ StringUtil.getQuestionMarkStringByList(columnList) + ")";
+			String sql = "insert into " + getTalbName() + " (" + StringUtil.getStringByListNoQuotation(columnList) + ") values (" + StringUtil.getQuestionMarkStringByList(columnList) + ")";
 
 			logger.info(getTalbName() + " save sql:" + sql);
 
@@ -264,8 +275,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		return list;
 	}
 
-	private Object getDomainObjFromResultSet(Class clz, ResultSet rst, List<PropertyDescriptor> propertyDescriptors) throws InstantiationException, IllegalAccessException,
-			SQLException, InvocationTargetException
+	private Object getDomainObjFromResultSet(Class clz, ResultSet rst, List<PropertyDescriptor> propertyDescriptors) throws InstantiationException, IllegalAccessException, SQLException, InvocationTargetException
 	{
 		Object instance = clz.newInstance();
 
@@ -354,9 +364,9 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			where += MyBeanUtils.getWhereSqlFromBean(domainInstance, getTableMetaData());
 
 			int totalCount = countByClause(where);
-			if (pageNo==0)
+			if (pageNo == 0)
 			{
-				pageNo=1;//防止默认第1页填成了第0页
+				pageNo = 1;// 防止默认第1页填成了第0页
 			}
 			int offset = (pageNo - 1) * pageCount;
 			if (pageCount == Integer.MAX_VALUE)
@@ -626,6 +636,22 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 
 	public boolean save(Object instance)
 	{
+		// 如果instance的编号<=0，则主动获取编号
+		BaseDbObj dbObj = (BaseDbObj) instance;
+		try
+		{
+			if (dbObj.getKeyValue() <= 0)
+			{
+				dbObj.setId(getMaxKeyValue());
+			}
+		} catch (Exception e)
+		{
+			logger.error(e.getMessage(), e);
+
+			return false;
+		}
+
+		// 保存入库
 		List<Object> instances = new ArrayList<Object>();
 		instances.add(instance);
 		return this.save(instances);

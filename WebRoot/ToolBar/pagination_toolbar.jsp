@@ -69,7 +69,7 @@
 	$('body').keydown(function(){
 	   if(event.keyCode == 13)
 	   {
-		 $("#pageForm").submit();
+		 toPage(1);
 	   }
 	});
 </script>

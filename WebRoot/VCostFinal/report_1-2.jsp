@@ -42,10 +42,10 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title><%=domainInstance.getCnName()%>列表</title>
 		<link href="../css/global.css" rel="stylesheet" type="text/css">
-		<link href="../css/table.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
 		<script type="text/javascript" src="../js/utils.js"></script>
 		<script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="../js/css-1.7.0.min.js"></script>
 	</head>
 	<body>
 		<form name="pageForm" id="pageForm" method="post" action="<%=request.getContextPath()%>/<%=basePath%>/Servlet?method=report&reportId=1-2">
@@ -85,6 +85,10 @@
 			 -->
 			<table class="table table-bordered table-striped" align="center" width="98%">
 				<thead>
+					<tr>
+						<th colspan="25" style="text-align:center">医院临床服务类科室全成本报表<br/><%=domainInstance.getDate_month() %>
+						</th>
+					</tr>
 					<tr>
 						<th>
 							科室

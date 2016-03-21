@@ -216,7 +216,15 @@ public class MyBeanUtils
 			String pName = p.getName();
 			String pValue = BeanUtils.getProperty(baseDbObj, pName);
 
-			where.append(" and " + pName + " like '%" + pValue + "%'");
+			if (p.getPropertyType().equals(String.class))
+			{
+				
+				where.append(" and " + pName + " like '%" + pValue + "%'");
+			}
+			else 
+			{
+				where.append(" and " + pName + " = '" + pValue + "'");
+			}
 		}
 		return where.toString();
 	}

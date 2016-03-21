@@ -188,7 +188,7 @@ public abstract class AbstractBaseServletTemplate extends HttpServlet
 		// 保存或更新
 		if (domainInstance.getKeyValue() < 0)
 		{
-			long keyValue = getDomainDao().getMaxKeyValue() + 1;
+			long keyValue = getDomainDao().getMaxKeyValue() ;
 			domainInstance.setId(keyValue);
 		}
 

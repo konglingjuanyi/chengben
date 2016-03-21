@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.apache.log4j.Logger;
 
 import com.hz.util.SystemConstant;
@@ -17,16 +19,17 @@ public class DictionaryService implements IDictionaryService
 	private Logger logger = Logger.getLogger(getClass());
 	private Dictionary dictionary = new Dictionary();
 	private final String pleaseSelect = "--请选择--";
+	private final String DICT_SELF = "DICT_SELF";
 
 	public List<DictItem> getDictItemsByDict(Dict dict, boolean addItemForAll)
 	{
 		try
 		{
-			Connection conn = MySqlUtil.getConnection(SystemConstant.DEFAULT_DB);
-			List<DictItem> items = dictionary.getDictItemsByDict(dict, addItemForAll, conn);
-			if (addItemForAll==false)
+			DataSource ds = MySqlUtil.getDataSource(SystemConstant.DEFAULT_DB);
+			List<DictItem> items = dictionary.getDictItemsByDict(dict, addItemForAll, ds);
+			if (addItemForAll == false)
 			{
-				items.add(0, new DictItem(0,"",pleaseSelect));
+				items.add(0, new DictItem(0, "", pleaseSelect));
 			}
 			return items;
 		} catch (Exception e)
@@ -38,31 +41,46 @@ public class DictionaryService implements IDictionaryService
 
 	public List<DictItem> getDictItemsByDictName(String dictName, boolean addItemForAll)
 	{
+		List<DictItem> items = new ArrayList<DictItem>();
 		try
 		{
-			Connection conn = MySqlUtil.getConnection(SystemConstant.DEFAULT_DB);
-			List<DictItem> items = dictionary.getDictItemsByDictName(dictName, addItemForAll, conn);
-			if (addItemForAll==false)
+			if (DICT_SELF.equalsIgnoreCase(dictName))
 			{
-				items.add(0, new DictItem(0,"",pleaseSelect));
+				// 字典配置文件中的字典信息
+				List<Dict> allDicts = dictionary.getAllDictionaries();
+				for (int i = 0; i < allDicts.size(); i++)
+				{
+					DictItem item = new DictItem();
+					item.setK(allDicts.get(i).getDictName());
+					item.setV(allDicts.get(i).getDictName());
+					items.add(item);
+				}
+			} else
+			{
+				DataSource ds = MySqlUtil.getDataSource(SystemConstant.DEFAULT_DB);
+				items = dictionary.getDictItemsByDictName(dictName, addItemForAll, ds);
 			}
-			return items;
+
+			if (addItemForAll == false)
+			{
+				items.add(0, new DictItem(0, "", pleaseSelect));
+			}
 		} catch (Exception e)
 		{
 			logger.error(e.getMessage(), e);
 		}
-		return new ArrayList<DictItem>();
+		return items;
 	}
-	
-	public List<DictItem> getDictItemsByDictName(String dictName, boolean addItemForAll,String dbName)
+
+	public List<DictItem> getDictItemsByDictName(String dictName, boolean addItemForAll, String dbName)
 	{
 		try
 		{
-			Connection conn = MySqlUtil.getConnection(dbName);
-			List<DictItem> items = dictionary.getDictItemsByDictName(dictName, addItemForAll, conn);
-			if (addItemForAll==false)
+			DataSource ds = MySqlUtil.getDataSource(dbName);
+			List<DictItem> items = dictionary.getDictItemsByDictName(dictName, addItemForAll, ds);
+			if (addItemForAll == false)
 			{
-				items.add(0, new DictItem(0,"",pleaseSelect));
+				items.add(0, new DictItem(0, "", pleaseSelect));
 			}
 			return items;
 		} catch (Exception e)
@@ -71,13 +89,13 @@ public class DictionaryService implements IDictionaryService
 		}
 		return new ArrayList<DictItem>();
 	}
-	
+
 	public List<DictItem> getDictItemsByDictNameExcludeKey(String dictName, boolean addItemForAll, String excloudKey)
 	{
 		List<DictItem> tempItems = getDictItemsByDictName(dictName, addItemForAll);
-		
+
 		List<DictItem> items = new ArrayList<DictItem>();
-		
+
 		for (int i = 0; i < tempItems.size(); i++)
 		{
 			DictItem item = tempItems.get(i);
@@ -86,7 +104,7 @@ public class DictionaryService implements IDictionaryService
 				items.add(item);
 			}
 		}
-		
+
 		return items;
 	}
 
@@ -94,11 +112,11 @@ public class DictionaryService implements IDictionaryService
 	{
 		try
 		{
-			Connection conn = MySqlUtil.getConnection(SystemConstant.DEFAULT_DB);
-			List<DictItem> items = dictionary.getDictItemsFromTo(fromDictName, toDictName, fromDictKey, addItemForAll, conn);
-			if (addItemForAll==false)
+			DataSource ds = MySqlUtil.getDataSource(SystemConstant.DEFAULT_DB);
+			List<DictItem> items = dictionary.getDictItemsFromTo(fromDictName, toDictName, fromDictKey, addItemForAll, ds);
+			if (addItemForAll == false)
 			{
-				items.add(0, new DictItem(0,"",pleaseSelect));
+				items.add(0, new DictItem(0, "", pleaseSelect));
 			}
 			return items;
 		} catch (Exception e)
@@ -108,4 +126,16 @@ public class DictionaryService implements IDictionaryService
 		return new ArrayList<DictItem>();
 	}
 
+	public String getDictValueByDictKey(String dictName, String key)
+	{
+		try
+		{
+			DataSource ds = MySqlUtil.getDataSource(SystemConstant.DEFAULT_DB);
+			return dictionary.getDictValueByDictKey(dictName, key, ds);
+		} catch (Exception e)
+		{
+			logger.error(e.getMessage(), e);
+		}
+		return "";
+	}
 }

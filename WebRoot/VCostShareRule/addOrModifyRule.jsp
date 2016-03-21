@@ -60,6 +60,7 @@
 		<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
 		<script type="text/javascript" src="../js/utils.js"></script>
 		<script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="../js/css-1.7.0.min.js"></script>
 		<script> 
 		//  新增或修改 
 		function addOrModify() 
@@ -104,7 +105,7 @@
 				</tr>
 			</table>
 			<!-- 详细信息 -->
-			<table class="table table-bordered table-striped" align="center" width="800">
+			<table class="table table-bordered" align="center" width="800">
 				<thead>
 					<tr>
 						<th><%=domainInstance.getPropertyCnName("department_type")%></th>
@@ -153,7 +154,7 @@
 					<td><%=StringUtil.getNotEmptyStr(o.getDepartment_name())%><input type="hidden" name="department_name" value="<%=o.getDepartment_name()%>">
 					</td>
 					<td style="text-align: right">
-						<input class="<%=o.getDepartment_type() + "_level1"%>" name="share_rate_level1" type="text" size="10" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_1())%>" />
+						<input class="<%=o.getDepartment_type() + "_level1"%>" name="share_rate_level1" type="text" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_1())%>" />
 					</td>
 					<td style="text-align: right">
 						<input class="<%=o.getDepartment_type() + "_level2"%>" name="share_rate_level2" type="<%=o.isLevel2()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_2())%>">

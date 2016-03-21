@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import oracle.jdbc.driver.OracleDriver;
 
 import org.apache.commons.dbcp.BasicDataSource;
@@ -24,6 +26,23 @@ public class MySqlUtil
 	// }
 
 	public static synchronized Connection getConnection(String dbName) throws SQLException
+	{
+		
+
+		Connection conn = getDataSource(dbName).getConnection();
+
+		// orcle数据库预先执行语句
+		if (isOracle(dbName))
+		{
+			conn.createStatement().execute("alter session set nls_date_format='yyyy-mm-dd hh24:mi:ss'");
+			conn.createStatement().execute("alter session set nls_timestamp_format='yyyy-mm-dd hh24:mi:ss'");
+			conn.createStatement().execute("alter SESSION set NLS_SORT = SCHINESE_PINYIN_M");// 按拼音排序
+		}
+
+		return conn;
+	}
+	
+	public static synchronized DataSource getDataSource(String dbName) throws SQLException
 	{
 		BasicDataSource ds = dsMap.get(dbName);
 
@@ -50,17 +69,9 @@ public class MySqlUtil
 			dsMap.put(dbName, ds);
 		}
 
-		Connection conn = ds.getConnection();
+		
 
-		// orcle数据库预先执行语句
-		if (isOracle(dbName))
-		{
-			conn.createStatement().execute("alter session set nls_date_format='yyyy-mm-dd hh24:mi:ss'");
-			conn.createStatement().execute("alter session set nls_timestamp_format='yyyy-mm-dd hh24:mi:ss'");
-			conn.createStatement().execute("alter SESSION set NLS_SORT = SCHINESE_PINYIN_M");// 按拼音排序
-		}
-
-		return conn;
+		return ds;
 	}
 
 	public static void closeConnection(Connection conn)

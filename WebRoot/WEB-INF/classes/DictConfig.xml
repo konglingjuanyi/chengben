@@ -2,9 +2,36 @@
 <DictConfig version="1.0">
 	<DictConfigList>
 		<DictConfig dictShowName="每页行数" dictName="pageCount" values="10,15,20,25,50,100,500"/>
-		<DictConfig dictShowName="科室" dictName="department" dictTable="dict_department" dictKeyCol="department_code" dictValueCol="department_type+'/'+department_name as department_name_show" dictOrderByCol="department_code" filter="department_type in('辅助类','医技类','临床类')"/>
-		<DictConfig dictShowName="科室类别" dictName="department_type" values="辅助类,医技类,临床类"/>
-		<DictConfig dictShowName="分摊级别" dictName="share_level" values="一级分摊,二级分摊,三级分摊"/>
+		<DictConfig dictShowName="科室" dictName="科室" dictTable="dict_department" dictKeyCol="department_code" dictValueCol="department_type+'/'+department_name as department_name_show" dictOrderByCol="department_code" filter="department_type in('辅助类','医技类','临床类')"/>
+		<DictConfig dictShowName="部门核算类别字典" dictName="部门核算类别字典" values="管理辅助类,医疗医技类,临床服务类"/>
+		<DictConfig dictShowName="分摊级别" dictName="分摊级别" values="一级分摊,二级分摊,三级分摊"/>
+		<DictConfig dictShowName="映射关系字典" dictName="映射关系字典" dictTable="sys_map_info" dictKeyCol="id" dictValueCol="name" dictOrderByCol="" filter=""/>
+		
+		<DictConfig dictShowName="导入数据处理方式字典" dictName="导入数据处理方式字典" values="新增,覆盖"/>
+		<DictConfig dictShowName="导入相同数据处理方式字典" dictName="导入相同数据处理方式字典" values="保持系统中数据不变,覆盖系统中相同数据"/>
+		
+		<DictConfig dictShowName="是否字典" dictName="是否字典" values="1=是,0=否"/>
+		<DictConfig dictShowName="级次字典" dictName="级次字典" values="0,1,2,3,4,5,6,7,8"/>
+		<DictConfig dictShowName="医疗/药品字典" dictName="医疗/药品字典" values="1=医疗,0=药品"/>
+		
+		<DictConfig dictShowName="来源字典" dictName="来源字典" values="1=HIS,2=HRP"/>
+		
+		<DictConfig dictShowName="会计科目字典" dictName="会计科目字典" values="1001,2001,1003"/>
+		
+		
+		
+		<DictConfig dictShowName="分摊级别字典" dictName="分摊级别字典" dictTable="EF_cost_ShareLevel" dictKeyCol="cShareLevelCode" dictValueCol="cShareLevelName" dictOrderByCol="cShareLevelCode" filter=""/>
+		<DictConfig dictShowName="分摊类别字典" dictName="分摊类别字典" dictTable="EF_cost_ShareKind" dictKeyCol="cShareKindCode" dictValueCol="cShareKindName" dictOrderByCol="cShareKindCode" filter=""/>
+		<DictConfig dictShowName="科室类别字典" dictName="科室类别字典" dictTable="EF_Cost_DeptKind" dictKeyCol="cDeptKindCode" dictValueCol="cDeptKindName" dictOrderByCol="cDeptKindCode" filter=""/>
+		<DictConfig dictShowName="核算科室字典" dictName="核算科室字典" dictTable="EF_Cost_Dept" dictKeyCol="cDeptCode" dictValueCol="cDeptName" dictOrderByCol="cDeptCode" filter=""/>
+		<DictConfig dictShowName="收费类别字典" dictName="收费类别字典" dictTable="EF_Cost_ChargeKind" dictKeyCol="cChargeKindCode" dictValueCol="cChargeKindName" dictOrderByCol="cChargeKindCode" filter=""/>
+		<DictConfig dictShowName="收费项目字典" dictName="收费项目字典" dictTable="EF_Cost_ChargeItem" dictKeyCol="cChargeItemCode" dictValueCol="cChargeItemName" dictOrderByCol="cChargeItemCode" filter=""/>
+		<DictConfig dictShowName="成本类别字典" dictName="成本类别字典" dictTable="EF_Cost_CostKind" dictKeyCol="cCostKindCode" dictValueCol="cCostKindName" dictOrderByCol="cCostKindCode" filter=""/>
+		<DictConfig dictShowName="收费项目字典" dictName="收费项目字典" dictTable="EF_Cost_CostItem" dictKeyCol="cCostItemCode" dictValueCol="cCostItemName" dictOrderByCol="cCostItemCode" filter=""/>
+		<DictConfig dictShowName="成本分类字典" dictName="成本分类字典" dictTable="EF_Cost_CostKind" dictKeyCol="cCostKindCode" dictValueCol="cCostKindName" dictOrderByCol="cCostKindCode" filter=""/>
+		<DictConfig dictShowName="成本项目字典" dictName="成本项目字典" dictTable="EF_Cost_CostItem" dictKeyCol="cCostItemCode" dictValueCol="cCostItemName" dictOrderByCol="cCostKindCode" filter=""/>
+		<DictConfig dictShowName="外部接口字典" dictName="外部接口字典" dictTable="EF_Cost_WbSource" dictKeyCol="cCode" dictValueCol="cName" dictOrderByCol="cCode" filter=""/>
+	
 	</DictConfigList>
 	<DictRelationList>
 		<DictRelation fromDict="taskType" toDict="taskSubType" fromDictCol="taskType"/>

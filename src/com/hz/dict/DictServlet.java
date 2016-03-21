@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
@@ -88,16 +89,16 @@ public class DictServlet extends HttpServlet
 		Connection conn = null;
 		try
 		{
-			conn = MySqlUtil.getConnection(SystemConstant.DEFAULT_DB);
+			DataSource ds = MySqlUtil.getDataSource(SystemConstant.DEFAULT_DB);
 			Dictionary dictionary = new Dictionary();
 			List<DictItem> items = new ArrayList<DictItem>();
 
 			if ("getDict".equalsIgnoreCase(method))
 			{
-				items = dictionary.getDictItemsByDictName(dictName, true, conn);
+				items = dictionary.getDictItemsByDictName(dictName, true,ds);
 			} else if ("getSubDict".equalsIgnoreCase(method))
 			{
-				items = dictionary.getDictItemsFromTo(fromDictName, toDictName, fromDictKey, true, conn);
+				items = dictionary.getDictItemsFromTo(fromDictName, toDictName, fromDictKey, true, ds);
 			}
 
 			request.setAttribute("items", items);

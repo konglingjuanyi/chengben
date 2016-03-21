@@ -8,6 +8,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
 		<title></title>
 		<link href="css/global.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="js/css-1.7.0.min.js"></script>
 		<style type="text/css"> 
 <!--
 a
@@ -50,7 +51,7 @@ a
 			  </td>
 			</tr>
 			<tr>
-				<td height="8" colspan="2" bgcolor="#339933"></td>
+				<td height="8" colspan="2" class="header_bottom"></td>
 			</tr>
 	</table>
 	</body>
