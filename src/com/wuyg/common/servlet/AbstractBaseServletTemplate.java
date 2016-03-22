@@ -271,7 +271,7 @@ public abstract class AbstractBaseServletTemplate extends HttpServlet
 		// 导出时不限条数，放到最大值
 		PaginationObj domainPagination = getDomainDao().searchPaginationByDomainInstance(domainInstance, domainInstance.findDefaultOrderBy(), 1, Integer.MAX_VALUE);
 
-		RequestUtil.downloadFile(this, response, domainPagination.getDataList(), domainInstance.getProperties(), "明细");
+		RequestUtil.downloadFile(this, response, domainPagination.getDataList(), domainInstance.getProperties(), StringUtil.getNotEmptyStr(domainInstance.getCnName(), "明细数据"));
 	}
 
 	// 解析前台传递过来的数据

@@ -8,8 +8,10 @@ public class SysMapInfoObj extends BaseDbObj
 private Long id;
 private String name;
 private String comment;
+private String source_name;
 private String source_dict_name;
-private String source_dict_showname;
+private String dest_name;
+private String dest_dict_name;
 private String other_system;// 外部系统
 @Override
 public String findKeyColumnName()
@@ -48,11 +50,31 @@ public LinkedHashMap<String, String> getProperties()
 
 		pros.put("id", "编号");
 		pros.put("name", "对照关系名");
-		pros.put("other_system", "外部系统名称");
-		pros.put("comment", "对照关系描述");
+		pros.put("source_name", "成本系统字段名");
 		pros.put("source_dict_name", "成本系统字典");
-//		pros.put("source_dict_showname", "映射到该字典");
+		pros.put("other_system", "外部系统名称");
+		pros.put("dest_name", "外部系统字段名");
+		pros.put("dest_dict_name", "外部系统字典");
+		pros.put("comment", "对照关系描述");
+		
+		
 		return pros;
+}
+public String getSource_name()
+{
+	return source_name;
+}
+public void setSource_name(String source_name)
+{
+	this.source_name = source_name;
+}
+public String getDest_name()
+{
+	return dest_name;
+}
+public void setDest_name(String dest_name)
+{
+	this.dest_name = dest_name;
 }
 public Long getId()
 {
@@ -87,13 +109,14 @@ public void setSource_dict_name(String source_dict_name)
 {
 	this.source_dict_name = source_dict_name;
 }
-public String getSource_dict_showname()
+
+public String getDest_dict_name()
 {
-	return source_dict_showname;
+	return dest_dict_name;
 }
-public void setSource_dict_showname(String source_dict_showname)
+public void setDest_dict_name(String dest_dict_name)
 {
-	this.source_dict_showname = source_dict_showname;
+	this.dest_dict_name = dest_dict_name;
 }
 public String getOther_system()
 {

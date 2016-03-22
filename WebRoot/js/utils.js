@@ -165,6 +165,12 @@ function toPage(pageNo) {
 	$("#pageForm").submit();
 }
 
+// 刷新当前页
+function freshCurrentPage(pageNo) {
+	$("#pageForm").submit();
+}
+
+
 //显示所有数据
 function showAllRows(rows)
 {

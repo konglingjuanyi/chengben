@@ -213,6 +213,23 @@
 		<url-pattern>/EfCostWbsource/Servlet</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>EfCostShareparamServlet</servlet-name>
+		<servlet-class>com.cost.EfCostShareparamServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostShareparamServlet</servlet-name>
+		<url-pattern>/EfCostShareparam/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>EfCostSharefunServlet</servlet-name>
+		<servlet-class>com.cost.EfCostSharefunServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EfCostSharefunServlet</servlet-name>
+		<url-pattern>/EfCostSharefun/Servlet</url-pattern>
+	</servlet-mapping>
 	
 	
 	<!-- ==session超时时间，单位秒== -->

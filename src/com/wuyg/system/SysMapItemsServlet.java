@@ -51,6 +51,11 @@ public class SysMapItemsServlet extends AbstractBaseServletTemplate
 	// 查询
 	public void list4this(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		String map_id = request.getParameter("map_id");
+		IBaseDAO dao=new DefaultBaseDAO(SysMapInfoObj.class);
+		Object sysMapInfo = dao.searchByKey(SysMapInfoObj.class, map_id);
+		request.setAttribute("sysMapInfo", sysMapInfo);
+		
 		super.list(request, response);
 	}
 

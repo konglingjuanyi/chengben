@@ -49,6 +49,12 @@
 			</tr> 
 			<tr> 
 				<td> 
+					<%=domainInstance.getPropertyCnName("source_name") %>: 
+				</td> 
+				<td><%=StringUtil.getNotEmptyStr(domainInstance.getSource_name())%></td> 
+			</tr> 
+			<tr> 
+				<td> 
 					<%=domainInstance.getPropertyCnName("source_dict_name") %>: 
 				</td> 
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getSource_dict_name())%></td> 
@@ -58,6 +64,18 @@
 					<%=domainInstance.getPropertyCnName("other_system") %>: 
 				</td> 
 				<td><%= new DictionaryService().getDictValueByDictKey("外部接口字典",domainInstance.getOther_system())%></td> 
+			</tr> 
+			<tr> 
+				<td> 
+					<%=domainInstance.getPropertyCnName("dest_name") %>: 
+				</td> 
+				<td><%=StringUtil.getNotEmptyStr(domainInstance.getDest_name())%></td> 
+			</tr> 
+			<tr> 
+				<td> 
+					<%=domainInstance.getPropertyCnName("dest_dict_name") %>: 
+				</td> 
+				<td><%=StringUtil.getNotEmptyStr(domainInstance.getDest_dict_name())%></td> 
 			</tr> 
 			<tr> 
 				<td> 

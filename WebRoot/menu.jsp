@@ -202,6 +202,22 @@ function toggleMenuGroup(td,menuGroupId)
 						</tr>
 						<tr>
 							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostShareparam/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/list.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;分摊参数
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostSharefun/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/list.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;分摊方法
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostWbsource/Servlet?method=list4this')">
 								<img src="images/svg/heavy/green/list.png" width="18"
 									height="18" align="middle" />

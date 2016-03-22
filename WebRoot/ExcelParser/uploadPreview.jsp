@@ -23,6 +23,7 @@
 %> 
 <html> 
 	<head> 
+		<base target="_self" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 		<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no" />		<title><%=domainInstance.getCnName() %>列表</title> 
 		<link href="../css/global.css" rel="stylesheet" type="text/css"> 
@@ -57,7 +58,7 @@
 						 
 					</td> 
 					<td align="right"> 
-						<input name="addButton" type="submit" class="button button_add" value="导入"> 
+						<input name="addButton" type="button" class="button button_add" value="导入" onclick="import2db()"> 
 					</td> 
 				</tr> 
 			</table> 
@@ -243,13 +244,35 @@
 			</table> 
 			</div>
 			
-			<%} 
+	<script>
 			
-			}
-			%>
-  
-		</form>  
-	 <script>
+	 function import2db()
+	 {
+		 if(!checkNull("import_type","<%=domainInstance.getPropertyCnName("import_type")%>")) return false; 
+	 	 
+	 	 
+	 	 if('新增'==$('#import_type').val()
+	 	 &&<%=inDbDataList.size()%>>0
+	 	 )// 新增 且 数据库中有相同数据
+	 	 {
+	 	 	if(!checkNull("same_record_process_type","<%=domainInstance.getPropertyCnName("same_record_process_type")%>")) return false; 
+	 	 }
+	 	 
+	 	 if(
+	 	 '新增'==$('#import_type').val()
+	 	 &&<%=justInExcelDataList.size()%>==0
+	 	 &&$("#same_record_process_type").val()=='保持系统中数据不变'
+	 	 )// 新增 且 没有新增数据 且 相同数据的处理方式选择了 保持系统中数据不变
+	 	 {
+	 	 	alert("'没有新增数据'且对于相同数据的处理方式您选择了'保持系统中数据不变' ，因此没有任何数据需要导入，请重新选择");
+	 	 	return false; 
+	 	 }
+	 	 
+	 	 $('#pageForm').submit();
+	 	 
+	 }
+	 
+	 
 	 $('#import_type').change(function(){
 	 	var selected = $(this).val();
 	 	var new_data_div = $('#new_data_div');
@@ -280,5 +303,15 @@
 	 	}
 	 });
 	 </script>
+			
+			<%} 
+			
+			}
+			%>
+  
+		</form>  
+	
+	 
+	
 	</body> 
 </html> 

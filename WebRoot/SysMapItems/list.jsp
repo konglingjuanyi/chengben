@@ -7,7 +7,8 @@
 <%@page import="com.wuyg.common.obj.PaginationObj"%> 
 <%@page import="com.inspur.common.dictionary.util.DictionaryUtil"%> 
 <%@page import="com.hz.dict.service.DictionaryService"%> 
-<%@page import="com.wuyg.system.obj.SysMapItemsObj"%> 
+<%@page import="com.wuyg.system.obj.SysMapItemsObj"%>
+<%@page import="com.wuyg.system.obj.SysMapInfoObj"%> 
 <!-- 基本信息 --> 
 <% 
 	// 当前上下文路径 
@@ -17,6 +18,18 @@
 	SysMapItemsObj domainInstance = (SysMapItemsObj) request.getAttribute("domainInstance"); 
 	// 该功能路径 
 	String basePath = domainInstance.getBasePath(); 
+	
+	
+	// 则获取对象信息 
+	SysMapInfoObj sysMapInfo=new SysMapInfoObj();
+	Object sysMapInfoObj = request.getAttribute("sysMapInfo"); 
+	if (sysMapInfoObj != null) 
+	{ 
+		sysMapInfo = (SysMapInfoObj) sysMapInfoObj; 
+	}
+	
+	// 外部系统名称
+	String otherSysName=new DictionaryService().getDictValueByDictKey("外部接口字典",sysMapInfo.getOther_system() );
 %> 
 <html> 
 	<head> 
@@ -50,16 +63,19 @@
 						-->
 						
 						&nbsp;  
-						<%=domainInstance.getPropertyCnName("source_name") %> 
+						<!-- <%=domainInstance.getPropertyCnName("source_name") %>  -->
+						<%="成本系统-"+sysMapInfo.getSource_name() %>
 						<input name="source_name" type="text" id="source_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_name())%>" size="20" > 
 						&nbsp;  
-						<%=domainInstance.getPropertyCnName("dest_name") %> 
+						<!-- <%=domainInstance.getPropertyCnName("dest_name") %> -->
+						<%=otherSysName+"-"+sysMapInfo.getDest_name() %>
 						<input name="dest_name" type="text" id="dest_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_name())%>" size="20" > 
 						&nbsp;  
 						<input name="searchButton" type="button" class="button button_search" value="查询" onClick="toPage(1)"> 
 					</td> 
 					<td align="right"> 
 						<input name="addButton" type="button" class="button button_add" value="增加" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4this&map_id=<%=domainInstance.getMap_id()%>')"> 
+						<input name="uploadButton" type="button" class="button button_upload" value="导入" onClick="openBigModalDialog('<%=contextPath%>/ExcelParser/uploadFile.jsp?basedbobj_class=<%=domainInstance.getClass().getCanonicalName()%>')">
 					</td> 
 				</tr> 
 			</table> 
@@ -86,10 +102,10 @@
 					<tr> 
 						<th><%=domainInstance.getPropertyCnName("id") %></th> 
 						<!-- <th><%=domainInstance.getPropertyCnName("map_id") %></th>  -->
-						<th><%=domainInstance.getPropertyCnName("source_id") %></th> 
-						<th><%=domainInstance.getPropertyCnName("source_name") %></th> 
-						<th><%=domainInstance.getPropertyCnName("dest_id") %></th> 
-						<th><%=domainInstance.getPropertyCnName("dest_name") %></th> 
+						<th style="color:#66cccc"><%="成本系统<br>"+sysMapInfo.getSource_name()+"编号" %></th> 
+						<th style="color:#66cccc"><%="成本系统<br>"+sysMapInfo.getSource_name()+"名称" %></th> 
+						<th style="color:#ff9900"><%=otherSysName+"<br>"+sysMapInfo.getDest_name()+"编号" %></th> 
+						<th style="color:#ff9900"><%=otherSysName+"<br>"+sysMapInfo.getDest_name()+"名称" %></th> 
 						<th>操作</th> 
 					</tr> 
 				</thead> 

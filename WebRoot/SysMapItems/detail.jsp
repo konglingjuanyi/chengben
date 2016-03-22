@@ -46,27 +46,24 @@
 					<%=domainInstance.getPropertyCnName("map_id") %>: 
 				</td> 
 				<td><%=new DictionaryService().getDictValueByDictKey("映射关系字典",StringUtil.getNotEmptyStr(domainInstance.getMap_id()))%></td> 
+				<td></td><td></td>
 			</tr> 
 			<tr> 
-				<td> 
+				<td style="color:#66cccc"> 
 					<%=domainInstance.getPropertyCnName("source_id") %>: 
 				</td> 
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getSource_id())%></td> 
-			</tr> 
-			<tr> 
-				<td> 
-					<%=domainInstance.getPropertyCnName("source_name") %>: 
-				</td> 
-				<td><%=StringUtil.getNotEmptyStr(domainInstance.getSource_name())%></td> 
-			</tr> 
-			<tr> 
-				<td> 
+				<td style="color:#ff9900"> 
 					<%=domainInstance.getPropertyCnName("dest_id") %>: 
 				</td> 
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getDest_id())%></td> 
 			</tr> 
 			<tr> 
-				<td> 
+				<td style="color:#66cccc"> 
+					<%=domainInstance.getPropertyCnName("source_name") %>: 
+				</td> 
+				<td><%=StringUtil.getNotEmptyStr(domainInstance.getSource_name())%></td> 
+				<td style="color:#ff9900"> 
 					<%=domainInstance.getPropertyCnName("dest_name") %>: 
 				</td> 
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getDest_name())%></td> 

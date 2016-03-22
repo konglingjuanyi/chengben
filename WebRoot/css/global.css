@@ -87,6 +87,12 @@ body {
 .button_close:hover {
   background-image: url(../images/svg/light/orange/16/cross_circle.png);
 }
+.button_upload {
+  background-image: url(../images/svg/light/gray/16/cloud_upload.png);
+}
+.button_upload:hover {
+  background-image: url(../images/svg/light/orange/16/cloud_upload.png);
+}
 .green_button {
   background: #38B162;
   padding: 6px;
@@ -442,6 +448,11 @@ table style
 }
 .detail_table-bordered tr td:first-child {
   border-left: 1px solid #dddddd;
+  color: #666666;
+  text-align: right;
+  width: 120px;
+}
+.detail_table-bordered tr td:nth-child(odd) {
   color: #666666;
   text-align: right;
   width: 120px;

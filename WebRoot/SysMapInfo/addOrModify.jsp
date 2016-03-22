@@ -47,8 +47,10 @@
 				// 做必要的检查 
 		if(!checkNull("id","<%=domainInstance.getPropertyCnName("id")%>")) return false; 
 		if(!checkNull("name","<%=domainInstance.getPropertyCnName("name")%>")) return false; 		
+		if(!checkNull("source_name","<%=domainInstance.getPropertyCnName("source_name")%>")) return false;
 		if(!checkNull("source_dict_name","<%=domainInstance.getPropertyCnName("source_dict_name")%>")) return false; 
 		if(!checkNull("other_system","<%=domainInstance.getPropertyCnName("other_system")%>")) return false; 	 
+		if(!checkNull("dest_name","<%=domainInstance.getPropertyCnName("dest_name")%>")) return false;
 			// 修改 
 			if("true"=="<%=isModify%>") 
 			{ 
@@ -109,6 +111,15 @@
 				</tr> 
 				<tr> 
 					<td> 
+						<%=domainInstance.getPropertyCnName("source_name") %>: 
+					</td> 
+					<td> 
+						<input name="source_name" type="text" id="source_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_name(),"")%>" size="20"  > 
+						<font color="red">*</font> 
+					</td> 
+				</tr> 
+				<tr> 
+					<td> 
 						<%=domainInstance.getPropertyCnName("source_dict_name") %>: 
 					</td> 
 					<td> 
@@ -123,6 +134,24 @@
 					<td> 
 						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("外部接口字典", false), "other_system", "", StringUtil.getNotEmptyStr(domainInstance.getOther_system(), ""), "notEmpty")%> 
 						<font color="red">*</font> 
+					</td> 
+				</tr> 
+				<tr> 
+					<td> 
+						<%=domainInstance.getPropertyCnName("dest_name") %>: 
+					</td> 
+					<td> 
+						<input name="dest_name" type="text" id="dest_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_name(),"")%>" size="20"  > 
+						<font color="red">*</font> 
+					</td> 
+				</tr> 
+				<tr> 
+					<td> 
+						<%=domainInstance.getPropertyCnName("dest_dict_name") %>: 
+					</td> 
+					<td> 
+						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("DICT_SELF", false), "dest_dict_name", "", StringUtil.getNotEmptyStr(domainInstance.getDest_dict_name(), ""), "notEmpty")%> 
+						
 					</td> 
 				</tr> 
 				<tr> 

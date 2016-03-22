@@ -39,6 +39,9 @@
 	{ 
 		sysMapInfo = (SysMapInfoObj) sysMapInfoObj; 
 	} 
+	
+	// 外部系统名称
+	String otherSysName=new DictionaryService().getDictValueByDictKey("外部接口字典",sysMapInfo.getOther_system() );
 %> 
 <html> 
 	<head> 
@@ -127,34 +130,35 @@
 					<td></td>
 				</tr> 
 				<tr> 
-					<td> 
-						<%=domainInstance.getPropertyCnName("source_id") %>: 
+					<td style="color:#66cccc"> 
+						<%="成本系统<br>"+sysMapInfo.getSource_name()+"编号" %>: 
 					</td> 
 					<td> 
-						<input name="source_id" type="text" id="source_id" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_id(),"")%>" size="20"  <% if(!StringUtil.isEmpty(sysMapInfo.getSource_dict_name())){%>onClick="$('#dict_table').show();" readOnly<%} %>> 
+						<input name="source_id" type="text" id="source_id" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_id(),"")%>" size="20"  <% if(!StringUtil.isEmpty(sysMapInfo.getSource_dict_name())){%>onClick="openDictTable('source')" readOnly<%} %>> 
 						<font color="red">*</font> 
 					</td> 
-					<td> 
-						<%=domainInstance.getPropertyCnName("source_name") %>: 
+					<td style="color:#ff9900"> 
+						<%=otherSysName+"<br>"+sysMapInfo.getDest_name()+"编号" %>: 
 					</td> 
 					<td> 
-						<input name="source_name" type="text" id="source_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_name(),"")%>" size="20"  <% if(!StringUtil.isEmpty(sysMapInfo.getSource_dict_name())){%>onClick="$('#dict_table').show();" readOnly<%} %>> 
+						<input name="dest_id" type="text" id="dest_id" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_id(),"")%>" size="20" <% if(!StringUtil.isEmpty(sysMapInfo.getDest_dict_name())){%>onClick="openDictTable('dest')" readOnly<%} %>> 
 						<font color="red">*</font> 
-					</td> 
+					</td>
+					
 				</tr> 
 				<tr> 
-					<td> 
-						<%=domainInstance.getPropertyCnName("dest_id") %>: 
+					<td style="color:#66cccc"> 
+						<%="成本系统<br>"+sysMapInfo.getSource_name()+"名称" %>: 
 					</td> 
 					<td> 
-						<input name="dest_id" type="text" id="dest_id" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_id(),"")%>" size="20"  > 
+						<input name="source_name" type="text" id="source_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_name(),"")%>" size="20"  <% if(!StringUtil.isEmpty(sysMapInfo.getSource_dict_name())){%>onClick="openDictTable('source')" readOnly<%} %>> 
 						<font color="red">*</font> 
 					</td> 
-					<td> 
-						<%=domainInstance.getPropertyCnName("dest_name") %>: 
+					<td style="color:#ff9900"> 
+						<%=otherSysName+"<br>"+sysMapInfo.getDest_name()+"名称" %>: 
 					</td> 
 					<td> 
-						<input name="dest_name" type="text" id="dest_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_name(),"")%>" size="20" > 
+						<input name="dest_name" type="text" id="dest_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_name(),"")%>" size="20" <% if(!StringUtil.isEmpty(sysMapInfo.getDest_dict_name())){%>onClick="openDictTable('dest')" readOnly<%} %>> 
 						<font color="red">*</font> 
 					</td> 
 				</tr> 
@@ -164,17 +168,20 @@
 			<!-- 工具栏 --> 
 			<jsp:include page="../ToolBar/addOrModify_toolbar.jsp" /> 
 			
-<!-- 字典信息表 -->
-<table width="600" id="dict_table" style="display:none; background-color:#66cccc; width:600px; margin-left: auto; margin-right: auto; padding:4px;" border="0" align="center" cellpadding="0" cellspacing="0">
+<!-- 成本系统字典信息表 -->
+<table width="600" id="source_dict_table" style="display:none; background-color:#66cccc; width:600px; margin-left: auto; margin-right: auto; padding:4px;" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
     <td align="right"><input type="button" name="close_btn" class="button button_close"  value="" onclick="closeDictTable()"></td>
   </tr>
   <tr>
-    <td align="center"><h3>请从下表中选择映射后的名字</h3></td>
+    <td align="center"><h3>请从下表中选择成本系统中的名字</h3></td>
+  </tr>
+  <tr>
+    <td align="center"><input type="text" id="source_dict_search_input" name="source_dict_search_input" size="20"></td>
   </tr>
   <tr>
     <td>
-	<table width="100%" class="table table-bordered table-striped" align="center">
+	<table id="source_dict_table_list" width="100%" class="table table-bordered table-striped" align="center">
 				<thead> 
 					<tr> 
 						<th>选择</th>
@@ -189,7 +196,7 @@
 					DictItem item=items.get(i);
 			%>
 			<tr>
-				<td><input type="radio" name="id_radiao" value="<%=item.getK() %>" label="<%=item.getV() %>" onclick="confirmSelect();"></td>
+				<td><input type="radio" name="source_radiao" value="<%=item.getK() %>" label="<%=item.getV() %>" onclick="confirmSelect('source',this);"></td>
 				<td><%=item.getK() %></td>
 				<td><%=item.getV() %></td>
 			</tr>
@@ -202,26 +209,120 @@
   </tr>
 </table>
 
+<%if(!StringUtil.isEmpty(sysMapInfo.getDest_dict_name())){ %>
+<!-- 外部系统字典信息表 -->
+<table width="600" id="dest_dict_table" style="display:none; background-color:#ff9900; width:600px; margin-left: auto; margin-right: auto; padding:4px;" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="right"><input type="button" name="close_btn" class="button button_close"  value="" onclick="closeDictTable()"></td>
+  </tr>
+  <tr>
+    <td align="center"><h3>请从下表中选择外部系统中的名字</h3></td>
+  </tr>
+  <tr>
+    <td align="center"><input type="text" id="dest_dict_search_input" name="dest_dict_search_input" size="20"></td>
+  </tr>
+  <tr>
+    <td>
+	<table id="dest_dict_table_list" width="100%" class="table table-bordered table-striped" align="center">
+				<thead> 
+					<tr> 
+						<th>选择</th>
+						<th>编号</th> 
+						<th>名称</th> 
+					</tr> 
+				</thead> 
+			<%
+				items = new DictionaryService().getDictItemsByDictName(sysMapInfo.getDest_dict_name(), true);
+				for(int i=1;i<items.size();i++)
+				{
+					DictItem item=items.get(i);
+			%>
+			<tr>
+				<td><input type="radio" name="dest_radiao" value="<%=item.getK() %>" label="<%=item.getV() %>" onclick="confirmSelect('dest',this);"></td>
+				<td><%=item.getK() %></td>
+				<td><%=item.getV() %></td>
+			</tr>
+			<%
+				}
+			%>
+	
+			</table>
+	</td>
+  </tr>
+</table>
+<%} %>
+
 		</form> 
 		
-			<script>
-	function confirmSelect()
+	<script>
+	// 确认选择
+	function confirmSelect(sourceOrDest,radioChecked)
 	{		
-		var check_radio = $("input:radio:checked");
+		var check_radio = $(radioChecked);
 		
 		if(check_radio)
 		{
-			$("#source_id").val($(check_radio).val());
-			$("#source_name").val($(check_radio).attr('label'));
+			$('#'+sourceOrDest+'_id').val($(check_radio).val());
+			$('#'+sourceOrDest+'_name').val($(check_radio).attr('label'));
 		}
 		
-		closeDictTable();
+		closeDictTable(sourceOrDest);
 	}
 	
-	function closeDictTable()
-	{
-		$('#dict_table').hide();
+	// 打开字典
+	function openDictTable(sourceOrDest)
+	{	
+		closeDictTable();
+		$('#'+sourceOrDest+'_dict_table').show();
+		$('#'+sourceOrDest+'_dict_search_input').focus();
 	}
+	
+	// 关闭字典
+	function closeDictTable()
+	{		
+		$('#source_dict_table').hide();
+		$('#dest_dict_table').hide();
+	}
+	
+	
+	// 字典检索
+	$('#source_dict_search_input').bind('input propertychange',function(){dictSearch('source');});
+	
+	$('#dest_dict_search_input').bind('input propertychange',function(){dictSearch('dest');});
+	
+	function dictSearch(sourceOrDest){
+		var search_value = $('#'+sourceOrDest+'_dict_search_input').val().trim();
+		if(search_value!=""){
+		
+			$('#'+sourceOrDest+'_dict_table_list tr').each(function(){
+			
+				var tr = $(this);
+				if($(tr).text().indexOf(search_value)>=0){
+					$(tr).show();
+				}
+				else
+				{
+					$(tr).hide();
+				}
+				
+			});
+		}
+		else
+		{
+			$('#'+sourceOrDest+'_dict_table_list tr').each(function(){
+			
+				$(this).show();
+				
+			});
+		}
+	}
+	
+	function dictRowClick()
+	{
+		//$(this).find("input[type='radio']").attr("checked","checked");
+	}
+	
+	//$("#source_id").click();
 	</script>
 	</body> 
 </html> 

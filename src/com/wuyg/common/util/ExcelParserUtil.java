@@ -5,9 +5,41 @@ import java.util.LinkedHashMap;
 
 import com.cost.obj.EfCostDeptObj;
 import com.wuyg.common.dao.BaseDbObj;
+import com.wuyg.excelparser.obj.ExcelColumnObj;
+import com.wuyg.excelparser.obj.ExcelParserConfigObj;
 
 public class ExcelParserUtil
-{
+{ 
+	/**
+	 * 根据BaseDbObj获取对应的Excel解析器
+	 * 
+	 * @param baseDbObj
+	 * @return
+	 */
+	public static ExcelParserConfigObj getExcelParserConfigByBaseDbObj(BaseDbObj baseDbObj)
+	{
+		ExcelParserConfigObj o = new ExcelParserConfigObj();
+		o.setName(baseDbObj.getCnName());// 名字
+		o.setJavaBean(baseDbObj.getClass().getCanonicalName());// 对应的javabean
+
+		LinkedHashMap<String, String> props = baseDbObj.getProperties(); // 所有列
+		Iterator<String> iterator = props.keySet().iterator();
+		while (iterator.hasNext())
+		{
+			String propEnName = iterator.next();
+			String propCnName = props.get(propEnName);
+
+			ExcelColumnObj column = new ExcelColumnObj();
+			column.setExcelColumnName(propCnName);
+			column.setJavaBeanProperty(propEnName);
+			column.setIsUnique(propEnName.equalsIgnoreCase(baseDbObj.findKeyColumnName()));// 是否主键
+
+			o.addExcelColumn(column);
+		}
+
+		return o;
+	}
+
 	/**
 	 * 根据BaseDbObj对象获取excel解析所需的配置信息
 	 * 
@@ -20,7 +52,7 @@ public class ExcelParserUtil
 
 		xml.append("<ExcelParser name=\"" + baseDbObj.getCnName() + "\">\n");
 		xml.append("	<!-- 对应的javabean -->\n");
-		xml.append("	<javaBean>"+baseDbObj.getClass().getCanonicalName()+"</javaBean>\n");
+		xml.append("	<javaBean>" + baseDbObj.getClass().getCanonicalName() + "</javaBean>\n");
 		xml.append("	<!-- 需解析的sheet名，默认为空，即解第1个sheet -->\n");
 		xml.append("	<sheetName/>\n");
 		xml.append("	<!-- 表头位于第几行，默认第1行 -->\n");
@@ -50,7 +82,7 @@ public class ExcelParserUtil
 
 		return xml.toString();
 	}
-	
+
 	public static void main(String[] args)
 	{
 		System.out.println(getExcelParserXmlConfigByBaseDbObj(new EfCostDeptObj()));

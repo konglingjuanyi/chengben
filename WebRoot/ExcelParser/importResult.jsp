@@ -15,7 +15,7 @@
 	</head> 
 	<body> 
 			<!-- 表格标题 --> 
-			<table width="98%" align="center" class="title_table"> 
+			<table width="98%" align="center" class="detail_table"> 
 				<tr> 
 					<td>
 		<%
@@ -23,16 +23,21 @@
 		if(errorMessageObj!=null)
 		{
 			Exception e=(Exception)errorMessageObj;
-			out.print("<table width='90%' align='center'><tr><td><h3><font color=\"red\">出错了:<br>"+e.getMessage()+"</font></h3></td></tr></table>");
+			out.print("<h3><font color=\"red\">Excel解析出错了，具体原因如下:<br></h3></font>"+e.getMessage().replaceAll("\n|\r","<br>"));
 		}
 		else
 		{
-			out.print("Excel导入成功");
+		
+			out.print("<h3><font color=\"green\">Excel数据导入成功</font></h3><br>");
+			out.print(StringUtil.getNotEmptyStr(request.getAttribute("message")).replaceAll("\n|\r","<br>"));
 		}
 		 %>
 						
 					</td> 
 				</tr> 
 			</table>
+			
+			<!-- 工具栏 --> 
+		<jsp:include page="../ToolBar/detail_toolbar.jsp"/> 
 	</body> 
 </html> 

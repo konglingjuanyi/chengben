@@ -69,8 +69,11 @@
 					<tr> 
 						<th><%=domainInstance.getPropertyCnName("id") %></th> 
 						<th><%=domainInstance.getPropertyCnName("name") %></th> 
+						<th><%=domainInstance.getPropertyCnName("source_name") %></th> 
 						<th><%=domainInstance.getPropertyCnName("source_dict_name") %></th> 
 						<th><%=domainInstance.getPropertyCnName("other_system") %></th>
+						<th><%=domainInstance.getPropertyCnName("dest_name") %></th> 
+						<th><%=domainInstance.getPropertyCnName("dest_dict_name") %></th> 
 						<th><%=domainInstance.getPropertyCnName("comment") %></th> 
 						<th>维护对照关系明细</th>
 						<th>操作</th> 
@@ -86,8 +89,11 @@
 						<a href="#" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=detail4this&<%=o.findKeyColumnName()%>=<%=o.getKeyValue()%>')"> <%=StringUtil.getNotEmptyStr(o.getKeyValue())%> </a> 
 					</td> 
 					<td style="text-align:left"><%=StringUtil.getNotEmptyStr(o.getName())%></td> 
+					<td style="text-align:left"><%=StringUtil.getNotEmptyStr(o.getSource_name())%></td> 
 					<td style="text-align:left"><%=StringUtil.getNotEmptyStr(o.getSource_dict_name())%></td> 
 					<td style="text-align:left"><%= new DictionaryService().getDictValueByDictKey("外部接口字典",o.getOther_system())%></td> 
+					<td style="text-align:left"><%=StringUtil.getNotEmptyStr(o.getDest_name())%></td> 
+					<td style="text-align:left"><%=StringUtil.getNotEmptyStr(o.getDest_dict_name())%></td> 
 					<td style="text-align:left"><%=StringUtil.getNotEmptyStr(o.getComment())%></td> 
 					<td style="text-align:center"><a href="#" onClick="winOpen('<%=contextPath%>/SysMapItems/Servlet?method=list4this&map_id=<%=o.getId() %>')">维护对照关系明细</a></td> 
 					<td align="left" style="cursor: pointer"> 

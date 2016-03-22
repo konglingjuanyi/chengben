@@ -6,15 +6,20 @@ import com.alibaba.fastjson.JSON;
 public class ExcelParserObj extends BaseDbObj
 {
 private Long id;
-private String parser_name;
+
+private String parser_name; // 解析器名称
+
+private String basedbobj_class; // excel对应的数据库基础类
+
 private String source_file_name;
 private Long file_length;
 private String dest_file_path;
+
 private String user_account;
 private Timestamp time_stamp;
 
-private String import_type;
-private String same_record_process_type;
+private String import_type;// 数据导入方式：新增、覆盖
+private String same_record_process_type;// 相同数据处理方式：保持系统中数据不变、覆盖系统中相同数据
 
 @Override
 public String findKeyColumnName()
@@ -58,7 +63,18 @@ public LinkedHashMap<String, String> getProperties()
 		pros.put("dest_file_path", "上传后文件路径");
 		pros.put("user_account", "用户名");
 		pros.put("time_stamp", "时间戳");
+		pros.put("import_type", "导入方式");
+		pros.put("same_record_process_type", "相同数据处理方式");
 		return pros;
+}
+
+public String getBasedbobj_class()
+{
+	return basedbobj_class;
+}
+public void setBasedbobj_class(String basedbobj_class)
+{
+	this.basedbobj_class = basedbobj_class;
 }
 public Long getId()
 {

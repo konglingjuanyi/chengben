@@ -14,12 +14,12 @@
 		<DictConfig dictShowName="级次字典" dictName="级次字典" values="0,1,2,3,4,5,6,7,8"/>
 		<DictConfig dictShowName="医疗/药品字典" dictName="医疗/药品字典" values="1=医疗,0=药品"/>
 		
-		<DictConfig dictShowName="来源字典" dictName="来源字典" values="1=HIS,2=HRP"/>
+		<DictConfig dictShowName="来源字典" dictName="来源字典" values="0=总账系统,1=HIS,2=HRP"/>
 		
 		<DictConfig dictShowName="会计科目字典" dictName="会计科目字典" values="1001,2001,1003"/>
 		
 		
-		
+		<DictConfig dictShowName="分摊方法字典" dictName="分摊方法字典" values="0=按总额分摊,1=按项目分摊"/>
 		<DictConfig dictShowName="分摊级别字典" dictName="分摊级别字典" dictTable="EF_cost_ShareLevel" dictKeyCol="cShareLevelCode" dictValueCol="cShareLevelName" dictOrderByCol="cShareLevelCode" filter=""/>
 		<DictConfig dictShowName="分摊类别字典" dictName="分摊类别字典" dictTable="EF_cost_ShareKind" dictKeyCol="cShareKindCode" dictValueCol="cShareKindName" dictOrderByCol="cShareKindCode" filter=""/>
 		<DictConfig dictShowName="科室类别字典" dictName="科室类别字典" dictTable="EF_Cost_DeptKind" dictKeyCol="cDeptKindCode" dictValueCol="cDeptKindName" dictOrderByCol="cDeptKindCode" filter=""/>
@@ -29,7 +29,10 @@
 		<DictConfig dictShowName="成本类别字典" dictName="成本类别字典" dictTable="EF_Cost_CostKind" dictKeyCol="cCostKindCode" dictValueCol="cCostKindName" dictOrderByCol="cCostKindCode" filter=""/>
 		<DictConfig dictShowName="收费项目字典" dictName="收费项目字典" dictTable="EF_Cost_CostItem" dictKeyCol="cCostItemCode" dictValueCol="cCostItemName" dictOrderByCol="cCostItemCode" filter=""/>
 		<DictConfig dictShowName="成本分类字典" dictName="成本分类字典" dictTable="EF_Cost_CostKind" dictKeyCol="cCostKindCode" dictValueCol="cCostKindName" dictOrderByCol="cCostKindCode" filter=""/>
-		<DictConfig dictShowName="成本项目字典" dictName="成本项目字典" dictTable="EF_Cost_CostItem" dictKeyCol="cCostItemCode" dictValueCol="cCostItemName" dictOrderByCol="cCostKindCode" filter=""/>
+		<DictConfig dictShowName="成本项目字典" dictName="成本项目字典" dictTable="EF_Cost_CostItem" dictKeyCol="cCostItemCode" dictValueCol="cCostItemName" dictOrderByCol="cCostItemCode" filter=""/>
+		<DictConfig dictShowName="工作项目字典" dictName="工作项目字典" dictTable="EF_Cost_Workitem" dictKeyCol="cWorkItemCode" dictValueCol="cWorkItemName" dictOrderByCol="cWorkItemCode" filter=""/>
+		<DictConfig dictShowName="分摊参数字典" dictName="分摊参数字典" dictTable="EF_Cost_ShareParam" dictKeyCol="cShareParamCode" dictValueCol="cShareParamName" dictOrderByCol="cShareParamCode" filter=""/>
+		
 		<DictConfig dictShowName="外部接口字典" dictName="外部接口字典" dictTable="EF_Cost_WbSource" dictKeyCol="cCode" dictValueCol="cName" dictOrderByCol="cCode" filter=""/>
 	
 	</DictConfigList>
