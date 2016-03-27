@@ -491,6 +491,18 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 	private void supplementWbDeptMap(String wbSource)
 	{
 		logger.info("==补足 总账系统科室 与 科室类型 对照关系(" + wbDeptMapNeedAddMap.size() + "条)==");
+		
+		
+		// 取总账科室表
+		IBaseDAO deptDao=new DefaultBaseDAO(DepartmentObj.class);
+		List<DepartmentObj> deptList = deptDao.searchByClause(DepartmentObj.class, null, null, 0, Integer.MAX_VALUE);
+		Map<String, String> deptMap=new HashMap<String, String>();
+		for (int i = 0; i < deptList.size(); i++)
+		{
+			deptMap.put(deptList.get(i).getDepartment_name(), deptList.get(i).getDepartment_code());
+		}
+		
+		
 		Object[] wbDeptMapNeedAdd = wbDeptMapNeedAddMap.values().toArray();
 		List<SourceDeptMapObj> sourceDeptMapList = new ArrayList<SourceDeptMapObj>();
 		for (int i = 0; i < wbDeptMapNeedAdd.length; i++)
@@ -500,6 +512,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 			SourceDeptMapObj o = new SourceDeptMapObj();
 			o.setSource_system(wbSource);
 			o.setSource_dept_name(glav.getWbDeptName());
+			o.setDest_dept_code(deptMap.get(glav.getWbDeptName()));// 如果总账系统中有名字直接匹配的科室则直接填充对应的部门编号
 
 			if (getZzDeptId(wbSource, glav.getWbDeptName()) == null)
 			{

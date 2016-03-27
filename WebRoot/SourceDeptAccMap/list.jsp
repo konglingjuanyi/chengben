@@ -31,7 +31,7 @@
 		<script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script> 
 	</head> 
 	<body> 
-		<form name="pageForm" id="pageForm" method="post" action="<%=request.getContextPath()%>/<%=basePath%>/Servlet?method=list4this&list4notOk=<%=list4notOk %>"> 
+		<form name="pageForm" id="pageForm" method="post" action="<%=request.getContextPath()%>/<%=basePath%>/Servlet?method=list4this"> 
 			
 			<table class="title_table" align="center" width="98%"> 
 				<tr>
@@ -48,6 +48,8 @@
 						&nbsp;  
 						<%=domainInstance.getPropertyCnName("source_acc_subject") %> 
 						<input name="source_acc_subject" type="text" id="source_acc_subject" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_acc_subject())%>" size="20" > 
+						&nbsp;  
+						<input name="list4notOk" type="checkbox" value="true" <%=list4notOk?"checked":"" %>>只查还未对照的
 						&nbsp;  
 						<input name="searchButton" type="button" class="button button_search" value="查询" onClick="toPage(1)"> 
 					</td> 
