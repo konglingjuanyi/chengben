@@ -119,6 +119,10 @@
 						while(columnEnNamesIter.hasNext())
 						{
 							String columnEnName = (String)columnEnNamesIter.next();
+							if(javaBean.findKeyColumnName().equalsIgnoreCase(columnEnName))
+							{
+								continue; // 忽略key
+							}
 							columnEnNamesList.add(columnEnName);
 						}
 						

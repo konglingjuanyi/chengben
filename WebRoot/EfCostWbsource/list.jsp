@@ -73,6 +73,8 @@
 						<th><%=domainInstance.getPropertyCnName("id") %></th> 
 						<th><%=domainInstance.getPropertyCnName("ccode") %></th> 
 						<th><%=domainInstance.getPropertyCnName("cname") %></th> 
+						<th><%=domainInstance.getPropertyCnName("debitORcredit") %></th> 
+						<th>对照关系维护</th> 
 						<th>操作</th> 
 					</tr> 
 				</thead> 
@@ -87,6 +89,8 @@
 					</td> 
 					<td><%=StringUtil.getNotEmptyStr(o.getCcode())%></td> 
 					<td><%=StringUtil.getNotEmptyStr(o.getCname())%></td> 
+					<td><%=new DictionaryService().getDictValueByDictKey("余额方向字典",o.getDebitORcredit())%></td> 
+					<td style="text-align:center"><a href="#" onclick="winOpen('<%=contextPath%>/SourceDeptMap/Servlet?method=list4this&source_system=<%=o.getCcode() %>')">科室对照关系</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" onclick="winOpen('<%=contextPath%>/SourceDeptAccMap/Servlet?method=list4this&source_system=<%=o.getCcode() %>')">科目对照关系</a></td>
 					<td align="left" style="cursor: pointer"> 
 						<input type="button" class="button button_modify" title="修改" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4this&<%=o.findKeyColumnName()%>=<%=o.getKeyValue()%>')" /> 
 						&nbsp; 

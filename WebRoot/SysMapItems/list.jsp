@@ -29,7 +29,7 @@
 	}
 	
 	// 外部系统名称
-	String otherSysName=new DictionaryService().getDictValueByDictKey("外部接口字典",sysMapInfo.getOther_system() );
+	String otherSysName=new DictionaryService().getDictValueByDictKey("外部接口字典",sysMapInfo.getSource_system() );
 %> 
 <html> 
 	<head> 
@@ -64,11 +64,11 @@
 						
 						&nbsp;  
 						<!-- <%=domainInstance.getPropertyCnName("source_name") %>  -->
-						<%="成本系统-"+sysMapInfo.getSource_name() %>
+						<%=otherSysName+"-"+sysMapInfo.getSource_name()+"名称" %>
 						<input name="source_name" type="text" id="source_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_name())%>" size="20" > 
 						&nbsp;  
 						<!-- <%=domainInstance.getPropertyCnName("dest_name") %> -->
-						<%=otherSysName+"-"+sysMapInfo.getDest_name() %>
+						<%="总账系统-"+sysMapInfo.getDest_name()+"名称" %>
 						<input name="dest_name" type="text" id="dest_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_name())%>" size="20" > 
 						&nbsp;  
 						<input name="searchButton" type="button" class="button button_search" value="查询" onClick="toPage(1)"> 
@@ -102,10 +102,10 @@
 					<tr> 
 						<th><%=domainInstance.getPropertyCnName("id") %></th> 
 						<!-- <th><%=domainInstance.getPropertyCnName("map_id") %></th>  -->
-						<th style="color:#66cccc"><%="成本系统<br>"+sysMapInfo.getSource_name()+"编号" %></th> 
-						<th style="color:#66cccc"><%="成本系统<br>"+sysMapInfo.getSource_name()+"名称" %></th> 
-						<th style="color:#ff9900"><%=otherSysName+"<br>"+sysMapInfo.getDest_name()+"编号" %></th> 
-						<th style="color:#ff9900"><%=otherSysName+"<br>"+sysMapInfo.getDest_name()+"名称" %></th> 
+						<th style="color:#3daeb6"><%=otherSysName+"<br>"+sysMapInfo.getSource_name()+"编号" %></th> 
+						<th style="color:#3daeb6"><%=otherSysName+"<br>"+sysMapInfo.getSource_name()+"名称" %></th> 
+						<th style="color:#ff9900"><%="总账系统<br>"+sysMapInfo.getDest_name()+"编号" %></th> 
+						<th style="color:#ff9900"><%="总账系统<br>"+sysMapInfo.getDest_name()+"名称" %></th> 
 						<th>操作</th> 
 					</tr> 
 				</thead> 

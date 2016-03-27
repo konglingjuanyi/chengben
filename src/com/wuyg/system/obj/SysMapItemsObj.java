@@ -48,10 +48,10 @@ public LinkedHashMap<String, String> getProperties()
 
 		pros.put("id", "编号");
 		pros.put("map_id", "所属对照关系");
-		pros.put("source_id", "成本系统对应编号");
-		pros.put("source_name", "成本系统对应名字");
-		pros.put("dest_id", "外部系统对应编号");
-		pros.put("dest_name", "外部系统对应名字");
+		pros.put("source_id", "外部接口对应编号");
+		pros.put("source_name", "外部接口对应名字");
+		pros.put("dest_id", "总账系统对应编号");
+		pros.put("dest_name", "总账系统对应名字");
 		return pros;
 }
 public Long getId()

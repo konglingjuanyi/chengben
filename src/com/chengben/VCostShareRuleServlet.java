@@ -10,6 +10,7 @@ import org.apache.commons.beanutils.MethodUtils;
 import org.apache.log4j.Logger;
 
 import com.chengben.obj.CostShareRuleObj;
+import com.chengben.obj.DepartmentObj;
 import com.chengben.obj.DictDepartmentObj;
 import com.chengben.obj.VCostShareRuleObj;
 import com.wuyg.common.dao.DefaultBaseDAO;
@@ -129,14 +130,15 @@ public class VCostShareRuleServlet extends AbstractBaseServletTemplate
 		// 如果查询不到，说明没有设置这个月份的分摊规则，则查询出科室信息返回前台
 		if (ruleList == null || ruleList.size() == 0)
 		{
-			IBaseDAO departmentsDAO = new DefaultBaseDAO(DictDepartmentObj.class);
-			List<DictDepartmentObj> departments = departmentsDAO.searchByClause(DictDepartmentObj.class, "department_type in('辅助类','医技类','临床类')", "department_type_sort,department_code", 0, Integer.MAX_VALUE);
+			IBaseDAO departmentsDAO = new DefaultBaseDAO(DepartmentObj.class);
+			List<DepartmentObj> departments = departmentsDAO.searchByClause(DepartmentObj.class, "department_type_code in('01','02','03')", "department_type_code desc,department_code", 0, Integer.MAX_VALUE);
 			for (int i = 0; i < departments.size(); i++)
 			{
-				DictDepartmentObj d = departments.get(i);
+				DepartmentObj d = departments.get(i);
 				VCostShareRuleObj rule = new VCostShareRuleObj();
 				rule.setDate_month(date_month);
-				rule.setDepartment_type(d.getDepartment_type());
+				rule.setDepartment_type_code(d.getDepartment_type_code());
+				rule.setDepartment_type_name(d.getDepartment_type_code());
 				rule.setDepartment_code(d.getDepartment_code());
 				rule.setDepartment_name(d.getDepartment_name());
 				ruleList.add(rule);
@@ -167,6 +169,32 @@ public class VCostShareRuleServlet extends AbstractBaseServletTemplate
 	public void export4this(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.export(request, response);
+	}
+
+	// 复制
+	public void copyShareRule(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		IBaseDAO costShareRuleDAO = new DefaultBaseDAO(CostShareRuleObj.class);
+
+		String date_month = request.getParameter("date_month");
+		String dest_date_month = request.getParameter("dest_date_month");
+
+		// 先删除原来的
+		costShareRuleDAO.deleteByClause(" date_month='" + dest_date_month + "' ");
+
+		// 再复制
+		List<CostShareRuleObj> sourceList = (List<CostShareRuleObj>) costShareRuleDAO.searchByClause(CostShareRuleObj.class, "date_month='" + date_month + "'", null, 0, Integer.MAX_VALUE);
+
+		long maxKeyValue = costShareRuleDAO.getMaxKeyValue();
+
+		for (int i = 0; i < sourceList.size(); i++)
+		{
+			sourceList.get(i).setId(null);
+			sourceList.get(i).setDate_month(dest_date_month);
+		}
+		costShareRuleDAO.save(sourceList);
+
+		request.getRequestDispatcher("/" + getBasePath() + "/Servlet?method=preModify4this&date_month=" + dest_date_month).forward(request, response);
 	}
 
 }

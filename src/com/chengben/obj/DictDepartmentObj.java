@@ -9,7 +9,8 @@ public class DictDepartmentObj extends BaseDbObj
 {
 	private String id;
 	private String department_code;
-	private String department_type;
+	private String department_type_code;
+	private String department_type_name;
 	private String department_name;
 	private String department_type_sort;
 
@@ -81,14 +82,25 @@ public class DictDepartmentObj extends BaseDbObj
 		this.department_code = department_code;
 	}
 
-	public String getDepartment_type()
+
+	public String getDepartment_type_code()
 	{
-		return department_type;
+		return department_type_code;
 	}
 
-	public void setDepartment_type(String department_type)
+	public void setDepartment_type_code(String department_type_code)
 	{
-		this.department_type = department_type;
+		this.department_type_code = department_type_code;
+	}
+
+	public String getDepartment_type_name()
+	{
+		return department_type_name;
+	}
+
+	public void setDepartment_type_name(String department_type_name)
+	{
+		this.department_type_name = department_type_name;
 	}
 
 	public String getDepartment_name()

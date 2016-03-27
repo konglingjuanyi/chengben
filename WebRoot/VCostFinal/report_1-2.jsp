@@ -83,7 +83,7 @@
 			<tr><td style="text-align:center">医院临床服务类科室全成本报表<br/><%=domainInstance.getDate_month() %></td></tr>
 			</table>
 			 -->
-			<table class="table table-bordered table-striped" align="center" width="98%">
+			<table class="table report_table table-bordered table-striped" align="center" width="98%">
 				<thead>
 					<tr>
 						<th colspan="25" style="text-align:center">医院临床服务类科室全成本报表<br/><%=domainInstance.getDate_month() %>
@@ -202,7 +202,7 @@
 							VCostFinalObj o = (VCostFinalObj) list.get(i);
 				%>
 				<tr>
-					<td><%=StringUtil.getNotEmptyStr(o.getDepartment_name())%></td>
+					<td style="word-break:keep-all"><%=StringUtil.getNotEmptyStr(o.getDepartment_name())%></td>
 					<td><%=StringUtil.formatDouble(o.getRenyuan_jingfei(),2)%></td>
 					<td><%=StringUtil.formatDouble(o.getRenyuan_jingfei_share(),2)%></td>
 					<td><%=StringUtil.formatDouble(o.getRenyuan_jingfei_sum(),2)%></td>
@@ -234,7 +234,7 @@
 					VCostFinalSumbyCosttypeObj o = (VCostFinalSumbyCosttypeObj)request.getAttribute("vCostFinalSumbyCosttypeObj");
 				%>
 				<tr style="color:blue">
-					<td>临床类合计:</td>
+					<td style="word-break:keep-all">临床类合计:</td>
 					<td><%=StringUtil.formatDouble(o.getRenyuan_jingfei(),2)%></td>
 					<td><%=StringUtil.formatDouble(o.getRenyuan_jingfei_share(),2)%></td>
 					<td><%=StringUtil.formatDouble(o.getRenyuan_jingfei_sum(),2)%></td>

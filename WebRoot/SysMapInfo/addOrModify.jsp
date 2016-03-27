@@ -47,10 +47,11 @@
 				// 做必要的检查 
 		if(!checkNull("id","<%=domainInstance.getPropertyCnName("id")%>")) return false; 
 		if(!checkNull("name","<%=domainInstance.getPropertyCnName("name")%>")) return false; 		
+		if(!checkNull("map_type","<%=domainInstance.getPropertyCnName("map_type")%>")) return false;
+		if(!checkNull("other_system","<%=domainInstance.getPropertyCnName("other_system")%>")) return false; 
 		if(!checkNull("source_name","<%=domainInstance.getPropertyCnName("source_name")%>")) return false;
-		if(!checkNull("source_dict_name","<%=domainInstance.getPropertyCnName("source_dict_name")%>")) return false; 
-		if(!checkNull("other_system","<%=domainInstance.getPropertyCnName("other_system")%>")) return false; 	 
 		if(!checkNull("dest_name","<%=domainInstance.getPropertyCnName("dest_name")%>")) return false;
+		if(!checkNull("dest_dict_name","<%=domainInstance.getPropertyCnName("dest_dict_name")%>")) return false;
 			// 修改 
 			if("true"=="<%=isModify%>") 
 			{ 
@@ -108,6 +109,27 @@
 						<input name="name" type="text" id="name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getName(),"")%>" size="20"  > 
 						<font color="red">*</font> 
 					</td> 
+					<td></td><td></td>
+				</tr> 
+				<tr> 
+					<td> 
+						<%=domainInstance.getPropertyCnName("map_type") %>: 
+					</td> 
+					<td> 
+						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("对照关系类型字典", false), "map_type", "", StringUtil.getNotEmptyStr(domainInstance.getMap_type(), ""), "notEmpty")%> 
+						<font color="red">*</font> 
+					</td> 
+					<td></td><td></td>
+				</tr>
+				<tr> 
+					<td> 
+						<%=domainInstance.getPropertyCnName("source_system") %>: 
+					</td> 
+					<td> 
+						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("外部接口字典", false), "source_system", "", StringUtil.getNotEmptyStr(domainInstance.getSource_system(), ""), "notEmpty")%> 
+						<font color="red">*</font> 
+					</td> 
+					<td></td><td></td>
 				</tr> 
 				<tr> 
 					<td> 
@@ -117,23 +139,12 @@
 						<input name="source_name" type="text" id="source_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_name(),"")%>" size="20"  > 
 						<font color="red">*</font> 
 					</td> 
-				</tr> 
-				<tr> 
 					<td> 
 						<%=domainInstance.getPropertyCnName("source_dict_name") %>: 
 					</td> 
 					<td> 
 						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("DICT_SELF", false), "source_dict_name", "", StringUtil.getNotEmptyStr(domainInstance.getSource_dict_name(), ""), "notEmpty")%> 
-						<font color="red">*</font> 
-					</td> 
-				</tr> 
-				<tr> 
-					<td> 
-						<%=domainInstance.getPropertyCnName("other_system") %>: 
-					</td> 
-					<td> 
-						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("外部接口字典", false), "other_system", "", StringUtil.getNotEmptyStr(domainInstance.getOther_system(), ""), "notEmpty")%> 
-						<font color="red">*</font> 
+						
 					</td> 
 				</tr> 
 				<tr> 
@@ -144,14 +155,12 @@
 						<input name="dest_name" type="text" id="dest_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_name(),"")%>" size="20"  > 
 						<font color="red">*</font> 
 					</td> 
-				</tr> 
-				<tr> 
 					<td> 
 						<%=domainInstance.getPropertyCnName("dest_dict_name") %>: 
 					</td> 
 					<td> 
 						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("DICT_SELF", false), "dest_dict_name", "", StringUtil.getNotEmptyStr(domainInstance.getDest_dict_name(), ""), "notEmpty")%> 
-						
+						<font color="red">*</font> 
 					</td> 
 				</tr> 
 				<tr> 
@@ -162,6 +171,7 @@
 						<input name="comment" type="text" id="comment" value="<%=StringUtil.getNotEmptyStr(domainInstance.getComment(),"")%>" size="20"  > 
 						
 					</td> 
+					<td></td><td></td>
 				</tr> 
 
 			</table> 

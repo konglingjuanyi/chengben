@@ -25,12 +25,15 @@ import com.wuyg.common.util.StringUtil;
 
 public class ExcelConstructor
 {
-	public static void construct(String head, List dataList, LinkedHashMap props, String filePath) throws Exception
+	public static void construct(String head, List dataList, LinkedHashMap props, List<String> uniqueIndexProperties, String filePath) throws Exception
 	{
 		HSSFWorkbook wk = new HSSFWorkbook();
 		int sheetNum = 0;
 		// 构造样式
 		HSSFCellStyle headStyle = getHeadStyle(wk);
+		HSSFCellStyle headUniqueStyle = wk.createCellStyle();
+		headUniqueStyle.cloneStyleFrom(headStyle);
+		headUniqueStyle.setFillForegroundColor(HSSFColor.RED.index);
 		HSSFCellStyle dataRowStyle1 = getDataRowStyle1(wk);
 		HSSFCellStyle dataRowStyle2 = getDataRowStyle2(wk);
 		// 构造sheet
@@ -43,7 +46,7 @@ public class ExcelConstructor
 		// 构造sheet标题
 		// constructHead(sheet, head, headStyle, rowNum++, props.size());
 		// 构造表头
-		constructDataHead(sheet, props, headStyle, rowNum++, columnsWidth);
+		constructDataHead(sheet, props, uniqueIndexProperties, headStyle, headUniqueStyle, rowNum++, columnsWidth);
 		// 写数据
 		constructDataRows(sheet, dataList, props, dataRowStyle1, dataRowStyle2, rowNum++, columnsWidth);
 		// 自动调整列宽
@@ -56,8 +59,8 @@ public class ExcelConstructor
 	{
 		for (int i = 0; i < columnsWidth.size(); i++)
 		{
-			int width= columnsWidth.get(i) + 2;
-			if (width<=255)
+			int width = columnsWidth.get(i) + 2;
+			if (width <= 255)
 			{
 				sheet.setColumnWidth(i, width * 256);
 			}
@@ -83,7 +86,7 @@ public class ExcelConstructor
 		cell.setCellValue(head);
 	}
 
-	private static void constructDataHead(HSSFSheet sheet, LinkedHashMap props, HSSFCellStyle headStyle, int fromRow, List<Integer> columnsWidth)
+	private static void constructDataHead(HSSFSheet sheet, LinkedHashMap props, List<String> uniqueIndexProperties, HSSFCellStyle headStyle, HSSFCellStyle headUniqueStyle, int fromRow, List<Integer> columnsWidth)
 	{
 		HSSFRow head = sheet.createRow(fromRow);
 		Iterator keys = props.keySet().iterator();
@@ -96,13 +99,18 @@ public class ExcelConstructor
 			columnsWidth.add(name.getBytes().length);// 计算列宽
 			HSSFCell cell = head.createCell((short) i++);
 			// cell.setEncoding(HSSFCell.ENCODING_UTF_16);
-			cell.setCellStyle(headStyle);
+			if (uniqueIndexProperties.contains(key))
+			{
+				cell.setCellStyle(headUniqueStyle);
+			} else
+			{
+				cell.setCellStyle(headStyle);
+			}
 			cell.setCellValue(name);
 		}
 	}
 
-	private static void constructDataRows(HSSFSheet sheet, List dataList, LinkedHashMap props, HSSFCellStyle dataRowStyle1, HSSFCellStyle dataRowStyle2,
-			int fromRow, List<Integer> columnsWidth) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException
+	private static void constructDataRows(HSSFSheet sheet, List dataList, LinkedHashMap props, HSSFCellStyle dataRowStyle1, HSSFCellStyle dataRowStyle2, int fromRow, List<Integer> columnsWidth) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException
 	{
 		for (int i = 0; i < dataList.size(); i++)
 		{

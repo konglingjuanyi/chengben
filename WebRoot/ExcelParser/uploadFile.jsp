@@ -42,7 +42,7 @@
 		<script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>  
 	</head> 
 	<body> 
-		<form name="addOrModifyForm" id="addOrModifyForm" action="<%=contextPath%>/<%=basePath%>/Servlet?method=uploadFile&parser_name=<%=parser_name %>&basedbobj_class=<%=basedbobj_class %>" enctype="multipart/form-data" method="post"> 
+		<form name="addOrModifyForm" id="addOrModifyForm" action="<%=contextPath%>/<%=basePath%>/Servlet?method=uploadFile" enctype="multipart/form-data" method="post"> 
 			
 			<!-- 表格标题 --> 
 			<table width="98%" align="center" class="title_table"> 
@@ -56,7 +56,8 @@
  
 			<!-- 详细信息 --> 
 			<table width="98%" align="center" class="detail_table detail_table-bordered detail_table-striped"> 
-				<input type="hidden" id="<%=domainInstance.findKeyColumnName()%>" name="<%=domainInstance.findKeyColumnName()%>" value="<%=domainInstance.getKeyValue()%>"> 
+			<input type="hidden" id="parser_name" name="parser_name" value="<%=parser_name %>">
+			<input type="hidden" id="basedbobj_class" name="basedbobj_class" value="<%=basedbobj_class %>">
 				<tr> 
 					<td style="width:200px;text-align:center"> 
 						请选择要导入的Excel数据文件:<br>(支持Office2007及以下版本)

@@ -45,10 +45,100 @@ function toggleMenuGroup(td,menuGroupId)
 	%>
 	<body class="menu_bg">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0">
+		
+		<tr>
+				<td class="menu_header_expand"
+					onclick="toggleMenuGroup(this,'04')">
+					数据导入
+				</td>
+			</tr>
+			<tr>
+				<td>
+
+					<table id="menu_group_04" width="100%" cellpadding="0"
+						cellspacing="0" border="0">
+						<!-- 
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/ExcelParser/uploadFile.jsp')">
+								<img src="images/excel.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;Excel导入
+							</td>
+						</tr>
+						 -->
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=002&debitORcredit=credit')">
+								<img src="images/excel.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;门诊收入转凭证
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=003&debitORcredit=credit')">
+								<img src="images/excel.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;住院收入转凭证
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=004&debitORcredit=debit')">
+								<img src="images/excel.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;药房成本转凭证
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=005&debitORcredit=debit')">
+								<img src="images/excel.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;卫生材料成本转凭证
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=006&debitORcredit=debit')">
+								<img src="images/excel.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;其他材料成本转凭证
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=007&debitORcredit=debit')">
+								<img src="images/excel.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;行政后勤成本转凭证
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/CostDirect/uploadFile.jsp')">
+								<img src="images/excel.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;各科室直接成本表导入
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/Servlet?method=zzlist')">
+								<img src="images/svg/heavy/green/list.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;总账凭证查询
+							</td>
+						</tr>
+					</table>
+
+				</td>
+			</tr>
 			<tr>
 				<td class="menu_header_expand"
 					onclick="toggleMenuGroup(this,'01')">
-					成本分摊管理
+					成本分摊
 				</td>
 			</tr>
 			<tr>
@@ -57,11 +147,19 @@ function toggleMenuGroup(td,menuGroupId)
 					<table id="menu_group_01" width="100%" cellpadding="0"
 						cellspacing="0" border="0">
 						<tr>
-							<td class="menu_selected"
+							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostShareRule/Servlet?method=preModify4this&date_month=<%=TimeUtil.nowTime2str("yyyy-MM") %>')">
 								<img src="images/svg/heavy/green/list.png" width="18"
 									height="18" align="middle" />
 								&nbsp;&nbsp;成本分摊规则管理
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/CostDirect/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/stats.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;各科室直接成本报表
 							</td>
 						</tr>
 						<tr>
@@ -85,6 +183,7 @@ function toggleMenuGroup(td,menuGroupId)
 				</td>
 			</tr>
 			
+			<!-- 
 			<tr>
 				<td class="menu_header_expand"
 					onclick="toggleMenuGroup(this,'02')">
@@ -108,7 +207,7 @@ function toggleMenuGroup(td,menuGroupId)
 
 				</td>
 			</tr>
-			
+			 -->
 			<tr>
 				<td class="menu_header_expand"
 					onclick="toggleMenuGroup(this,'03')">
@@ -120,6 +219,7 @@ function toggleMenuGroup(td,menuGroupId)
 
 					<table id="menu_group_03" width="100%" cellpadding="0"
 						cellspacing="0" border="0">
+						<!-- 
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostSharelevel/Servlet?method=list4this')">
@@ -128,6 +228,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;成本分摊级别
 							</td>
 						</tr>
+						 
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostSharekind/Servlet?method=list4this')">
@@ -136,6 +237,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;成本分摊类别
 							</td>
 						</tr>
+						
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostDeptkind/Servlet?method=list4this')">
@@ -144,6 +246,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;科室类别
 							</td>
 						</tr>
+						
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostDept/Servlet?method=list4this')">
@@ -152,6 +255,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;核算科室
 							</td>
 						</tr>
+					
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostChargekind/Servlet?method=list4this')">
@@ -160,6 +264,25 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;收费类别
 							</td>
 						</tr>
+						 -->
+						 
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/Department/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/list.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;医院科室
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/AccountingSubject/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/list.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;会计科目
+							</td>
+						</tr>
+						<!-- 
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostChargeitem/Servlet?method=list4this')">
@@ -168,6 +291,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;收费项目
 							</td>
 						</tr>
+						
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostCostkind/Servlet?method=list4this')">
@@ -176,6 +300,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;成本分类
 							</td>
 						</tr>
+						
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostCostitem/Servlet?method=list4this')">
@@ -184,6 +309,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;成本项目
 							</td>
 						</tr>
+						 
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostServiceitem/Servlet?method=list4this')">
@@ -200,6 +326,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;工作项目
 							</td>
 						</tr>
+						
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostShareparam/Servlet?method=list4this')">
@@ -216,6 +343,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;分摊方法
 							</td>
 						</tr>
+						-->
 						<tr>
 							<td class="menu_not_selected"
 								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostWbsource/Servlet?method=list4this')">
@@ -226,10 +354,18 @@ function toggleMenuGroup(td,menuGroupId)
 						</tr>
 						<tr>
 							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/SysMapInfo/Servlet?method=list4this')">
-								<img src="images/svg/heavy/green/map.png" width="18"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VSourceDeptMapInfo/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/list.png" width="18"
 									height="18" align="middle" />
-								&nbsp;&nbsp;对照关系管理
+								&nbsp;&nbsp;外部接口科室对照
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected"
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VSourceDeptAccMapInfo/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/list.png" width="18"
+									height="18" align="middle" />
+								&nbsp;&nbsp;外部接口科目对照
 							</td>
 						</tr>
 					</table>
@@ -237,29 +373,7 @@ function toggleMenuGroup(td,menuGroupId)
 				</td>
 			</tr>
 			
-			<tr>
-				<td class="menu_header_expand"
-					onclick="toggleMenuGroup(this,'04')">
-					系统管理
-				</td>
-			</tr>
-			<tr>
-				<td>
-
-					<table id="menu_group_04" width="100%" cellpadding="0"
-						cellspacing="0" border="0">
-						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/ExcelParser/uploadFile.jsp')">
-								<img src="images/excel.png" width="18"
-									height="18" align="middle" />
-								&nbsp;&nbsp;Excel导入
-							</td>
-						</tr>
-					</table>
-
-				</td>
-			</tr>
+			
 			
 			<%
 				if (isAdmin)

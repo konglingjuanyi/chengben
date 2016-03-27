@@ -22,7 +22,7 @@
 			<ExcelColumn excelColumnName="生日" javaBeanProperty="birthday"/>
 		</ExcelColumnList>
 	</ExcelParserConfig>
-	<ExcelParserConfig name="核算科室">
+	<ExcelParserConfig name="核算科室1">
 		<!-- 对应的javabean -->
 		<javaBean>com.cost.obj.EfCostDeptObj</javaBean>
 		<!-- 需解析的sheet名，默认为空，即解第1个sheet -->

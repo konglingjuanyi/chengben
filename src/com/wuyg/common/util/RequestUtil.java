@@ -17,6 +17,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 
+import com.wuyg.common.dao.BaseDbObj;
 import com.wuyg.excel.ExcelConstructor;
 
 public class RequestUtil
@@ -49,16 +50,29 @@ public class RequestUtil
 		return instance;
 	}
 
+	public static void downloadFile(HttpServlet servlet, HttpServletResponse response, List dataList, Class domainInstanceClz) throws Exception, IllegalAccessException
+	{
+		BaseDbObj domainInstance = (BaseDbObj) domainInstanceClz.newInstance();
+
+		LinkedHashMap<String, String> properties = domainInstance.getProperties();
+		properties.remove(domainInstance.findKeyColumnName());// 系统内部生成的ID不导出
+
+		List<String> uniqueIndexProperties = domainInstance.getUniqueIndexProperties();
+
+		String fileName = StringUtil.getNotEmptyStr(domainInstance.getCnName(), "明细数据");
+
+		downloadFile(servlet, response, dataList, properties, uniqueIndexProperties, fileName);
+	}
+
 	// 文件下载
-	public static void downloadFile(HttpServlet servlet, HttpServletResponse response, List dataList, LinkedHashMap<String, String> instanceProperties,
-			String fileName) throws Exception
+	public static void downloadFile(HttpServlet servlet, HttpServletResponse response, List dataList, LinkedHashMap<String, String> instanceProperties, List<String> uniqueIndexProperties, String fileName) throws Exception
 	{
 		// 生成excel文件
 		String filePath = servlet.getServletContext().getRealPath("/download/") + "/" + fileName + "_" + TimeUtil.nowTime2str("yyyyMMddHHmmss") + ".xls";
 		File xlsFile = new File(filePath);
 
 		logger.info("导出文件,生成开始 " + filePath);
-		ExcelConstructor.construct(fileName, dataList, instanceProperties, filePath);
+		ExcelConstructor.construct(fileName, dataList, instanceProperties,uniqueIndexProperties, filePath);
 		logger.info("导出文件,生成完成 " + filePath + ",文件大小；" + (xlsFile.length() / 1024) + "K");
 
 		// 下载
@@ -130,15 +144,16 @@ public class RequestUtil
 		}
 
 	}
-	
+
 	/**
 	 * 判断是否是移动设备访问
+	 * 
 	 * @param request
 	 * @return
 	 */
 	public static boolean is4m(HttpServletRequest request)
 	{
-		String is4m = (request.getSession().getAttribute("4m"))+"";
+		String is4m = (request.getSession().getAttribute("4m")) + "";
 		return "TRUE".equalsIgnoreCase(is4m);
 	}
 }

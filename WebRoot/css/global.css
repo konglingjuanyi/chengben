@@ -373,6 +373,13 @@ table style
 .table tbody tr:hover th {
   background-color: #ecf8f9;
 }
+/*report table style*/
+.report_table td {
+  padding: 4px 2px 4px 2px;
+  text-align: right;
+  vertical-align: middle;
+  border-top: 1px solid #dddddd;
+}
 /*search table style*/
 .search_table {
   margin-bottom: 8px;
@@ -404,6 +411,23 @@ table style
   font-weight: bold;
   color: #3daeb6;
   border-bottom: 4px solid #3daeb6;
+}
+/*alert table style*/
+.alert_table {
+  margin-top: 10px;
+  max-width: 100%;
+  background-color: #ffffff;
+  border: 0;
+  border-spacing: 0;
+  cellpadding: 0
+}
+.alert_table td {
+  padding: 10px 8px 10px 8px;
+  vertical-align: left;
+  text-align: left;
+  font-size: 12px;
+  color: #ff6600;
+  border-bottom: 1px solid #ff6600;
 }
 /*table tool bar style*/
 .toolbar_table {

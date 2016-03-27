@@ -12,7 +12,7 @@
   <frame src="header.jsp" name="topFrame" scrolling="no" noresize="noresize" id="topFrame" title="topFrame" />
   <frameset cols="190,*" frameborder="no" border="0" framespacing="0">
     <frame src="menu.jsp" name="leftFrame" scrolling="yes" noresize="noresize" id="leftFrame" title="leftFrame" border="0" framespacing="0"/>
-    <frame src="<%=request.getContextPath()%>/VCostShareRule/Servlet?method=preModify4this&date_month=<%=TimeUtil.nowTime2str("yyyy-MM") %>" name="mainFrame" id="mainFrame" title="mainFrame"  border="0" framespacing="0"/>
+    <frame src="index.jsp" name="mainFrame" id="mainFrame" title="mainFrame"  border="0" framespacing="0"/>
   </frameset>
   <frame src="footer.jsp" id='copyrightFrame' name="copyrightFrame" scrolling="no" noresize  border="0" framespacing="0"/>
 </frameset>

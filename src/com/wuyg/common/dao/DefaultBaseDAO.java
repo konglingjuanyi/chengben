@@ -69,7 +69,5 @@ public class DefaultBaseDAO extends AbstractBaseDAOTemplate
 	public String getDbName()
 	{
 		return dbName;
-	}
-
-	
+	}	
 }

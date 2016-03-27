@@ -49,6 +49,18 @@
 			</tr> 
 			<tr> 
 				<td> 
+					<%=domainInstance.getPropertyCnName("map_type") %>: 
+				</td> 
+				<td><%= new DictionaryService().getDictValueByDictKey("对照关系类型字典",domainInstance.getMap_type())%></td> 
+			</tr> 
+			<tr> 
+				<td> 
+					<%=domainInstance.getPropertyCnName("source_system") %>: 
+				</td> 
+				<td><%= new DictionaryService().getDictValueByDictKey("外部接口字典",domainInstance.getSource_system())%></td> 
+			</tr> 
+			<tr> 
+				<td> 
 					<%=domainInstance.getPropertyCnName("source_name") %>: 
 				</td> 
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getSource_name())%></td> 
@@ -58,13 +70,7 @@
 					<%=domainInstance.getPropertyCnName("source_dict_name") %>: 
 				</td> 
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getSource_dict_name())%></td> 
-			</tr> 
-			<tr> 
-				<td> 
-					<%=domainInstance.getPropertyCnName("other_system") %>: 
-				</td> 
-				<td><%= new DictionaryService().getDictValueByDictKey("外部接口字典",domainInstance.getOther_system())%></td> 
-			</tr> 
+			</tr>
 			<tr> 
 				<td> 
 					<%=domainInstance.getPropertyCnName("dest_name") %>: 

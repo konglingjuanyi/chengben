@@ -10,6 +10,7 @@
 <%@page import="com.chengben.obj.VCostShareRuleObj"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="com.inspur.common.dictionary.pojo.DictItem"%>
+<%@page import="com.wuyg.common.util.TimeUtil"%>
 <!-- 基本信息 -->
 <%
 	// 上下文路径 
@@ -32,7 +33,7 @@
 	boolean isModify = ruleList.size() > 0;
 	
 	// 所有类别
-	String[] departmetTypes = new String[]{"辅助类","医技类","临床类"};
+	String[] departmetTypes = new String[]{VCostShareRuleObj.DEPARTMENT_TYPE_LINCHUANG,VCostShareRuleObj.DEPARTMENT_TYPE_YIJI,VCostShareRuleObj.DEPARTMENT_TYPE_FUZHU};// 临床类、医技类、辅助类
 	
 	// 月份，今年+去年
 	Calendar cal=Calendar.getInstance();
@@ -49,6 +50,10 @@
 			date_month_list.add(item);
 		}
 	}
+	
+	String date_month = StringUtil.getNotEmptyStr(request.getAttribute("date_month"));
+	
+	String date_month_current = TimeUtil.nowTime2str("yyyy-MM");
 %>
 <html>
 	<head>
@@ -85,7 +90,8 @@
 		</script>
 	</head>
 	<body>
-		<form name="addOrModifyForm" id="addOrModifyForm" action="<%=contextPath%>/<%=basePath%>/Servlet?method=addOrModify4this" method="post">
+		<form name="addOrModifyForm" id="addOrModifyForm" action="<%=contextPath%>/<%=basePath%>/Servlet" method="post">
+			<input type="hidden" id="method" name="method" value="addOrModify4this">
 			<!-- 表格标题 -->
 			<table width="800" align="center" class="title_table">
 				<tr>
@@ -99,8 +105,14 @@
 			<table class="search_table" align="center" width="800">
 				<tr>
 					<td>
-					月份：
-					<%=DictionaryUtil.getSelectHtml(date_month_list, "date_month", "", StringUtil.getNotEmptyStr(request.getAttribute("date_month"), ""), "notEmpty")%> 
+					月份
+					<%=DictionaryUtil.getSelectHtml(date_month_list, "date_month", "", date_month, "notEmpty")%> 
+					</td>
+					<td style="text-align:right">
+					
+					将当前规则复制到<%=DictionaryUtil.getSelectHtml(date_month_list, "dest_date_month", "", date_month, "notEmpty")%>
+					<input type="button" class="green_button" value="确认复制" onclick="copyShareRule()">
+					
 					</td>
 				</tr>
 			</table>
@@ -144,23 +156,23 @@
 						{
 							nextO = ruleList.get(i + 1);
 						}
-						boolean change = last || (nextO != null && !nextO.getDepartment_type().equals(o.getDepartment_type()));
+						boolean change = last || (nextO != null && !nextO.getDepartment_type_code().equals(o.getDepartment_type_code()));
 				%>
 				<tr>
-					<td><%=StringUtil.getNotEmptyStr(o.getDepartment_type())%><input type="hidden" name="department_type" value="<%=o.getDepartment_type()%>">
+					<td><%=new DictionaryService().getDictValueByDictKey("科室类别字典",StringUtil.getNotEmptyStr(o.getDepartment_type_code())) %><input type="hidden" name="department_type" value="<%=o.getDepartment_type_code()%>">
 					</td>
 					<td><%=StringUtil.getNotEmptyStr(o.getDepartment_code())%><input type="hidden" name="department_code" value="<%=o.getDepartment_code()%>">
 					</td>
 					<td><%=StringUtil.getNotEmptyStr(o.getDepartment_name())%><input type="hidden" name="department_name" value="<%=o.getDepartment_name()%>">
 					</td>
 					<td style="text-align: right">
-						<input class="<%=o.getDepartment_type() + "_level1"%>" name="share_rate_level1" type="text" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_1())%>" />
+						<input class="<%=o.getDepartment_type_code() + "_level1"%>" name="share_rate_level1" type="text" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_1())%>" />
 					</td>
 					<td style="text-align: right">
-						<input class="<%=o.getDepartment_type() + "_level2"%>" name="share_rate_level2" type="<%=o.isLevel2()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_2())%>">
+						<input class="<%=o.getDepartment_type_code() + "_level2"%>" name="share_rate_level2" type="<%=o.isLevel2()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_2())%>">
 					</td>
 					<td style="text-align: right">
-						<input class="<%=o.getDepartment_type() + "_level3"%>" name="share_rate_level3" type="<%=o.isLevel3()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_3())%>">
+						<input class="<%=o.getDepartment_type_code() + "_level3"%>" name="share_rate_level3" type="<%=o.isLevel3()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_3())%>">
 					</td>
 					<td style="text-align: right">
 						<input name="income" type="<%=o.isLevel3()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getIncome())%>">
@@ -177,10 +189,10 @@
 						{
 				%>
 				<tr style="color: blue; text-align: right">
-					<td colspan="3"><%=o.getDepartment_type()%>小计:
+					<td colspan="3"><%=new DictionaryService().getDictValueByDictKey("科室类别字典",StringUtil.getNotEmptyStr(o.getDepartment_type_code())) %>小计:
 					</td>
-					<td id="<%=o.getDepartment_type() + "_level1_subtotal"%>"><%=level1SubTotal%></td>
-					<td id="<%=o.getDepartment_type() + "_level2_subtotal"%>">
+					<td id="<%=o.getDepartment_type_code() + "_level1_subtotal"%>"><%=level1SubTotal%></td>
+					<td id="<%=o.getDepartment_type_code() + "_level2_subtotal"%>">
 						<%
 							if (o.isLevel2())
 									{
@@ -189,7 +201,7 @@
 							}
 						%>
 					</td>
-					<td id="<%=o.getDepartment_type() + "_level3_subtotal"%>">
+					<td id="<%=o.getDepartment_type_code() + "_level3_subtotal"%>">
 						<%
 							if (o.isLevel3())
 									{
@@ -298,6 +310,23 @@
 			$("#addOrModifyForm").attr("action","<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4this");
 			$("#addOrModifyForm").submit();
 		});
+		
+		
+		// 复制规则
+		function copyShareRule()
+		{
+			var date_month=$("#date_month").val();;
+			var dest_date_month=$("#dest_date_month").val();
+			
+			if(date_month==dest_date_month)
+			{
+				alert("同一个月份之间不能互相复制，请重新选择需要复制到哪个月份。");
+				return false;
+			}
+			
+			$("#addOrModifyForm").attr("action","<%=contextPath%>/<%=basePath%>/Servlet?method=copyShareRule");
+			$("#addOrModifyForm").submit();
+		}
 		</script>
 	</body>
 </html>

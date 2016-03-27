@@ -231,6 +231,78 @@
 		<url-pattern>/EfCostSharefun/Servlet</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>GlAccvouchServlet</servlet-name>
+		<servlet-class>com.gl.GlAccvouchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GlAccvouchServlet</servlet-name>
+		<url-pattern>/GlAccvouch/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SourceDeptAccMapServlet</servlet-name>
+		<servlet-class>com.chengben.SourceDeptAccMapServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SourceDeptAccMapServlet</servlet-name>
+		<url-pattern>/SourceDeptAccMap/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CostDirectServlet</servlet-name>
+		<servlet-class>com.chengben.CostDirectServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CostDirectServlet</servlet-name>
+		<url-pattern>/CostDirect/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DepartmentServlet</servlet-name>
+		<servlet-class>com.chengben.DepartmentServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DepartmentServlet</servlet-name>
+		<url-pattern>/Department/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AccountingSubjectServlet</servlet-name>
+		<servlet-class>com.chengben.AccountingSubjectServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AccountingSubjectServlet</servlet-name>
+		<url-pattern>/AccountingSubject/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>VSourceDeptAccMapInfoServlet</servlet-name>
+		<servlet-class>com.chengben.VSourceDeptAccMapInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>VSourceDeptAccMapInfoServlet</servlet-name>
+		<url-pattern>/VSourceDeptAccMapInfo/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>VSourceDeptMapInfoServlet</servlet-name>
+		<servlet-class>com.chengben.VSourceDeptMapInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>VSourceDeptMapInfoServlet</servlet-name>
+		<url-pattern>/VSourceDeptMapInfo/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SourceDeptMapServlet</servlet-name>
+		<servlet-class>com.chengben.SourceDeptMapServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SourceDeptMapServlet</servlet-name>
+		<url-pattern>/SourceDeptMap/Servlet</url-pattern>
+	</servlet-mapping>
+	
 	
 	<!-- ==session超时时间，单位秒== -->
 	<session-config>

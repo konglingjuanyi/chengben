@@ -46,7 +46,26 @@ public class EfCostCostitemServlet extends AbstractBaseServletTemplate
 	// 查询
 	public void list4this(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		super.list(request,response);
+//		super.list(request,response);
+		
+		// 查询
+		PaginationObj domainPagination = getDomainDao().searchPaginationByDomainInstance(domainInstance, domainInstance.findDefaultOrderBy(), domainSearchCondition.getPageNo(), domainSearchCondition.getPageCount());
+
+		request.setAttribute(DOMAIN_INSTANCE, domainInstance);
+		request.setAttribute(DOMAIN_PAGINATION, domainPagination);
+
+		// 转向
+		if ("true".equalsIgnoreCase(request.getParameter("4m")))
+		{
+			request.getRequestDispatcher("/" + getBasePath() + "/" + BASE_METHOD_LIST + "4m.jsp").forward(request, response);
+		} else if ("true".equalsIgnoreCase(request.getParameter("justListData")))
+		{
+			request.getRequestDispatcher("/" + getBasePath() + "/" + BASE_METHOD_LIST + "Data.jsp").forward(request, response);
+		}
+		else
+		{
+			request.getRequestDispatcher("/" + getBasePath() + "/" + BASE_METHOD_LIST + ".jsp").forward(request, response);
+		}
 	}
 
 	// 检查ID是否已录入系统

@@ -85,7 +85,7 @@
 			<tr><td style="text-align:center">医院临床服务类科室全成本构成分析表<br/><%=domainInstance.getDate_month() %></td></tr>
 			</table>
 			-->
-			<table class="table table-bordered table-striped" align="center" width="98%">
+			<table class="table report_table table-bordered table-striped" align="center" width="98%">
 			<thead>
 				<tr>
 					<th colspan="<%=list.size()*2+3 %>" style="text-align:center">医院临床服务类科室全成本构成分析表<br/><%=domainInstance.getDate_month() %>
@@ -116,7 +116,7 @@
               </tr>
 			 </thead>
               <tr>
-                <td>人员经费</td>
+                <td style="word-break:keep-all">人员经费</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -129,7 +129,7 @@
                 <td><%=StringUtil.formatDouble(sum.getRenyuan_jingfei_sum_rate(),2) %></td>
               </tr>
               <tr>
-                <td>卫生材料费</td>
+                <td style="word-break:keep-all">卫生材料费</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -142,7 +142,7 @@
                 <td><%=StringUtil.formatDouble(sum.getWeisheng_cailiao_sum_rate(),2) %></td>
               </tr>
               <tr>
-                <td>药品费</td>
+                <td style="word-break:keep-all">药品费</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -155,7 +155,7 @@
                 <td><%=StringUtil.formatDouble(sum.getYaopin_sum_rate(),2) %></td>
               </tr>
               <tr>
-                <td>固定资产折旧费</td>
+                <td style="word-break:keep-all">固定资产折旧费</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -168,7 +168,7 @@
                 <td><%=StringUtil.formatDouble(sum.getGuding_zichan_zhejiu_sum_rate(),2) %></td>
               </tr>
               <tr>
-                <td>无形资产摊销</td>
+                <td style="word-break:keep-all">无形资产摊销</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -181,7 +181,7 @@
                 <td><%=StringUtil.formatDouble(sum.getWuxing_zichan_tanxiao_sum_rate(),2) %></td>
               </tr>
               <tr>
-                <td>提取医疗风险基金</td>
+                <td style="word-break:keep-all">提取医疗风险基金</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -194,7 +194,7 @@
                 <td><%=StringUtil.formatDouble(sum.getTiqu_yiliao_fengxian_jijin_sum_rate(),2) %></td>
               </tr>
               <tr>
-                <td>其他费用</td>
+                <td style="word-break:keep-all">其他费用</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -207,7 +207,7 @@
                 <td><%=StringUtil.formatDouble(sum.getQita_feiyong_sum_rate(),2) %></td>
               </tr>
               <tr style="color:blue">
-                <td>科室全成本合计</td>
+                <td style="word-break:keep-all">科室全成本合计</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -220,7 +220,7 @@
                 <td><%=StringUtil.formatDouble(sum.getTotal_rate(),2) %></td>
               </tr>
               <tr>
-                <td>科室收入</td>
+                <td style="word-break:keep-all">科室收入</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -233,7 +233,7 @@
                 <td>&nbsp;</td>
               </tr>
               <tr>
-                <td>收入-成本</td>
+                <td style="word-break:keep-all">收入-成本</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -246,7 +246,7 @@
                 <td>&nbsp;</td>
               </tr>
               <tr>
-                <td>床日成本</td>
+                <td style="word-break:keep-all">床日成本</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{
@@ -259,7 +259,7 @@
                 <td>&nbsp;</td>
               </tr>
               <tr>
-                <td>诊次成本</td>
+                <td style="word-break:keep-all">诊次成本</td>
                 <%
 				for (int i = 0; i < list.size(); i++)
 				{

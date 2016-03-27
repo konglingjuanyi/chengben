@@ -7,12 +7,13 @@ public class SysMapInfoObj extends BaseDbObj
 {
 private Long id;
 private String name;
+private String map_type;// 科室，科目
 private String comment;
 private String source_name;
 private String source_dict_name;
 private String dest_name;
 private String dest_dict_name;
-private String other_system;// 外部系统
+private String source_system;// 外部系统
 @Override
 public String findKeyColumnName()
 {
@@ -50,15 +51,24 @@ public LinkedHashMap<String, String> getProperties()
 
 		pros.put("id", "编号");
 		pros.put("name", "对照关系名");
-		pros.put("source_name", "成本系统字段名");
-		pros.put("source_dict_name", "成本系统字典");
-		pros.put("other_system", "外部系统名称");
-		pros.put("dest_name", "外部系统字段名");
-		pros.put("dest_dict_name", "外部系统字典");
+		pros.put("map_type", "对照关系类型");
+		pros.put("source_system", "外部接口名称");
+		pros.put("source_name", "外部接口字段名");
+		pros.put("source_dict_name", "外部接口字段-字典");
+		pros.put("dest_name", "总账系统字段名");
+		pros.put("dest_dict_name", "总账系统字段-字典");
 		pros.put("comment", "对照关系描述");
 		
 		
 		return pros;
+}
+public String getMap_type()
+{
+	return map_type;
+}
+public void setMap_type(String map_type)
+{
+	this.map_type = map_type;
 }
 public String getSource_name()
 {
@@ -118,13 +128,14 @@ public void setDest_dict_name(String dest_dict_name)
 {
 	this.dest_dict_name = dest_dict_name;
 }
-public String getOther_system()
+
+public String getSource_system()
 {
-	return other_system;
+	return source_system;
 }
-public void setOther_system(String other_system)
+public void setSource_system(String source_system)
 {
-	this.other_system = other_system;
+	this.source_system = source_system;
 }
 @Override
 public String toString()

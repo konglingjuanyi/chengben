@@ -13,35 +13,60 @@ v_cost_share_rule r
 
 select * from cost_direct
 
-update cost_direct set department_type
-=(select b.department_type from dict_department b where b.department_code=cost_direct.department_code)
+select * from departmen
 
+--更新科室类别
+update cost_direct 
+set 
+department_code=(select t1.department_code from department t1 where t1.department_name=cost_direct.department_name),
+department_type_code=(select t1.department_type_code from department t1 where t1.department_name=cost_direct.department_name)
+
+drop view v_cost_direct
+
+CREATE view [dbo].[v_cost_direct] as 
+select 
+t1.id,
+t1.date_month,
+t2.department_code,
+t2.department_name,
+t2.department_type_code,
+t1.renyuan_jingfei,
+t1.weisheng_cailiao,
+t1.yaopin,
+t1.guding_zichan_zhejiu,
+t1.wuxing_zichan_tanxiao,
+t1.tiqu_yiliao_fengxian_jijin,
+t1.qita_feiyong,
+t1.heji
+from 
+cost_direct t1
+left join
+department t2
+on t1.department_code=t2.department_code
+GO
+
+select * from v_cost_direct
+
+drop view v_cost_direct_sum
 
 create view v_cost_direct_sum as
 select 
 date_month,
-department_type,
-	sum(renyuan_jingfei) renyuan_jingfei,
-	sum(weisheng_cailiao) weisheng_cailiao,
-	sum(yaopin) yaopin,
-	sum(guding_zichan_zhejiu) guding_zichan_zhejiu,
-	sum(wuxing_zichan_tanxiao) wuxing_zichan_tanxiao,
-	sum(tiqu_yiliao_fengxian_jijin) tiqu_yiliao_fengxian_jijin,
-	sum(qita_feiyong) qita_feiyong,
-	sum(heji) heji
+department_type_code,
+	sum(isnull(renyuan_jingfei,0)) renyuan_jingfei,
+	sum(isnull(weisheng_cailiao,0)) weisheng_cailiao,
+	sum(isnull(yaopin,0)) yaopin,
+	sum(isnull(guding_zichan_zhejiu,0)) guding_zichan_zhejiu,
+	sum(isnull(wuxing_zichan_tanxiao,0)) wuxing_zichan_tanxiao,
+	sum(isnull(tiqu_yiliao_fengxian_jijin,0)) tiqu_yiliao_fengxian_jijin,
+	sum(isnull(qita_feiyong,0)) qita_feiyong,
+	sum(isnull(renyuan_jingfei,0)+isnull(weisheng_cailiao,0)+isnull(yaopin,0)+isnull(guding_zichan_zhejiu,0)+isnull(wuxing_zichan_tanxiao,0)+isnull(tiqu_yiliao_fengxian_jijin,0)+isnull(qita_feiyong,0)) heji
 from cost_direct 
 group by 
 date_month,
-department_type
-
-
+department_type_code
 
 select * from v_cost_direct_sum
-
-select 
-* 
-from cost_direct c
-
 
 drop view v_cost_level1
 
@@ -76,7 +101,7 @@ cd.guding_zichan_zhejiu,
 cd.wuxing_zichan_tanxiao,
 cd.tiqu_yiliao_fengxian_jijin,
 cd.qita_feiyong,
-cd.heji,
+isnull(cd.renyuan_jingfei,0)+isnull(cd.weisheng_cailiao,0)+isnull(cd.yaopin,0)+isnull(cd.guding_zichan_zhejiu,0)+isnull(cd.wuxing_zichan_tanxiao,0)+isnull(cd.tiqu_yiliao_fengxian_jijin,0)+isnull(cd.qita_feiyong,0) heji,
 r.share_rate_level_1,
 r.share_rate_level_1*cd_sum.renyuan_jingfei/100	renyuan_jingfei_l1,
 r.share_rate_level_1*cd_sum.weisheng_cailiao/100	weisheng_cailiao_l1,
@@ -90,13 +115,11 @@ from
 cost_share_rule r
 left join
 cost_direct cd
-on r.department_code=cd.department_code
+on r.department_code=cd.department_code and r.date_month=cd.date_month
 left join
 v_cost_direct_sum cd_sum
-on cd_sum.department_type='管理类'
+on r.date_month=cd_sum.date_month and cd_sum.department_type_code='04'--管理类
 ) level1
-
-
 
 select * from v_cost_level1
 
@@ -105,14 +128,14 @@ drop view v_cost_level1_sum
 create view v_cost_level1_sum as
 select 
 date_month,department_type,
-sum(renyuan_jingfei_l1_sum)renyuan_jingfei_l1_sum,
-sum(weisheng_cailiao_l1_sum)weisheng_cailiao_l1_sum,
-sum(yaopin_l1_sum)yaopin_l1_sum,
-sum(guding_zichan_zhejiu_l1_sum)guding_zichan_zhejiu_l1_sum,
-sum(wuxing_zichan_tanxiao_l1_sum)wuxing_zichan_tanxiao_l1_sum,
-sum(tiqu_yiliao_fengxian_jijin_l1_sum)tiqu_yiliao_fengxian_jijin_l1_sum,
-sum(qita_feiyong_l1_sum)qita_feiyong_l1_sum,
-sum(heji_l1_sum)heji_l1_sum 
+sum(isnull(renyuan_jingfei_l1_sum,0))renyuan_jingfei_l1_sum,
+sum(isnull(weisheng_cailiao_l1_sum,0))weisheng_cailiao_l1_sum,
+sum(isnull(yaopin_l1_sum,0))yaopin_l1_sum,
+sum(isnull(guding_zichan_zhejiu_l1_sum,0))guding_zichan_zhejiu_l1_sum,
+sum(isnull(wuxing_zichan_tanxiao_l1_sum,0))wuxing_zichan_tanxiao_l1_sum,
+sum(isnull(tiqu_yiliao_fengxian_jijin_l1_sum,0))tiqu_yiliao_fengxian_jijin_l1_sum,
+sum(isnull(qita_feiyong_l1_sum,0))qita_feiyong_l1_sum,
+sum(isnull(heji_l1_sum,0))heji_l1_sum 
 from v_cost_level1 
 group by date_month,department_type
 
@@ -166,26 +189,27 @@ from
 cost_share_rule r
 left join
 v_cost_level1 l1
-on r.department_code=l1.department_code
+on r.department_code=l1.department_code and r.date_month=l1.date_month
 left join
 v_cost_level1_sum l1_sum
-on l1_sum.department_type='辅助类'
+on r.date_month=l1_sum.date_month and l1_sum.department_type='03'--辅助类
 ) level2
 
-
 select * from v_cost_level2 
+
+drop view v_cost_level2_sum
 
 create view v_cost_level2_sum as
 select 
 date_month,department_type,
-sum(renyuan_jingfei_l2_sum)renyuan_jingfei_l2_sum,
-sum(weisheng_cailiao_l2_sum)weisheng_cailiao_l2_sum,
-sum(yaopin_l2_sum)yaopin_l2_sum,
-sum(guding_zichan_zhejiu_l2_sum)guding_zichan_zhejiu_l2_sum,
-sum(wuxing_zichan_tanxiao_l2_sum)wuxing_zichan_tanxiao_l2_sum,
-sum(tiqu_yiliao_fengxian_jijin_l2_sum)tiqu_yiliao_fengxian_jijin_l2_sum,
-sum(qita_feiyong_l2_sum)qita_feiyong_l2_sum,
-sum(heji_l2_sum)heji_l2_sum 
+sum(isnull(renyuan_jingfei_l2_sum,0))renyuan_jingfei_l2_sum,
+sum(isnull(weisheng_cailiao_l2_sum,0))weisheng_cailiao_l2_sum,
+sum(isnull(yaopin_l2_sum,0))yaopin_l2_sum,
+sum(isnull(guding_zichan_zhejiu_l2_sum,0))guding_zichan_zhejiu_l2_sum,
+sum(isnull(wuxing_zichan_tanxiao_l2_sum,0))wuxing_zichan_tanxiao_l2_sum,
+sum(isnull(tiqu_yiliao_fengxian_jijin_l2_sum,0))tiqu_yiliao_fengxian_jijin_l2_sum,
+sum(isnull(qita_feiyong_l2_sum,0))qita_feiyong_l2_sum,
+sum(isnull(heji_l2_sum,0))heji_l2_sum 
 from v_cost_level2 
 group by date_month,department_type
 
@@ -238,10 +262,10 @@ from
 cost_share_rule r
 left join
 v_cost_level2 l1
-on r.department_code=l1.department_code
+on r.department_code=l1.department_code and r.date_month=l1.date_month
 left join
 v_cost_level2_sum l2_sum
-on l2_sum.department_type='医技类'
+on r.date_month=l2_sum.date_month and l2_sum.department_type='02'--医技类
 ) level3
 
 
@@ -249,7 +273,7 @@ select * from v_cost_level3
 
 drop view v_cost_final
 
-alter view v_cost_final as
+create view v_cost_final as
 select 
 *,
 round(renyuan_jingfei_sum/total*100,2)	renyuan_jingfei_sum_rate	,
@@ -271,7 +295,7 @@ from
 (
 select 
 c.date_month,
-c.department_type,
+c.department_type_code department_type,
 c.department_code,
 c.department_name,
 c.renyuan_jingfei,(l3.renyuan_jingfei_l3_sum-c.renyuan_jingfei) renyuan_jingfei_share,l3.renyuan_jingfei_l3_sum renyuan_jingfei_sum,
@@ -292,7 +316,7 @@ on c.date_month=r.date_month and c.department_code=r.department_code
 left join
 v_cost_level3 l3
 on c.date_month=l3.date_month and c.department_code=l3.department_code
-where c.department_type='临床类'
+where c.department_type_code='01'--临床类
 ) linchuang
 ) t
 
@@ -366,3 +390,64 @@ on d.department_code=i.department_code
 
 
 select * from v_department_income
+
+create view v_direct_cost as
+select 
+date_month,
+case 
+	when (grouping(department_name)=1 and grouping(department_type_name)=1) then '合计'
+	when (grouping(department_name)=1) then department_type_name+'小计' 
+	else department_name 
+end department_name,
+SUM(isnull(renyuan_jingfei,0)) renyuan_jingfei,
+SUM(isnull(weisheng_cailiao,0)) weisheng_cailiao,
+SUM(isnull(yaopin,0)) yaopin,
+SUM(isnull(guding_zichan_zhejiu,0)) guding_zichan_zhejiu,
+SUM(isnull(wuxing_zichan_tanxiao,0)) wuxing_zichan_tanxiao,
+SUM(isnull(tiqu_yiliao_fengxian_jijin,0)) tiqu_yiliao_fengxian_jijin,
+SUM(isnull(qita_feiyong,0)) qita_feiyong,
+SUM(isnull(heji,0)) heji
+from cost_direct
+group by date_month,department_type_name,department_name
+with rollup
+having grouping(date_month)=1 or grouping(department_type_name)=0 or grouping(department_name)=0
+
+drop view v_source_dept_acc_map_info
+
+create view v_source_dept_acc_map_info as 
+select *,relation_total_num-relation_ok_num relation_not_ok_num
+from
+(
+select
+t2.ccode source_system,
+t2.cname+'-会计科目对照关系' relation_name,
+t2.cname source_system_name,
+sum(case when t1.source_acc_subject is null then 0 else 1 end) relation_total_num,
+sum(case when t1.dest_acc_subject is null then 0 else 1 end) relation_ok_num
+from 
+EF_Cost_WbSource t2
+left join
+source_dept_acc_map t1
+on t1.source_system=t2.cCode
+group by t2.cCode,t2.cName
+) t
+
+drop view v_source_dept_map_info
+
+create view v_source_dept_map_info as 
+select *,relation_total_num-relation_ok_num relation_not_ok_num
+from
+(
+select
+t2.ccode source_system,
+t2.cname+'-科室对照关系' relation_name,
+t2.cname source_system_name,
+sum(case when t1.source_dept_name is null then 0 else 1 end) relation_total_num,
+sum(case when t1.dest_dept_code is null then 0 else 1 end) relation_ok_num
+from 
+EF_Cost_WbSource t2
+left join
+source_dept_map t1
+on t1.source_system=t2.cCode
+group by t2.cCode,t2.cName
+) t

@@ -29,7 +29,7 @@
 		{
 		
 			out.print("<h3><font color=\"green\">Excel数据导入成功</font></h3><br>");
-			out.print(StringUtil.getNotEmptyStr(request.getAttribute("message")).replaceAll("\n|\r","<br>"));
+			out.print("<h3>"+StringUtil.getNotEmptyStr(request.getAttribute("message")).replaceAll("\n|\r","<br>")+"</h3>");
 		}
 		 %>
 						

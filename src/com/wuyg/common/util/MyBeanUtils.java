@@ -68,8 +68,7 @@ public class MyBeanUtils
 				if (tableColumns == null || tableColumns.size() == 0)
 				{
 					propertyDescriptorList.add(p);
-				}
-				else 
+				} else
 				{
 					for (int j = 0; j < tableColumns.size(); j++)
 					{
@@ -142,7 +141,7 @@ public class MyBeanUtils
 	 * @param instance
 	 * @throws Exception
 	 */
-	public static Object createInstanceFromHttpRequest(HttpServletRequest request, Class clz, boolean isFromUrl) throws Exception
+	public static Object createInstanceFromHttpRequest(Map<String, String[]> parameterMap, Class clz, boolean isFromUrl) throws Exception
 	{
 		Object instance = clz.newInstance();
 
@@ -151,13 +150,18 @@ public class MyBeanUtils
 		{
 			PropertyDescriptor property = properties.get(i);
 
-			Object propertyValue = null;
+			String[] propertyValues = parameterMap.get(property.getName());
 
-			String propertyValueStr = request.getParameter(property.getName());
+			String propertyValueStr = propertyValues == null ? null : propertyValues[0];// 取第一个元素
 			if (isFromUrl)
 			{
-				propertyValueStr = getParameterFromUrl(request, property.getName());
+				if (isFromUrl)
+				{
+					propertyValueStr = new String(StringUtil.getNotEmptyStr(propertyValueStr).getBytes("iso-8859-1"), "utf-8");
+				}
 			}
+
+			Object propertyValue = null;
 
 			if (!StringUtil.isEmpty(propertyValueStr))
 			{
@@ -198,17 +202,10 @@ public class MyBeanUtils
 		return instance;
 	}
 
-	public static String getParameterFromUrl(HttpServletRequest request, String parameterName) throws UnsupportedEncodingException
-	{
-		String pValueISO88591 = request.getParameter(parameterName);
-		String pValueUtf8 = new String(StringUtil.getNotEmptyStr(pValueISO88591).getBytes("iso-8859-1"), "utf-8");
-		return pValueUtf8;
-	}
-
-	public static String getWhereSqlFromBean(BaseDbObj baseDbObj, List<String> tableColumns) throws Exception
+	public static String getWhereSqlFromBean(BaseDbObj baseDbObj, List<String> tableColumns, boolean useLike) throws Exception
 	{
 		StringBuffer where = new StringBuffer();
-		
+
 		List<PropertyDescriptor> notNullProperties = getNotNullPropertyDescriptors(baseDbObj, baseDbObj.findKeyColumnName(), tableColumns);
 		for (int i = 0; i < notNullProperties.size(); i++)
 		{
@@ -218,10 +215,15 @@ public class MyBeanUtils
 
 			if (p.getPropertyType().equals(String.class))
 			{
-				
-				where.append(" and " + pName + " like '%" + pValue + "%'");
-			}
-			else 
+				if (useLike)
+				{
+					where.append(" and " + pName + " like '%" + pValue + "%'");
+				} else
+				{
+					where.append(" and " + pName + " = '" + pValue + "'");
+				}
+
+			} else
 			{
 				where.append(" and " + pName + " = '" + pValue + "'");
 			}

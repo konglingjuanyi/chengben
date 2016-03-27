@@ -117,7 +117,7 @@ public class VCostFinalServlet extends AbstractBaseServletTemplate
 		String date_month = StringUtil.getNotEmptyStr(request.getParameter("date_month"));// 月份
 		request.setAttribute("date_month", date_month);
 		
-		// 查询
+		// 明细
 		PaginationObj domainPagination = getDomainDao().searchPaginationByDomainInstance(domainInstance, domainInstance.findDefaultOrderBy(), domainSearchCondition.getPageNo(), domainSearchCondition.getPageCount());
 
 		request.setAttribute(DOMAIN_INSTANCE, domainInstance);

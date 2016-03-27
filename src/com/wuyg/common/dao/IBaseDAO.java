@@ -85,7 +85,7 @@ public interface IBaseDAO
 	public PaginationObj searchPaginationByClause(Class clz, String where, String orderBy, int pageNo, int pageCount);
 
 	/**
-	 * 根据域对象实例中的属性值分页从数据库中查询符合条件的数据
+	 * 根据域对象实例中的属性值分页从数据库中查询符合条件的数据,对于属性中的字符串类字段采用like条件查询
 	 * 
 	 * @param orderBy
 	 * @param where
@@ -95,6 +95,18 @@ public interface IBaseDAO
 	 */
 	public PaginationObj searchPaginationByDomainInstance(BaseDbObj domainInstance, String orderBy, int pageNo, int pageCount);
 
+	/**
+	 * 根据域对象实例中的属性值分页从数据库中查询符合条件的数据，对于属性中的字符串类字段采用输入的useLike字段确定是否用like条件查询
+	 * @param domainInstance
+	 * @param useLike
+	 * @param orderBy
+	 * @param pageNo
+	 * @param pageCount
+	 * @return
+	 */
+	public PaginationObj searchPaginationByDomainInstance(BaseDbObj domainInstance, boolean useLike, String orderBy, int pageNo, int pageCount);
+
+	
 	/**
 	 * 根据条件计算数据库中记录数
 	 * 

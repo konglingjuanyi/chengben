@@ -41,7 +41,7 @@
 	} 
 	
 	// 外部系统名称
-	String otherSysName=new DictionaryService().getDictValueByDictKey("外部接口字典",sysMapInfo.getOther_system() );
+	String otherSysName=new DictionaryService().getDictValueByDictKey("外部接口字典",sysMapInfo.getSource_system() );
 %> 
 <html> 
 	<head> 
@@ -130,15 +130,15 @@
 					<td></td>
 				</tr> 
 				<tr> 
-					<td style="color:#66cccc"> 
-						<%="成本系统<br>"+sysMapInfo.getSource_name()+"编号" %>: 
+					<td style="color:#3daeb6"> 
+						<%=otherSysName+"<br>"+sysMapInfo.getSource_name()+"编号" %>: 
 					</td> 
 					<td> 
 						<input name="source_id" type="text" id="source_id" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_id(),"")%>" size="20"  <% if(!StringUtil.isEmpty(sysMapInfo.getSource_dict_name())){%>onClick="openDictTable('source')" readOnly<%} %>> 
 						<font color="red">*</font> 
 					</td> 
 					<td style="color:#ff9900"> 
-						<%=otherSysName+"<br>"+sysMapInfo.getDest_name()+"编号" %>: 
+						<%="总账系统<br>"+sysMapInfo.getDest_name()+"编号" %>: 
 					</td> 
 					<td> 
 						<input name="dest_id" type="text" id="dest_id" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_id(),"")%>" size="20" <% if(!StringUtil.isEmpty(sysMapInfo.getDest_dict_name())){%>onClick="openDictTable('dest')" readOnly<%} %>> 
@@ -147,15 +147,15 @@
 					
 				</tr> 
 				<tr> 
-					<td style="color:#66cccc"> 
-						<%="成本系统<br>"+sysMapInfo.getSource_name()+"名称" %>: 
+					<td style="color:#3daeb6"> 
+						<%=otherSysName+"<br>"+sysMapInfo.getSource_name()+"名称" %>: 
 					</td> 
 					<td> 
 						<input name="source_name" type="text" id="source_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getSource_name(),"")%>" size="20"  <% if(!StringUtil.isEmpty(sysMapInfo.getSource_dict_name())){%>onClick="openDictTable('source')" readOnly<%} %>> 
 						<font color="red">*</font> 
 					</td> 
 					<td style="color:#ff9900"> 
-						<%=otherSysName+"<br>"+sysMapInfo.getDest_name()+"名称" %>: 
+						<%="总账系统<br>"+sysMapInfo.getDest_name()+"名称" %>: 
 					</td> 
 					<td> 
 						<input name="dest_name" type="text" id="dest_name" value="<%=StringUtil.getNotEmptyStr(domainInstance.getDest_name(),"")%>" size="20" <% if(!StringUtil.isEmpty(sysMapInfo.getDest_dict_name())){%>onClick="openDictTable('dest')" readOnly<%} %>> 

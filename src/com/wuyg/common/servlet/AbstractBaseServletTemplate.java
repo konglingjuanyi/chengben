@@ -1,8 +1,12 @@
 package com.wuyg.common.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
 import com.hz.auth.obj.AuthUser;
@@ -22,6 +30,7 @@ import com.wuyg.common.obj.PaginationObj;
 import com.wuyg.common.util.MyBeanUtils;
 import com.wuyg.common.util.RequestUtil;
 import com.wuyg.common.util.StringUtil;
+import com.wuyg.common.util.TimeUtil;
 
 public abstract class AbstractBaseServletTemplate extends HttpServlet
 {
@@ -36,6 +45,9 @@ public abstract class AbstractBaseServletTemplate extends HttpServlet
 	public BaseDbObj domainInstance;
 	// 查询条件
 	public BaseSearchCondition domainSearchCondition;
+
+	// 上传的文件，只保存第一个
+	protected File savedFile = null;
 
 	// 虚方法：获取领域DAO，具体集成类实现
 	public abstract IBaseDAO getDomainDao();
@@ -168,18 +180,33 @@ public abstract class AbstractBaseServletTemplate extends HttpServlet
 	// 检查ID是否已录入系统
 	public void checkId(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		if (domainInstance.getKeyValue() < 0)
+		// if (domainInstance.getKeyValue() < 0)
+		// {
+		// response.getWriter().write("false");
+		// response.flushBuffer();
+		// } else
+		// {
+
+		List<String> uniqueIndexProperties = domainInstance.getUniqueIndexProperties();
+
+		String whereSql = " 1=1 ";
+		for (int i = 0; i < uniqueIndexProperties.size(); i++)
 		{
-			response.getWriter().write("false");
-			response.flushBuffer();
+			// 取用于唯一性检查的字段的值
+			String propName = uniqueIndexProperties.get(i);
+			whereSql += " and " + propName + "='" + BeanUtils.getProperty(domainInstance, propName) + "'";
 		}
 
-		PaginationObj pagination = getDomainDao().searchPaginationByDomainInstance(domainInstance, null, 1, 1);
-		if (pagination.getDataList().size() > 0)
+		int num = getDomainDao().countByClause(whereSql);
+		if (num > 0)
 		{
 			response.getWriter().write("true");
-			response.flushBuffer();
+		} else
+		{
+			response.getWriter().write("false");
 		}
+		response.flushBuffer();
+		// }
 	}
 
 	// 增加 or 修改
@@ -188,12 +215,12 @@ public abstract class AbstractBaseServletTemplate extends HttpServlet
 		// 保存或更新
 		if (domainInstance.getKeyValue() < 0)
 		{
-			long keyValue = getDomainDao().getMaxKeyValue() ;
+			long keyValue = getDomainDao().getMaxKeyValue();
 			domainInstance.setId(keyValue);
 		}
 
 		boolean success = getDomainDao().saveOrUpdate(domainInstance);
-		
+
 		// 声明是新增后转到的详情页面
 		request.setAttribute("needRefresh", true);
 
@@ -271,17 +298,35 @@ public abstract class AbstractBaseServletTemplate extends HttpServlet
 		// 导出时不限条数，放到最大值
 		PaginationObj domainPagination = getDomainDao().searchPaginationByDomainInstance(domainInstance, domainInstance.findDefaultOrderBy(), 1, Integer.MAX_VALUE);
 
-		RequestUtil.downloadFile(this, response, domainPagination.getDataList(), domainInstance.getProperties(), StringUtil.getNotEmptyStr(domainInstance.getCnName(), "明细数据"));
+		// RequestUtil.downloadFile(this, response,
+		// domainPagination.getDataList(), domainInstance.getProperties(),
+		// StringUtil.getNotEmptyStr(domainInstance.getCnName(), "明细数据"));
+
+		RequestUtil.downloadFile(this, response, domainPagination.getDataList(), getDomainInstanceClz());
+	}
+
+	// 上传文件
+	public void uploadFile(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		if (this.savedFile == null)
+		{
+			throw new Exception("文件上传出错，请检查是否选择了合适的文件");
+		}
 	}
 
 	// 解析前台传递过来的数据
 	private void parseParameters(HttpServletRequest request, String method) throws Exception
 	{
+		Map<String, String[]> parameterMap = request.getParameterMap();
+
+		// 处理enctype="multipart/form-data"的form，保存文件+抽取参数
+		parameterMap = parseMuiltipartRequest(request);
+
 		// 参数是否是通过url传递过来的
 		boolean isFromUrl = "true".equalsIgnoreCase(request.getParameter("isFromUrl"));
 
 		// 获取领域对象基本信息
-		domainInstance = (BaseDbObj) MyBeanUtils.createInstanceFromHttpRequest(request, getDomainInstanceClz(), isFromUrl);
+		domainInstance = (BaseDbObj) MyBeanUtils.createInstanceFromHttpRequest(parameterMap, getDomainInstanceClz(), isFromUrl);
 
 		// 获取领域对象主键值
 		domainInstanceKeyValue = request.getParameter(domainInstance.findKeyColumnName());
@@ -291,13 +336,68 @@ public abstract class AbstractBaseServletTemplate extends HttpServlet
 		}
 
 		// 获取领域对象查询查询条件
-		domainSearchCondition = (BaseSearchCondition) MyBeanUtils.createInstanceFromHttpRequest(request, getDomainSearchConditionClz(), isFromUrl);
+		domainSearchCondition = (BaseSearchCondition) MyBeanUtils.createInstanceFromHttpRequest(parameterMap, getDomainSearchConditionClz(), isFromUrl);
 
 		// 设置查询条件的业务对象
 		domainSearchCondition.setDomainObj(domainInstance);
 
 		// 设置当前账号
 		domainSearchCondition.setUser(currentUser);
+	}
+
+	// 判断form enctype="multipart/form-data"并保存文件+抽取参数
+	private Map<String, String[]> parseMuiltipartRequest(HttpServletRequest request) throws FileUploadException, UnsupportedEncodingException, Exception, IOException
+	{
+		Map<String, String[]> parameterMap = new HashMap<String, String[]>();
+
+		// 文件置空
+		this.savedFile = null;
+
+		Enumeration<String> parameterNames = request.getParameterNames();
+		while (parameterNames.hasMoreElements())
+		{
+			String parameterName = (String) parameterNames.nextElement();
+			parameterMap.put(parameterName, request.getParameterValues(parameterName));
+		}
+
+		if (ServletFileUpload.isMultipartContent(request))
+		{
+			DiskFileItemFactory fac = new DiskFileItemFactory();
+			ServletFileUpload upload = new ServletFileUpload(fac);
+			upload.setHeaderEncoding("utf-8");
+			List<FileItem> fileList = upload.parseRequest(request);
+			for (int i = 0; i < fileList.size(); i++)
+			{
+				FileItem item = fileList.get(i);
+				if (item.isFormField())
+				{
+					// 构造map,普通参数放入map
+					parameterMap.put(item.getFieldName(), new String[]
+					{ new String(item.getString().getBytes("iso-8859-1"), "utf-8") });
+				} else if (this.savedFile == null)
+				{
+					// 文件保存,每次请求只保存第一个文件
+					String fileName = item.getName();
+					if (fileName == null || fileName.trim().equals(""))
+					{
+						continue;
+					}
+
+					String destFileName = TimeUtil.nowTime2str("yyyyMMddHHmmss_") + fileName;
+
+					String baseDir = this.getServletConfig().getServletContext().getRealPath("/upload/");
+					savedFile = new File(baseDir + "/" + destFileName);
+					if (!savedFile.getParentFile().exists())
+					{
+						savedFile.getParentFile().mkdirs();
+					}
+					item.write(savedFile);
+
+					log.info("文件上传成功，保存位置:" + savedFile.getCanonicalPath() + ",大小:" + savedFile.length());
+				}
+			}
+		}
+		return parameterMap;
 	}
 
 	private String getParameterFromUrl(HttpServletRequest request, String parameterName) throws UnsupportedEncodingException

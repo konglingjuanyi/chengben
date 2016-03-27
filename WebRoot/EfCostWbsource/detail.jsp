@@ -53,6 +53,12 @@
 				</td> 
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getCname())%></td> 
 			</tr> 
+			<tr> 
+				<td> 
+					<%=domainInstance.getPropertyCnName("debitORcredit") %>: 
+				</td> 
+				<td><%=new DictionaryService().getDictValueByDictKey("余额方向字典",domainInstance.getDebitORcredit())%></td> 
+			</tr> 
 		</table> 
 		 
 		<!-- 工具栏 --> 

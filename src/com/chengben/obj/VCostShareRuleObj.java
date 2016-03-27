@@ -11,8 +11,9 @@ public class VCostShareRuleObj extends BaseDbObj
 	private String date_month;
 	private String department_code;
 	private String department_name;
-	private String department_type;
-	private Integer department_type_sort;
+	private String department_type_code;
+	private String department_type_name;
+	private String department_type_sort;
 	private Double share_rate_level_1 = 0d;
 	private Double share_rate_level_2 = 0d;
 	private Double share_rate_level_3 = 0d;
@@ -22,9 +23,9 @@ public class VCostShareRuleObj extends BaseDbObj
 	private Timestamp last_modify_time;
 	private String last_modify_account;
 
-	public static final String DEPARTMENT_TYPE_FUZHU = "辅助类";
-	public static final String DEPARTMENT_TYPE_YIJI = "医技类";
-	public static final String DEPARTMENT_TYPE_LINCHUANG = "临床类";
+	public static final String DEPARTMENT_TYPE_FUZHU = "03";
+	public static final String DEPARTMENT_TYPE_YIJI = "02";
+	public static final String DEPARTMENT_TYPE_LINCHUANG = "01";
 
 	@Override
 	public String findKeyColumnName()
@@ -60,7 +61,7 @@ public class VCostShareRuleObj extends BaseDbObj
 	@Override
 	public String findDefaultOrderBy()
 	{
-		return "department_type_sort,department_code";
+		return "department_type_code desc,department_code";
 	}
 
 	public LinkedHashMap<String, String> getProperties()
@@ -81,6 +82,36 @@ public class VCostShareRuleObj extends BaseDbObj
 		// pros.put("last_modify_time", "修改时间");
 		// pros.put("last_modify_account", "修改人");
 		return pros;
+	}
+
+	public String getDepartment_type_code()
+	{
+		return department_type_code;
+	}
+
+	public void setDepartment_type_code(String department_type_code)
+	{
+		this.department_type_code = department_type_code;
+	}
+
+	public String getDepartment_type_name()
+	{
+		return department_type_name;
+	}
+
+	public void setDepartment_type_name(String department_type_name)
+	{
+		this.department_type_name = department_type_name;
+	}
+
+	public String getDepartment_type_sort()
+	{
+		return department_type_sort;
+	}
+
+	public void setDepartment_type_sort(String department_type_sort)
+	{
+		this.department_type_sort = department_type_sort;
 	}
 
 	public String getDate_month()
@@ -123,15 +154,7 @@ public class VCostShareRuleObj extends BaseDbObj
 		this.cost_per_treat = cost_per_treat;
 	}
 
-	public Integer getDepartment_type_sort()
-	{
-		return department_type_sort;
-	}
 
-	public void setDepartment_type_sort(Integer department_type_sort)
-	{
-		this.department_type_sort = department_type_sort;
-	}
 
 	public String getId()
 	{
@@ -163,15 +186,6 @@ public class VCostShareRuleObj extends BaseDbObj
 		this.department_name = department_name;
 	}
 
-	public String getDepartment_type()
-	{
-		return department_type;
-	}
-
-	public void setDepartment_type(String department_type)
-	{
-		this.department_type = department_type;
-	}
 
 	public Double getShare_rate_level_1()
 	{
@@ -230,12 +244,12 @@ public class VCostShareRuleObj extends BaseDbObj
 
 	public boolean isLevel2()
 	{
-		return DEPARTMENT_TYPE_YIJI.equals(this.department_type) || DEPARTMENT_TYPE_LINCHUANG.equals(this.department_type);
+		return DEPARTMENT_TYPE_YIJI.equals(this.department_type_code) || DEPARTMENT_TYPE_LINCHUANG.equals(this.department_type_code);
 	}
 
 	public boolean isLevel3()
 	{
-		return DEPARTMENT_TYPE_LINCHUANG.equals(this.department_type);
+		return DEPARTMENT_TYPE_LINCHUANG.equals(this.department_type_code);
 	}
 
 	@Override

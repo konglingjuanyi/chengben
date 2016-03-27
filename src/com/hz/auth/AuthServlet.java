@@ -3,6 +3,7 @@ package com.hz.auth;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -398,12 +399,12 @@ public class AuthServlet extends HttpServlet
 
 	// 解析前台传递过来的数据
 	private void parseParameters(HttpServletRequest request) throws Exception
-	{
+	{	
 		// 获取部门数据
-		department = (AuthDepartment) MyBeanUtils.createInstanceFromHttpRequest(request, AuthDepartment.class, false);
+		department = (AuthDepartment) MyBeanUtils.createInstanceFromHttpRequest(request.getParameterMap(), AuthDepartment.class, false);
 
 		// 获取用户数据
-		user4addOrModify = (AuthUser) MyBeanUtils.createInstanceFromHttpRequest(request, AuthUser.class, false);
+		user4addOrModify = (AuthUser) MyBeanUtils.createInstanceFromHttpRequest(request.getParameterMap(), AuthUser.class, false);
 
 		// 4m
 		is4m = request.getParameter("4m");

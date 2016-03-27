@@ -41,7 +41,7 @@
 						<%=domainInstance.getPropertyCnName("ccostitemname") %> 
 						<input name="ccostitemname" type="text" id="ccostitemname" value="<%=StringUtil.getNotEmptyStr(domainInstance.getCcostitemname())%>" size="20" > 
 						&nbsp;  
-						<input name="searchButton" type="button" class="button button_search" value="查询" onClick="toPage(1)"> 
+						<input name="searchButton" type="button" class="button button_search" value="查询" onClick="toPage1(1)"> 
 					</td> 
 					<td align="right"> 
 						<input name="addButton" type="button" class="button button_add" value="增加" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4this')"> 
@@ -51,88 +51,35 @@
 			</table> 
  
 			<!-- 查询结果 --> 
-			<% 
-				PaginationObj pagination = null; 
-				List list = new ArrayList(); 
- 
-				Object paginationObj = request.getAttribute("domainPagination"); 
-				if (paginationObj != null) 
-				{ 
-					pagination = (PaginationObj) paginationObj; 
-					list = (List) pagination.getDataList(); 
-				} 
-				if (paginationObj == null) 
-				{ 
-					out.print("没有符合条件的数据，请重新设置条件再查询。"); 
-				} else 
-				{ 
-			%> 
-			<table class="table table-bordered table-striped" align="center" width="98%"> 
-				<thead> 
-					<tr> 
-						<th><%=domainInstance.getPropertyCnName("id") %></th> 
-						<th><%=domainInstance.getPropertyCnName("ccostitemcode") %></th> 
-						<th><%=domainInstance.getPropertyCnName("ccostitemname") %></th> 
-						<th><%=domainInstance.getPropertyCnName("cparentcode") %></th> 
-						<th><%=domainInstance.getPropertyCnName("csource") %></th> 
-						<th><%=domainInstance.getPropertyCnName("csubject") %></th> 
-						<th><%=domainInstance.getPropertyCnName("cdirect") %></th> 
-						<th><%=domainInstance.getPropertyCnName("cchange") %></th> 
-						<th><%=domainInstance.getPropertyCnName("ccontrol") %></th> 
-						<th><%=domainInstance.getPropertyCnName("ctm") %></th> 
-						<th><%=domainInstance.getPropertyCnName("ccostkindcode") %></th> 
-						<th><%=domainInstance.getPropertyCnName("cshareparamcode") %></th> 
-						<th><%=domainInstance.getPropertyCnName("cend") %></th> 
-						<th><%=domainInstance.getPropertyCnName("cstop") %></th> 
-						<th>操作</th> 
-					</tr> 
-				</thead> 
-				<% 
-					for (int i = 0; i < list.size(); i++) 
-						{ 
-							EfCostCostitemObj o = (EfCostCostitemObj) list.get(i); 
-				%> 
-				<tr> 
-					<td> 
-						<a href="#" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=detail4this&<%=o.findKeyColumnName()%>=<%=o.getKeyValue()%>')"> <%=StringUtil.getNotEmptyStr(o.getKeyValue())%> </a> 
-					</td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getCcostitemcode())%></td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getCcostitemname())%></td> 
-					<td><%=new DictionaryService().getDictValueByDictKey("成本项目字典",o.getCparentcode())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("来源字典",o.getCsource())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("会计科目字典",o.getCsubject())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("是否字典",o.getCdirect())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("是否字典",o.getCchange())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("是否字典",o.getCcontrol())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("医疗/药品字典",o.getCtm())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("成本分类字典",o.getCcostkindcode())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("分摊参数字典",o.getCshareparamcode())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("是否字典",o.getCend())%></td>  
-					<td><%=new DictionaryService().getDictValueByDictKey("是否字典",o.getCstop())%></td>  
-					<td align="left" style="cursor: pointer"> 
-						<input type="button" class="button button_modify" title="修改" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4this&<%=o.findKeyColumnName()%>=<%=o.getKeyValue()%>')" /> 
-						&nbsp; 
-						<input type="button" class="button button_delete" title="删除" 
-							onClick="javascript: 
-								$('#pageForm').attr('action','<%=contextPath%>/<%=basePath%>/Servlet?method=delete4this&<%=o.findKeyColumnName()%>_4del=<%=o.getKeyValue()%>'); 
-								$('#pageForm').submit(); 
-								" /> 
-					</td> 
-				</tr> 
-				<% 
-					} 
-				%> 
-			</table> 
- 
-			<!-- 翻页操作栏 --> 
-			<jsp:include page="../ToolBar/pagination_toolbar.jsp"> 
+ 			<div id="data_list_div">
+			<jsp:include page="listData.jsp"> 
 				<jsp:param name="basePath" value="<%=basePath%>"/> 
 			</jsp:include> 
+			</div>
  
-			<% 
-				} 
-			%> 
 		</form>  
- 
+ 		
+ 		
+ 		
+ 		<script>
+ 		function toPage1(pageNo)
+ 		{
+ 			$.post("Servlet?method=list4this&justListData=true",  
+					$('#pageForm').serialize(),  
+					function (data, textStatus){
+						$('#data_list_div').html(data);
+				}); 
+ 		}
+ 		
+ 		$('#ccostitemcode').bind('input propertychange',function(){
+ 				$('#pageNo').val(1);
+ 		 		$.post("Servlet?method=list4this&justListData=true",  
+					$('#pageForm').serialize(),  
+					function (data, textStatus){
+						$('#data_list_div').html(data);
+				}); 
+ 		}
+ 		);
+ 		</script>
 	</body> 
 </html> 

@@ -48,6 +48,8 @@
 		if(!checkNull("id","<%=domainInstance.getPropertyCnName("id")%>")) return false; 
 		if(!checkNull("ccode","<%=domainInstance.getPropertyCnName("ccode")%>")) return false; 
 		if(!checkNull("cname","<%=domainInstance.getPropertyCnName("cname")%>")) return false; 
+		if(!checkNull("debitORcredit","<%=domainInstance.getPropertyCnName("debitORcredit")%>")) return false; 
+		
 					 
 			// 修改 
 			if("true"=="<%=isModify%>") 
@@ -114,6 +116,15 @@
 					</td> 
 					<td> 
 						<input name="cname" type="text" id="cname" value="<%=StringUtil.getNotEmptyStr(domainInstance.getCname(),"")%>" size="20"  > 
+						<font color="red">*</font> 
+					</td> 
+				</tr> 
+				<tr> 
+					<td> 
+						<%=domainInstance.getPropertyCnName("debitORcredit") %>: 
+					</td> 
+					<td> 
+						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("余额方向字典", false), "debitORcredit", "", StringUtil.getNotEmptyStr(domainInstance.getDebitORcredit(), ""), "notEmpty")%> 
 						<font color="red">*</font> 
 					</td> 
 				</tr> 

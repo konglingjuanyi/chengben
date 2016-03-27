@@ -2,9 +2,12 @@ package com.excelparser;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +33,7 @@ import com.wuyg.common.util.MyBeanUtils;
 import com.wuyg.common.util.StringUtil;
 import com.wuyg.common.util.TimeUtil;
 import com.wuyg.excelparser.ExcelParser;
+import com.wuyg.excelparser.obj.ExcelColumnObj;
 import com.wuyg.excelparser.obj.ExcelParserConfigObj;
 
 public class ExcelParserServlet extends AbstractBaseServletTemplate
@@ -116,7 +120,13 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 			ExcelParserObj excelParserObj = (ExcelParserObj) domainInstance;
 
 			// 1、======保存Excel文件
-			File saveFile = saveFile(request);
+			// File saveFile = saveFile(request);
+
+			File saveFile = super.savedFile;
+			if (saveFile == null)
+			{
+				throw new Exception("文件上传出错，请检查是否选择了合适的文件");
+			}
 
 			// 2、======Excel解析到javabean
 
@@ -126,11 +136,10 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 			{
 				// 优先根据 解析器名字 从配置文件中获取excel解析器
 				excelParserConfigObj = ExcelParser.getExcelParserByName(excelParserObj.getParser_name());
-
 			} catch (Exception e)
 			{
 				logger.error(e.getMessage(), e);
-				
+
 				// 如果配置文件中没有配置该excel解析器，则根据前台传递过来的excel对应的basedbobj类来获取默认解析器
 				String basedbobj_class = excelParserObj.getBasedbobj_class();
 				logger.info("使用basedbobj类获取excel解析配置器,对应的类为：" + basedbobj_class);
@@ -146,40 +155,55 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 			Class javaBeanClass = Thread.currentThread().getContextClassLoader().loadClass(excelParserConfigObj.getJavaBean());
 
 			// 解析Excel文件
-			excelDataList = ExcelParser.parse(saveFile, excelParserConfigObj, null);
+			Map paramMap = new HashMap();
+			paramMap.put("request", request);
+			paramMap.put("response", response);
+
+			excelDataList = ExcelParser.parse(saveFile, excelParserConfigObj, paramMap);
 			logger.info("Excel解析出的数据共" + excelDataList.size() + "条:" + excelDataList);
 
 			// 3、======数据比对（用唯一标识字段比较excel中的数据与数据库中的数据）
 
 			// 根据唯一标识从数据库中抓取数据
-			List<String> uniqueKeyList = new ArrayList<String>();
-			String uniqueColumnName = excelParserConfigObj.getUniqueColumn().getJavaBeanProperty();
+			StringBuffer inDbSql = new StringBuffer("( 1=0 ");
+			List<ExcelColumnObj> uniqueColumns = excelParserConfigObj.getUniqueColumns();
 			for (int i = 0; i < excelDataList.size(); i++)
 			{
+				String clause = "";
 				Object obj = excelDataList.get(i);
-				String uniqueColumnValue = BeanUtils.getProperty(obj, uniqueColumnName);
-				uniqueKeyList.add(uniqueColumnValue);
-			}
+				for (int j = 0; j < uniqueColumns.size(); j++)
+				{
+					ExcelColumnObj uniqueColumn = uniqueColumns.get(j);
+					String uniqueColumnName = uniqueColumn.getJavaBeanProperty();
+					String uniqueColumnValue = BeanUtils.getProperty(obj, uniqueColumnName);
 
-			String inDbSql = uniqueColumnName + " in (" + StringUtil.getStringByListWithQuotation(uniqueKeyList) + ") ";
+					clause += (j == 0 ? "" : " and ") + uniqueColumnName + "='" + uniqueColumnValue + "' ";
+				}
+
+				if (!StringUtil.isEmpty(clause))
+				{
+					inDbSql.append(" or (" + clause + ") ");
+				}
+			}
+			inDbSql.append(" )");
 
 			IBaseDAO dao = new DefaultBaseDAO(javaBeanClass);
-			List dbSearchedDataList = dao.searchByClause(javaBeanClass, inDbSql, null, 0, Integer.MAX_VALUE);
+			List dbSearchedDataList = dao.searchByClause(javaBeanClass, inDbSql.toString(), null, 0, Integer.MAX_VALUE);
 
 			logger.info("需更新数据共" + dbSearchedDataList.size() + "条:" + dbSearchedDataList);
 
 			// 比对数据情况:新增 或 更新
-
 			for (int i = 0; i < excelDataList.size(); i++)
 			{
 				BaseDbObj excelRowObj = (BaseDbObj) excelDataList.get(i);
-				String uniqueColumnValueInExcel = BeanUtils.getProperty(excelRowObj, uniqueColumnName);
+
+				String uniqueColumnsValueInExcel = getUniqueColumnsValue(uniqueColumns, excelRowObj);
 				boolean isInDb = false;
 				for (int j = 0; j < dbSearchedDataList.size(); j++)
 				{
 					BaseDbObj dbRowObj = (BaseDbObj) dbSearchedDataList.get(j);
-					String uniqueColumnValueInDb = BeanUtils.getProperty(dbRowObj, uniqueColumnName);
-					if (uniqueColumnValueInExcel.trim().equalsIgnoreCase(uniqueColumnValueInDb.trim()))
+					String uniqueColumnsValueInDb = getUniqueColumnsValue(uniqueColumns, dbRowObj);
+					if (uniqueColumnsValueInExcel.trim().equalsIgnoreCase(uniqueColumnsValueInDb.trim()))
 					{
 						isInDb = true;
 						excelRowObj.setId(dbRowObj.getKeyValue());// 用数据库中的id填充
@@ -216,50 +240,14 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 		}
 	}
 
-	private File saveFile(HttpServletRequest request) throws Exception
+	private String getUniqueColumnsValue(List<ExcelColumnObj> uniqueColumns, BaseDbObj baseDbObj) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
 	{
-		String baseDir = this.getServletConfig().getServletContext().getRealPath("/upload/");
-
-		DiskFileItemFactory fac = new DiskFileItemFactory();
-		ServletFileUpload upload = new ServletFileUpload(fac);
-		upload.setHeaderEncoding("utf-8");
-		List<FileItem> fileList = upload.parseRequest(request);
-
-		String fileName = "";
-		File saveFile = null;
-
-		for (int i = 0; i < fileList.size(); i++)
+		String uniqueColumnsValue = "";
+		for (int j = 0; j < uniqueColumns.size(); j++)
 		{
-			FileItem item = fileList.get(i);
-			if (!item.isFormField())
-			{
-				fileName = item.getName();
-				if (fileName == null || fileName.trim().equals(""))
-				{
-					continue;
-				}
-
-				String destFileName = TimeUtil.nowTime2str("yyyyMMddHHmmss_") + fileName;
-
-				saveFile = new File(baseDir + "/" + destFileName);
-				if (!saveFile.getParentFile().exists())
-				{
-					saveFile.getParentFile().mkdirs();
-				}
-				item.write(saveFile);
-
-				logger.info("文件上传成功，保存位置:" + saveFile.getCanonicalPath() + ",大小:" + saveFile.length());
-
-				break;// 只传一个文件
-			}
+			uniqueColumnsValue += "--" + BeanUtils.getProperty(baseDbObj, uniqueColumns.get(j).getJavaBeanProperty());
 		}
-		
-		if (saveFile==null)
-		{
-			throw new Exception("文件上传出错，请检查是否选择了合适的文件");
-		}
-		
-		return saveFile;
+		return uniqueColumnsValue;
 	}
 
 	// 上传文件并预览
@@ -299,50 +287,55 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 				javaBeanClass = (Class) tmpObj;
 			}
 
-			String message="";
+			String message = "";
 			IBaseDAO dao = new DefaultBaseDAO(javaBeanClass);
 			if ("新增".equalsIgnoreCase(excelParserObj.getImport_type()))
 			{
 				// 保存新增数据
 
-				if (justInExcelDataList.size()>0)
+				if (justInExcelDataList.size() > 0)
 				{
 					dao.save(justInExcelDataList);
-					message+="新增数据："+justInExcelDataList.size()+"条\n";
+					message += "新增数据：" + justInExcelDataList.size() + "条\n";
 				}
-				
 
 				if ("覆盖系统中相同数据".equalsIgnoreCase(excelParserObj.getSame_record_process_type()))
 				{
 					// 覆盖系统中相同数据
-					if (inDbDataList.size()>0)
+					if (inDbDataList.size() > 0)
 					{
 						dao.update(inDbDataList);
-						message+="覆盖系统中相同数据："+inDbDataList.size()+"条\n";
+						message += "覆盖系统中相同数据：" + inDbDataList.size() + "条\n";
 					}
-					
+
 				}
 			} else if ("覆盖".equalsIgnoreCase(excelParserObj.getImport_type()))
 			{
 				// 先删除
 				dao.deleteByClause("1=1");
 
-				if (excelDataList.size()>0)
+				// 再入库
+				if (excelDataList.size() > 0)
 				{
-					// 再入库
+					long maxKeyValue= dao.getMaxKeyValue();
+					for (int i = 0; i < excelDataList.size(); i++)
+					{
+						BaseDbObj excelData=(BaseDbObj)excelDataList.get(i);
+						excelData.setId(maxKeyValue++);
+					}
 					dao.save(excelDataList);
 				}
-				
-				message+="删除系统中原有数据，并导入新数据："+excelDataList.size()+"条\n";
+
+				message += "删除系统中原有数据，并导入新数据：" + excelDataList.size() + "条\n";
 			}
 			if (StringUtil.isEmpty(message))
 			{
-				message="本次导入没有任何数据受影响";
+				message = "本次导入没有任何数据受影响";
 			}
 			logger.info(message);
 			request.setAttribute("message", message);
-			
-			request.setAttribute("needRefresh", true);//刷新数据
+
+			request.setAttribute("needRefresh", true);// 刷新数据
 		} catch (Exception e)
 		{
 			request.setAttribute("errorMessage", e.getMessage());

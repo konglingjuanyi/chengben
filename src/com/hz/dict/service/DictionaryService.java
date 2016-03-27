@@ -13,6 +13,7 @@ import com.inspur.common.dictionary.Dictionary;
 import com.inspur.common.dictionary.pojo.Dict;
 import com.inspur.common.dictionary.pojo.DictItem;
 import com.wuyg.common.util.MySqlUtil;
+import com.wuyg.common.util.StringUtil;
 
 public class DictionaryService implements IDictionaryService
 {
@@ -128,10 +129,20 @@ public class DictionaryService implements IDictionaryService
 
 	public String getDictValueByDictKey(String dictName, String key)
 	{
+		return getDictValueByDictKey(dictName, key, false);
+	}
+
+	public String getDictValueByDictKey(String dictName, String key, boolean showKey)
+	{
 		try
 		{
 			DataSource ds = MySqlUtil.getDataSource(SystemConstant.DEFAULT_DB);
-			return dictionary.getDictValueByDictKey(dictName, key, ds);
+			String value = dictionary.getDictValueByDictKey(dictName, key, ds);
+			if (showKey && !StringUtil.isEmpty(value))
+			{
+				value += "(" + key + ")";
+			}
+			return value;
 		} catch (Exception e)
 		{
 			logger.error(e.getMessage(), e);

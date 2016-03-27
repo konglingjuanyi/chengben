@@ -2,6 +2,7 @@ package com.wuyg.common.util;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import com.cost.obj.EfCostDeptObj;
 import com.wuyg.common.dao.BaseDbObj;
@@ -23,16 +24,25 @@ public class ExcelParserUtil
 		o.setJavaBean(baseDbObj.getClass().getCanonicalName());// 对应的javabean
 
 		LinkedHashMap<String, String> props = baseDbObj.getProperties(); // 所有列
+		
+		List<String> uniqueProps=baseDbObj.getUniqueIndexProperties();
 		Iterator<String> iterator = props.keySet().iterator();
 		while (iterator.hasNext())
 		{
+			
 			String propEnName = iterator.next();
 			String propCnName = props.get(propEnName);
+			
+			if (propEnName.equalsIgnoreCase(baseDbObj.findKeyColumnName()))
+			{
+				continue;// 忽略主键，这个主键一般是系统自动生成的，不要求填写
+			}
 
 			ExcelColumnObj column = new ExcelColumnObj();
 			column.setExcelColumnName(propCnName);
 			column.setJavaBeanProperty(propEnName);
-			column.setIsUnique(propEnName.equalsIgnoreCase(baseDbObj.findKeyColumnName()));// 是否主键
+			
+			column.setIsUnique(uniqueProps.contains(propEnName));// 是否用于判断唯一索引
 
 			o.addExcelColumn(column);
 		}

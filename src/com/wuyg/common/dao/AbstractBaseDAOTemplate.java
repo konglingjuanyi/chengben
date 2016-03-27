@@ -79,7 +79,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			if (firstInstance.getKeyValue() <= 0)
 			{
 				long maxKeyValue = getMaxKeyValue();
-				
+
 				for (int i = 0; i < instances.size(); i++)
 				{
 					((BaseDbObj) instances.get(i)).setId(maxKeyValue++);
@@ -275,7 +275,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		return list;
 	}
 
-	private Object getDomainObjFromResultSet(Class clz, ResultSet rst, List<PropertyDescriptor> propertyDescriptors) throws InstantiationException, IllegalAccessException, SQLException, InvocationTargetException
+	private Object getDomainObjFromResultSet(Class clz, ResultSet rst, List<PropertyDescriptor> propertyDescriptors) throws Exception
 	{
 		Object instance = clz.newInstance();
 
@@ -355,13 +355,13 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		return paginationObj;
 	}
 
-	public PaginationObj searchPaginationByDomainInstance(BaseDbObj domainInstance, String orderBy, int pageNo, int pageCount)
+	public PaginationObj searchPaginationByDomainInstance(BaseDbObj domainInstance, boolean useLike, String orderBy, int pageNo, int pageCount)
 	{
 		try
 		{
 			String where = " 1=1 ";
 			// 把非空的基本条件设置上
-			where += MyBeanUtils.getWhereSqlFromBean(domainInstance, getTableMetaData());
+			where += MyBeanUtils.getWhereSqlFromBean(domainInstance, getTableMetaData(), useLike);
 
 			int totalCount = countByClause(where);
 			if (pageNo == 0)
@@ -392,6 +392,11 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		}
 
 		return PaginationObj.NULL_PAGE;// 出错返回空页
+	}
+
+	public PaginationObj searchPaginationByDomainInstance(BaseDbObj domainInstance, String orderBy, int pageNo, int pageCount)
+	{
+		return searchPaginationByDomainInstance(domainInstance, true, orderBy, pageNo, pageCount);
 	}
 
 	public boolean update(List instances)

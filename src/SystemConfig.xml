@@ -18,6 +18,14 @@
 		<dbPassword>Wyg2461290!</dbPassword>
 	</db>
 	
+	<!-- 用友总账系统数据库 -->
+	<uf_db>
+		<dbDriverClassName>com.microsoft.sqlserver.jdbc.SQLServerDriver</dbDriverClassName>
+		<dbUrl>jdbc:sqlserver://127.0.0.1:1433;DatabaseName=uf_db</dbUrl>
+		<dbUser>sa</dbUser>
+		<dbPassword>Wyg2461290!</dbPassword>
+	</uf_db>
+	
 	
 	<!--
 	<db>

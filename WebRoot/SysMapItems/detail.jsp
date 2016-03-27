@@ -49,7 +49,7 @@
 				<td></td><td></td>
 			</tr> 
 			<tr> 
-				<td style="color:#66cccc"> 
+				<td style="color:#3daeb6"> 
 					<%=domainInstance.getPropertyCnName("source_id") %>: 
 				</td> 
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getSource_id())%></td> 
@@ -59,7 +59,7 @@
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getDest_id())%></td> 
 			</tr> 
 			<tr> 
-				<td style="color:#66cccc"> 
+				<td style="color:#3daeb6"> 
 					<%=domainInstance.getPropertyCnName("source_name") %>: 
 				</td> 
 				<td><%=StringUtil.getNotEmptyStr(domainInstance.getSource_name())%></td> 
