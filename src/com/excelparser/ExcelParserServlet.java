@@ -131,61 +131,43 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 			// 2、======Excel解析到javabean
 
 			// 获取解析器配置信息
-			ExcelParserConfigObj excelParserConfigObj = null;
+			ExcelParserConfigObj excelParserConfig = null;
 			try
 			{
 				// 优先根据 解析器名字 从配置文件中获取excel解析器
-				excelParserConfigObj = ExcelParser.getExcelParserByName(excelParserObj.getParser_name());
+				excelParserConfig = ExcelParser.getExcelParserByName(excelParserObj.getParser_name());
 			} catch (Exception e)
 			{
-				logger.error(e.getMessage(), e);
+				logger.error(e.getMessage());
 
 				// 如果配置文件中没有配置该excel解析器，则根据前台传递过来的excel对应的basedbobj类来获取默认解析器
 				String basedbobj_class = excelParserObj.getBasedbobj_class();
 				logger.info("使用basedbobj类获取excel解析配置器,对应的类为：" + basedbobj_class);
 				BaseDbObj baseDbObj = (BaseDbObj) Thread.currentThread().getContextClassLoader().loadClass(basedbobj_class).newInstance();
-				excelParserConfigObj = ExcelParserUtil.getExcelParserConfigByBaseDbObj(baseDbObj);
+				excelParserConfig = ExcelParserUtil.getExcelParserConfigByBaseDbObj(baseDbObj);
 			}
 
-			if (excelParserConfigObj == null)
+			if (excelParserConfig == null)
 			{
 				throw new Exception("找不到解析该Excel文件所需的配置信息，请检查Excel解析配置文件。");
 			}
 
-			Class javaBeanClass = Thread.currentThread().getContextClassLoader().loadClass(excelParserConfigObj.getJavaBean());
+			Class javaBeanClass = Thread.currentThread().getContextClassLoader().loadClass(excelParserConfig.getJavaBean());
 
 			// 解析Excel文件
 			Map paramMap = new HashMap();
 			paramMap.put("request", request);
 			paramMap.put("response", response);
 
-			excelDataList = ExcelParser.parse(saveFile, excelParserConfigObj, paramMap);
+			excelDataList = ExcelParser.parse(saveFile, excelParserConfig, paramMap);
 			logger.info("Excel解析出的数据共" + excelDataList.size() + "条:" + excelDataList);
 
 			// 3、======数据比对（用唯一标识字段比较excel中的数据与数据库中的数据）
 
 			// 根据唯一标识从数据库中抓取数据
-			StringBuffer inDbSql = new StringBuffer("( 1=0 ");
-			List<ExcelColumnObj> uniqueColumns = excelParserConfigObj.getUniqueColumns();
-			for (int i = 0; i < excelDataList.size(); i++)
-			{
-				String clause = "";
-				Object obj = excelDataList.get(i);
-				for (int j = 0; j < uniqueColumns.size(); j++)
-				{
-					ExcelColumnObj uniqueColumn = uniqueColumns.get(j);
-					String uniqueColumnName = uniqueColumn.getJavaBeanProperty();
-					String uniqueColumnValue = BeanUtils.getProperty(obj, uniqueColumnName);
-
-					clause += (j == 0 ? "" : " and ") + uniqueColumnName + "='" + uniqueColumnValue + "' ";
-				}
-
-				if (!StringUtil.isEmpty(clause))
-				{
-					inDbSql.append(" or (" + clause + ") ");
-				}
-			}
-			inDbSql.append(" )");
+			List<ExcelColumnObj> uniqueColumns = excelParserConfig.getUniqueColumns();
+			
+			String inDbSql=getInDbSql(excelDataList,uniqueColumns);
 
 			IBaseDAO dao = new DefaultBaseDAO(javaBeanClass);
 			List dbSearchedDataList = dao.searchByClause(javaBeanClass, inDbSql.toString(), null, 0, Integer.MAX_VALUE);
@@ -223,7 +205,7 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 			request.getSession().setAttribute("excelDataList", excelDataList);
 			request.getSession().setAttribute("inDbDataList", inDbDataList);
 			request.getSession().setAttribute("justInExcelDataList", justInExcelDataList);
-			request.getSession().setAttribute("javaBeanClass", javaBeanClass);
+			request.getSession().setAttribute("excelParserConfig", excelParserConfig);
 
 			// 4、反馈预览
 
@@ -238,6 +220,32 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 		{
 			request.getRequestDispatcher("/" + getBasePath() + "/uploadPreview.jsp").forward(request, response);
 		}
+	}
+	
+	private String getInDbSql(List<BaseDbObj> excelDataList,List<ExcelColumnObj> uniqueColumns) throws Exception
+	{
+		StringBuffer inDbSql = new StringBuffer("( 1=0 ");
+		for (int i = 0; i < excelDataList.size(); i++)
+		{
+			String clause = "";
+			Object obj = excelDataList.get(i);
+			for (int j = 0; j < uniqueColumns.size(); j++)
+			{
+				ExcelColumnObj uniqueColumn = uniqueColumns.get(j);
+				String uniqueColumnName = uniqueColumn.getJavaBeanProperty();
+				String uniqueColumnValue = BeanUtils.getProperty(obj, uniqueColumnName);
+
+				clause += (j == 0 ? "" : " and ") + uniqueColumnName + "='" + uniqueColumnValue + "' ";
+			}
+
+			if (!StringUtil.isEmpty(clause))
+			{
+				inDbSql.append(" or (" + clause + ") ");
+			}
+		}
+		inDbSql.append(" )");
+		
+		return inDbSql.toString();
 	}
 
 	private String getUniqueColumnsValue(List<ExcelColumnObj> uniqueColumns, BaseDbObj baseDbObj) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
@@ -261,7 +269,7 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 			List inDbDataList = new ArrayList(); // 数据库中已经存在的记录
 			List justInExcelDataList = new ArrayList(); // 本次新增的记录
 
-			Class javaBeanClass = null;
+			ExcelParserConfigObj excelParserConfig = null;
 
 			Object tmpObj = request.getSession().getAttribute("excelDataList");
 			if (tmpObj != null)
@@ -281,14 +289,14 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 				justInExcelDataList = (List) tmpObj;
 			}
 
-			tmpObj = request.getSession().getAttribute("javaBeanClass");
+			tmpObj = request.getSession().getAttribute("excelParserConfig");
 			if (tmpObj != null)
 			{
-				javaBeanClass = (Class) tmpObj;
+				excelParserConfig = (ExcelParserConfigObj) tmpObj;
 			}
 
 			String message = "";
-			IBaseDAO dao = new DefaultBaseDAO(javaBeanClass);
+			IBaseDAO dao = new DefaultBaseDAO(Thread.currentThread().getContextClassLoader().loadClass(excelParserConfig.getJavaBean()));
 			if ("新增".equalsIgnoreCase(excelParserObj.getImport_type()))
 			{
 				// 保存新增数据
@@ -312,7 +320,9 @@ public class ExcelParserServlet extends AbstractBaseServletTemplate
 			} else if ("覆盖".equalsIgnoreCase(excelParserObj.getImport_type()))
 			{
 				// 先删除
-				dao.deleteByClause("1=1");
+				dao.deleteByClause(getInDbSql(excelDataList, excelParserConfig.getUniqueColumns()));
+				
+				getInDbSql(excelDataList, excelParserConfig.getUniqueColumns());
 
 				// 再入库
 				if (excelDataList.size() > 0)

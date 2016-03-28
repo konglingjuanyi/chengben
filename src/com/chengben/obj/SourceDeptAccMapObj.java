@@ -33,7 +33,7 @@ public String findTableName()
 @Override 
 public String findDefaultOrderBy()
 {
-	return super.findDefaultOrderBy();
+	return "source_system,dept_share_type,source_acc_subject";
 }
 @Override
 public String getBasePath()

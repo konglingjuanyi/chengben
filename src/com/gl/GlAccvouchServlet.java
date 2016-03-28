@@ -218,13 +218,13 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		List<String> head = new ArrayList<String>();
 		for (int i = 0; i < matrix.size(); i++)
 		{
-			if (i == 1)
+			if (i == 0)
 			{
-				// 取表头，即所有科目
+				// 取第1行表头，即所有科目
 				head = matrix.get(i);
 			}
 
-			if (i >= 2)
+			if (i >= 1)
 			{
 				// 从第2行开始是每个科室的数据
 				List<String> cells = matrix.get(i);

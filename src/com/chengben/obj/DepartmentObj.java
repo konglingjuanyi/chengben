@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 
 public class DepartmentObj extends BaseDbObj
 {
-	private String id;
+	private Long id;
 	private String department_code;
 	private String department_name;
 	private String department_type_code;
@@ -72,12 +72,12 @@ public class DepartmentObj extends BaseDbObj
 		return pros;
 	}
 
-	public String getId()
+	public Long getId()
 	{
 		return id;
 	}
 
-	public void setId(String id)
+	public void setId(Long id)
 	{
 		this.id = id;
 	}

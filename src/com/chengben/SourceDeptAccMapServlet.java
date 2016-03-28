@@ -10,6 +10,7 @@ import org.apache.commons.beanutils.MethodUtils;
 import org.apache.log4j.Logger;
 
 import com.chengben.obj.SourceDeptAccMapObj;
+import com.chengben.obj.SourceDeptMapObj;
 import com.wuyg.common.dao.DefaultBaseDAO;
 import com.wuyg.common.dao.IBaseDAO;
 import com.wuyg.common.obj.PaginationObj;
@@ -50,7 +51,7 @@ public class SourceDeptAccMapServlet extends AbstractBaseServletTemplate
 		String list4notOk = request.getParameter("list4notOk");
 		if ("true".equalsIgnoreCase(list4notOk))
 		{
-			list4notOk(request,response);
+			list4notOk(request, response);
 		} else
 		{
 			super.list(request, response);
@@ -77,6 +78,38 @@ public class SourceDeptAccMapServlet extends AbstractBaseServletTemplate
 		request.setAttribute(source_system, request.getParameter(source_system));
 
 		super.preModify(request, response);
+	}
+
+	// 批量修改前查询领域对象信息
+	public void preModify4Batch(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		// 传递外部接口编号
+		String source_system = "source_system";
+		request.setAttribute(source_system, request.getParameter(source_system));
+
+		// 查询该外部接口的所有对照关系
+		List<SourceDeptAccMapObj> sourceDepMapList = getDomainDao().searchByClause(SourceDeptAccMapObj.class, "source_system='" + request.getParameter(source_system) + "'", domainInstance.findDefaultOrderBy(), 0, Integer.MAX_VALUE);
+
+		request.setAttribute("sourceDepMapList", sourceDepMapList);
+
+		request.getRequestDispatcher("/" + getBasePath() + "/" + BASE_METHOD_ADD_OR_MODIFY + "4Batch.jsp").forward(request, response);
+	}
+
+	// 批量修改前查询领域对象信息
+	public void addOrModify4Batch(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		String[] source_dept_acc_ids = request.getParameterValues("source_dept_acc_id");
+
+		String dest_acc_subject = request.getParameter("dest_acc_subject");
+
+		String updateSql = "update " + domainInstance.findTableName() + " set dest_acc_subject='" + dest_acc_subject + "' where id in (" + StringUtil.getStringByList(source_dept_acc_ids, true) + ")";
+
+		boolean success = getDomainDao().executeSql(updateSql);
+		
+//		response.getWriter().print(success);
+//		response.flushBuffer();
+		
+		preModify4Batch(request, response);
 	}
 
 	// 详情
@@ -109,14 +142,14 @@ public class SourceDeptAccMapServlet extends AbstractBaseServletTemplate
 	// 列出需要完善的对照关系
 	private void list4notOk(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		SourceDeptAccMapObj o=(SourceDeptAccMapObj)domainInstance;
-		
+		SourceDeptAccMapObj o = (SourceDeptAccMapObj) domainInstance;
+
 		// 查询
-		PaginationObj domainPagination = getDomainDao().searchPaginationByClause(domainInstance.getClass(), "source_system='"+o.getSource_system()+"' and dest_acc_subject is null", domainInstance.findDefaultOrderBy(), domainSearchCondition.getPageNo(), domainSearchCondition.getPageCount());
-		
+		PaginationObj domainPagination = getDomainDao().searchPaginationByClause(domainInstance.getClass(), "source_system='" + o.getSource_system() + "' and dest_acc_subject is null", domainInstance.findDefaultOrderBy(), domainSearchCondition.getPageNo(), domainSearchCondition.getPageCount());
+
 		request.setAttribute(DOMAIN_INSTANCE, domainInstance);
 		request.setAttribute(DOMAIN_PAGINATION, domainPagination);
-		
+
 		request.setAttribute("list4notOk", "true");// 保证修改完一个对照关系后父页面刷新时还是只查询notok的
 
 		// 转向

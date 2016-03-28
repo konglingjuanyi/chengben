@@ -34,7 +34,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 	 * 
 	 * @return
 	 */
-	public abstract String getTalbName();
+	public abstract String getTableName();
 
 	/**
 	 * 获取该对象对应表的主键字段名
@@ -49,6 +49,13 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 	 * @return
 	 */
 	public abstract String getParentKeyColumnName();
+
+	/**
+	 * 获取该对象对应表的唯一索引的字段名
+	 * 
+	 * @return
+	 */
+	public abstract List<String> getUniqueIndexColumns();
 
 	public int deleteByKeys(List<String> keys)
 	{
@@ -99,9 +106,9 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			}
 
 			// 构造sql
-			String sql = "insert into " + getTalbName() + " (" + StringUtil.getStringByListNoQuotation(columnList) + ") values (" + StringUtil.getQuestionMarkStringByList(columnList) + ")";
+			String sql = "insert into " + getTableName() + " (" + StringUtil.getStringByListNoQuotation(columnList) + ") values (" + StringUtil.getQuestionMarkStringByList(columnList) + ")";
 
-			logger.info(getTalbName() + " save sql:" + sql);
+			logger.info(getTableName() + " save sql:" + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
@@ -147,7 +154,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			// 批量执行
 			pstmt.executeBatch();
 
-			logger.info(getTalbName() + " saved " + instances.size() + " rows");
+			logger.info(getTableName() + " saved " + instances.size() + " rows");
 
 			return true;
 		} catch (Exception ex)
@@ -209,7 +216,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		{
 			conn = getDbConnection();
 
-			logger.info(getTalbName() + " search sql:" + sql);
+			logger.info(getTableName() + " search sql:" + sql);
 
 			// 构造对象，设置属性值
 			ResultSet rst = conn.createStatement().executeQuery(sql);
@@ -228,7 +235,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 				list.add(instance);
 			}
 
-			logger.info(getTalbName() + " searched " + list.size() + " rows");
+			logger.info(getTableName() + " searched " + list.size() + " rows");
 
 			return list;
 		} catch (Exception ex)
@@ -249,7 +256,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		{
 			conn = getDbConnection();
 
-			logger.info(getTalbName() + " search sql:" + sql);
+			logger.info(getTableName() + " search sql:" + sql);
 
 			// 构造对象，设置属性值
 			ResultSet rst = conn.createStatement().executeQuery(sql);
@@ -262,7 +269,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 				list.add(instance);
 			}
 
-			logger.info(getTalbName() + " searched " + list.size() + " rows");
+			logger.info(getTableName() + " searched " + list.size() + " rows");
 
 			return list;
 		} catch (Exception ex)
@@ -327,7 +334,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 	// 可被重载
 	public String getSelectSql(String clause, String orderBy)
 	{
-		String sql = "select * from " + getTalbName();
+		String sql = "select * from " + getTableName();
 		if (!StringUtil.isEmpty(clause))
 		{
 			sql += " where " + clause;
@@ -411,7 +418,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		{
 			conn = this.getDbConnection();
 
-			String sql = "update " + getTalbName() + " set ";
+			String sql = "update " + getTableName() + " set ";
 
 			// 只更新不为null的字段
 			List<PropertyDescriptor> propertyDescriptors = MyBeanUtils.getNotNullPropertyDescriptors(instances.get(0), getKeyColumnName(), getTableMetaData());
@@ -428,9 +435,21 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 				sql = sql.substring(0, sql.length() - 1);
 			}
 
-			sql += " where " + getKeyColumnName() + "=? ";
+			List<String> uniqueIndexColumns = getUniqueIndexColumns();
 
-			logger.info(getTalbName() + " udpate sql:" + sql);
+			// sql += " where " + getKeyColumnName() + "=? ";
+
+			sql += " where ";
+			for (int i = 0; i < uniqueIndexColumns.size(); i++)
+			{
+				sql += uniqueIndexColumns.get(i) + "=? ";
+				if (i < uniqueIndexColumns.size() - 1)
+				{
+					sql += " and ";
+				}
+			}
+
+			logger.info(getTableName() + " udpate sql:" + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
@@ -459,8 +478,12 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 					}
 				}
 
-				// 设置主键值
-				pstmt.setString(propertyDescriptors.size() + 1, BeanUtils.getProperty(instance, getKeyColumnName()));
+				// 设置索引值
+				for (int i = 1; i <= uniqueIndexColumns.size(); i++)
+				{
+					pstmt.setString(propertyDescriptors.size() + i, BeanUtils.getProperty(instance, uniqueIndexColumns.get(i-1)));
+				}
+				
 
 				pstmt.addBatch();
 
@@ -474,7 +497,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			// 批量执行
 			pstmt.executeBatch();
 
-			logger.info(getTalbName() + " updated " + instances.size() + " rows");
+			logger.info(getTableName() + " updated " + instances.size() + " rows");
 
 			return true;
 		} catch (Exception ex)
@@ -500,7 +523,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		try
 		{
 			conn = this.getDbConnection();
-			ResultSetMetaData metaData = conn.createStatement().executeQuery("select * from " + getTalbName()).getMetaData();
+			ResultSetMetaData metaData = conn.createStatement().executeQuery("select * from " + getTableName()).getMetaData();
 
 			for (int i = 1; i < metaData.getColumnCount() + 1; i++)
 			{
@@ -541,9 +564,9 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		{
 			conn = this.getDbConnection();
 
-			String sql = "select max(" + getKeyColumnName() + ") from " + getTalbName();
+			String sql = "select max(" + getKeyColumnName() + ") from " + getTableName();
 
-			logger.info(getTalbName() + " max key value sql:" + sql);
+			logger.info(getTableName() + " max key value sql:" + sql);
 
 			long maxValue = -1;
 			ResultSet rst = conn.createStatement().executeQuery(sql);
@@ -552,7 +575,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 				maxValue = rst.getLong(1);
 			}
 
-			logger.info(getTalbName() + " max key value is " + maxValue);
+			logger.info(getTableName() + " max key value is " + maxValue);
 
 			return maxValue + 1;
 		} catch (Exception ex)
@@ -607,12 +630,12 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		{
 			conn = this.getDbConnection();
 
-			String sql = "delete from " + getTalbName() + " where " + clause;
-			logger.info(getTalbName() + " delete sql:" + sql);
+			String sql = "delete from " + getTableName() + " where " + clause;
+			logger.info(getTableName() + " delete sql:" + sql);
 
 			int rows = conn.createStatement().executeUpdate(sql);
 
-			logger.info(getTalbName() + " deleted " + rows + " rows");
+			logger.info(getTableName() + " deleted " + rows + " rows");
 
 			return rows;
 		} catch (Exception ex)
@@ -700,13 +723,13 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			// sql += " where " + where;
 			// }
 
-			logger.info(getTalbName() + " count sql:" + sql);
+			logger.info(getTableName() + " count sql:" + sql);
 
 			ResultSet rst = conn.createStatement().executeQuery(sql);
 			if (rst.next())
 			{
 				int count = rst.getInt(1);
-				logger.info(getTalbName() + " count " + count + " rows");
+				logger.info(getTableName() + " count " + count + " rows");
 				return count;
 			}
 		} catch (Exception ex)
@@ -726,15 +749,16 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		{
 			conn = getDbConnection();
 			logger.info("execute sql:" + sql);
-			return conn.createStatement().execute(sql);
+			conn.createStatement().execute(sql);
 		} catch (Exception ex)
 		{
 			logger.error(ex.getMessage(), ex);
+			return false;
 		} finally
 		{
 			releaseDbConnection(conn);
 		}
-		return false;
+		return true;
 	}
 
 	public String getDbType()

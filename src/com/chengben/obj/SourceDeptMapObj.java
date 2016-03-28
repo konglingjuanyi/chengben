@@ -38,7 +38,7 @@ public class SourceDeptMapObj extends BaseDbObj
 	@Override
 	public String findDefaultOrderBy()
 	{
-		return super.findDefaultOrderBy();
+		return "source_system,case when dest_dept_code is null then 0 else 1 end,source_dept_name";
 	}
 
 	@Override

@@ -51,20 +51,22 @@
               <td height="30" align="right" class="little_gray_font">联系电话:</td>
               <td><%=StringUtil.getNotEmptyStr(userInfo.getTelephone()) %></td>
             </tr>
+            <!--
 			 <tr class="list_table_tr2">
               <td height="30" align="right" class="little_gray_font">供应商:</td>
               <td><%=userInfo.getDistrict() %></td>
             </tr>
-            <!-- 
+             
             <tr class="list_table_tr0">
               <td height="30" align="right">权限级别：</strong></td>
               <td><%=userInfo.getRoleLevel() %></td>
             </tr>
-            -->
+            
             <tr >
             
               <td height="30" colspan="2" align="center" class="tab_bg">&nbsp;</td>
             </tr>
+              -->
         </table></td>
       </tr>
     </table>

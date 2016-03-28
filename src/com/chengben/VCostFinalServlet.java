@@ -118,7 +118,7 @@ public class VCostFinalServlet extends AbstractBaseServletTemplate
 		request.setAttribute("date_month", date_month);
 		
 		// 明细
-		PaginationObj domainPagination = getDomainDao().searchPaginationByDomainInstance(domainInstance, domainInstance.findDefaultOrderBy(), domainSearchCondition.getPageNo(), domainSearchCondition.getPageCount());
+		PaginationObj domainPagination = getDomainDao().searchPaginationByDomainInstance(domainInstance, false, domainInstance.findDefaultOrderBy(), domainSearchCondition.getPageNo(), Integer.MAX_VALUE);
 
 		request.setAttribute(DOMAIN_INSTANCE, domainInstance);
 		request.setAttribute(DOMAIN_PAGINATION, domainPagination);

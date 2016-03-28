@@ -50,7 +50,7 @@
 			<table class="title_table" align="center" width="98%"> 
 				<tr> 
 					<td align="left"> 
-						本次导入将生成<%=pagination.getTotalCount()%>条数据，确认无误后请点击导入按钮生成凭证
+						本次导入将生成<font color="#ff9900"><%=pagination.getTotalCount()%></font>条数据，确认无误后请点击导入按钮生成凭证
 						<input name="iperiod" type="hidden" id="iperiod" value="<%=StringUtil.getNotEmptyStr(domainInstance.getIperiod())%>" size="5" > 
 						
 						<input name="ino_id" type="hidden" id="ino_id" value="<%=StringUtil.getNotEmptyStr(domainInstance.getIno_id())%>" size="5" > 

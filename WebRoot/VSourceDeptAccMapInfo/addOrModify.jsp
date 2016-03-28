@@ -12,7 +12,7 @@
 <% 
 	// 上下文路径 
 	String contextPath = request.getContextPath(); 
-	 
+	  
 	// 对象实例 
 	VSourceDeptAccMapInfoObj domainInstance = new VSourceDeptAccMapInfoObj(); 
 	// 该功能基本路径 
@@ -100,7 +100,7 @@
 						<%=domainInstance.getPropertyCnName("ccode") %>: 
 					</td> 
 					<td> 
-						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("外部接口字典", false), "ccode", "", StringUtil.getNotEmptyStr(domainInstance.getCcode(), ""), "notEmpty")%> 
+						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("外部接口字典", false), "ccode", "", StringUtil.getNotEmptyStr(domainInstance.getSource_system(), ""), "notEmpty")%> 
 					</td> 
 				</tr> 
 				<tr> 
@@ -108,7 +108,7 @@
 						<%=domainInstance.getPropertyCnName("relation_num") %>: 
 					</td> 
 					<td> 
-						<input name="relation_num" type="text" id="relation_num" value="<%=StringUtil.getNotEmptyStr(domainInstance.getRelation_num(),"")%>" size="20"  > 
+						<input name="relation_num" type="text" id="relation_num" value="<%=StringUtil.getNotEmptyStr(domainInstance.getRelation_total_num(),"")%>" size="20"  > 
 					</td> 
 				</tr> 
 			</table> 

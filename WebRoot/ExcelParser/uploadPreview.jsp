@@ -10,7 +10,8 @@
 <%@page import="com.excelparser.obj.ExcelParserObj"%>
 <%@page import="com.wuyg.common.dao.BaseDbObj"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="org.apache.commons.beanutils.BeanUtils"%> 
+<%@page import="org.apache.commons.beanutils.BeanUtils"%>
+<%@page import="com.wuyg.excelparser.obj.ExcelParserConfigObj"%> 
 <!-- 基本信息 --> 
 <% 
 	// 当前上下文路径 
@@ -69,7 +70,7 @@
 				List inDbDataList = new ArrayList(); // 数据库中已经存在的记录
 				List justInExcelDataList = new ArrayList(); // 本次新增的记录
 				
-				Class javaBeanClass = null;
+				ExcelParserConfigObj excelParserConfig = null;
 				
 				Object tmpObj = request.getSession().getAttribute("excelDataList"); 
 				if (tmpObj != null) 
@@ -89,11 +90,13 @@
 					justInExcelDataList = (List)tmpObj; 
 				}
 				
-				tmpObj = request.getSession().getAttribute("javaBeanClass"); 
+				tmpObj = request.getSession().getAttribute("excelParserConfig"); 
 				if (tmpObj != null) 
 				{ 
-					javaBeanClass = (Class)tmpObj; 
+					excelParserConfig = (ExcelParserConfigObj)tmpObj; 
 				}
+				
+				Class javaBeanClass = Thread.currentThread().getContextClassLoader().loadClass(excelParserConfig.getJavaBean());
 				
 				if(javaBeanClass!=null)
 				{					

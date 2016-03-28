@@ -1,5 +1,7 @@
-#Mon Mar 21 14:07:11 CST 2016
+#Mon Mar 28 16:27:54 CST 2016
 eclipse.preferences.version=1
+encoding//src/com/hz/auth/service/AuthService.java=gbk
+encoding//src/com/hz/auth/service/IAuthService.java=gbk
 encoding//src/com/hz/config/ConfigReader.java=gbk
 encoding//src/com/wuyg/common/dao/AbstractBaseDAOTemplate.java=UTF-8
 encoding//src/com/wuyg/common/dao/BaseDbObj.java=UTF-8

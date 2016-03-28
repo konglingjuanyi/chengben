@@ -32,7 +32,7 @@
 		<base target="_self" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no" />
-		<title><%=domainInstance.getCnName()%></title>
+		<title>生成凭证</title>
 		<link href="../css/global.css" rel="stylesheet" type="text/css">
 		<link href="../css/table.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
@@ -48,6 +48,8 @@
 			if(!checkNull("idoc","<%=domainInstance.getPropertyCnName("idoc")%>")) return false; 
 			if(!isNumber($('#idoc').val())) {alert("<%=domainInstance.getPropertyCnName("idoc")%>"+"必须是数字"); return false;}
 			if(!checkNull("file_upload","要导入的文件")) return false; 
+			
+			if(!confirm("本次导入将生成的是'<%=wbSourceName%>'的凭证，您确定要将文件'"+$("#file_upload").val()+"'生成此类凭证吗?")) return false;
 			
 			$("#uploadForm").submit();
 		} 

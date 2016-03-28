@@ -303,6 +303,16 @@
 		<url-pattern>/SourceDeptMap/Servlet</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>VCostDirectSumbyDepttypeServlet</servlet-name>
+		<servlet-class>com.chengben.VCostDirectSumbyDepttypeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>VCostDirectSumbyDepttypeServlet</servlet-name>
+		<url-pattern>/VCostDirectSumbyDepttype/Servlet</url-pattern>
+	</servlet-mapping>
+	
+	
 	
 	<!-- ==session超时时间，单位秒== -->
 	<session-config>

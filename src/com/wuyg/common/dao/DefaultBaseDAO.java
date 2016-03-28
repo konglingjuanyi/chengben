@@ -1,5 +1,7 @@
 package com.wuyg.common.dao;
 
+import java.util.List;
+
 import com.hz.util.SystemConstant;
 import com.wuyg.common.obj.PaginationObj;
 
@@ -54,9 +56,15 @@ public class DefaultBaseDAO extends AbstractBaseDAOTemplate
 	}
 
 	@Override
-	public String getTalbName()
+	public String getTableName()
 	{
 		return baseDbObject.findTableName();
+	}
+	
+	@Override
+	public List<String> getUniqueIndexColumns()
+	{
+		return baseDbObject.getUniqueIndexProperties();
 	}
 	
 	@Override

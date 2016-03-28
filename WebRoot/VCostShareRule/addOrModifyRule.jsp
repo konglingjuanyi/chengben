@@ -107,7 +107,9 @@
 					<td>
 					月份
 					<%=DictionaryUtil.getSelectHtml(date_month_list, "date_month", "", date_month, "notEmpty")%> 
-					</td>
+					&nbsp;
+					<input name="searchButton" type="button" class="button button_search" value="查询" onClick="searchShareRule()">
+					</td> 
 					<td style="text-align:right">
 					
 					将当前规则复制到<%=DictionaryUtil.getSelectHtml(date_month_list, "dest_date_month", "", date_month, "notEmpty")%>
@@ -119,6 +121,9 @@
 			<!-- 详细信息 -->
 			<table class="table table-bordered" align="center" width="800">
 				<thead>
+					<tr>
+						<th colspan="9">成本分摊规则<br><font color="#ff9900"><%=date_month %></font></th>
+					</tr>
 					<tr>
 						<th><%=domainInstance.getPropertyCnName("department_type")%></th>
 						<th><%=domainInstance.getPropertyCnName("department_code")%></th>
@@ -306,10 +311,10 @@
 		}
 		
 		// 重新查询
-		$("#date_month").change(function(){
+		function searchShareRule(){
 			$("#addOrModifyForm").attr("action","<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4this");
 			$("#addOrModifyForm").submit();
-		});
+		}
 		
 		
 		// 复制规则

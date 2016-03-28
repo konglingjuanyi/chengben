@@ -93,6 +93,13 @@ body {
 .button_upload:hover {
   background-image: url(../images/svg/light/orange/16/cloud_upload.png);
 }
+.button_set {
+  background-image: url(../images/svg/light/gray/16/settings.png);
+  width: 78px;
+}
+.button_set:hover {
+  background-image: url(../images/svg/light/orange/16/settings.png);
+}
 .green_button {
   background: #38B162;
   padding: 6px;

@@ -156,7 +156,7 @@ function toggleMenuGroup(td,menuGroupId)
 						</tr>
 						<tr>
 							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/CostDirect/Servlet?method=list4this')">
+								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostDirectSumbyDepttype/Servlet?method=report&date_month=<%=TimeUtil.nowTime2str("yyyy-MM") %>')">
 								<img src="images/svg/heavy/green/stats.png" width="18"
 									height="18" align="middle" />
 								&nbsp;&nbsp;各科室直接成本报表
@@ -375,19 +375,16 @@ function toggleMenuGroup(td,menuGroupId)
 			
 			
 			
-			<%
-				if (isAdmin)
-				{
-			%>
+			
 			<tr>
-				<td class="menu_header_not_expand"
-					onclick="toggleMenuGroup(this,'02')">
+				<td class="menu_header_expand"
+					onclick="toggleMenuGroup(this,'99')">
 					个人管理
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<table id="menu_group_02" width="100%" cellpadding="0"
+					<table id="menu_group_99" width="100%" cellpadding="0"
 						cellspacing="0" border="0" class="hidden">
 						<tr>
 							<td class="menu_not_selected"
@@ -405,9 +402,7 @@ function toggleMenuGroup(td,menuGroupId)
 								&nbsp;&nbsp;修改密码
 							</td>
 						</tr>
-						<%
-							}
-						%>
+						
 						<%
 							if (isAdmin)
 							{

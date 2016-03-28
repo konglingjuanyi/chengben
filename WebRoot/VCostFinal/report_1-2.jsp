@@ -54,8 +54,10 @@
 			<table class="search_table" align="center" width="98%">
 				<tr>
 					<td>
-					月份：
+					月份
 					<%=DictionaryUtil.getSelectHtml(date_month_list, "date_month", "", StringUtil.getNotEmptyStr(request.getAttribute("date_month"), ""), "notEmpty")%> 
+					&nbsp;
+					<input name="searchButton" type="submit" class="button button_search" value="查询">
 					</td>
 				</tr>
 			</table>
@@ -86,7 +88,7 @@
 			<table class="table report_table table-bordered table-striped" align="center" width="98%">
 				<thead>
 					<tr>
-						<th colspan="25" style="text-align:center">医院临床服务类科室全成本报表<br/><%=domainInstance.getDate_month() %>
+						<th colspan="25" style="text-align:center">医院临床服务类科室全成本报表<br/><font color="#ff9900"><%=domainInstance.getDate_month() %></font>
 						</th>
 					</tr>
 					<tr>
@@ -270,13 +272,7 @@
 			
 			<%
 				}
-			%>
-			<script>
-			// 重新查询
-			$("#date_month").change(function(){
-				$("#pageForm").submit();
-			});
-			</script>			
+			%>		
 		</form>
 	</body>
 </html>
