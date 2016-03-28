@@ -59,7 +59,7 @@ public class SourceDeptMapObj extends BaseDbObj
 		List<String> l = new ArrayList<String>();
 		l.add("source_system");
 		l.add("source_dept_name");
-		l.add("dest_dept_code");
+//		l.add("dest_dept_code");
 		return l;
 	}
 

@@ -52,7 +52,7 @@ public List<String> getUniqueIndexProperties()
 	l.add("source_system");
 	l.add("dept_share_type");
 	l.add("source_acc_subject");
-	l.add("dest_acc_subject");
+//	l.add("dest_acc_subject");
 	return l;
 }
 public LinkedHashMap<String, String> getProperties()
