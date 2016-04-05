@@ -37,23 +37,10 @@
 		<link href="../css/table.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
 		<script type="text/javascript" src="../js/utils.js"></script>
+		<script type="text/javascript" src="../js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 	</head>
-	<script> 
-		function preview() 
-		{	 
-			// 做必要的检查 
-			if(!checkNull("dbill_date","<%=domainInstance.getPropertyCnName("dbill_date")%>")) return false; 
-			if(!checkNull("cbill","<%=domainInstance.getPropertyCnName("cbill")%>")) return false; 
-			if(!checkNull("idoc","<%=domainInstance.getPropertyCnName("idoc")%>")) return false; 
-			if(!isNumber($('#idoc').val())) {alert("<%=domainInstance.getPropertyCnName("idoc")%>"+"必须是数字"); return false;}
-			if(!checkNull("file_upload","要导入的文件")) return false; 
-			
-			if(!confirm("本次导入将生成的是'<%=wbSourceName%>'的凭证，您确定要将文件'"+$("#file_upload").val()+"'生成此类凭证吗?")) return false;
-			
-			$("#uploadForm").submit();
-		} 
-	</script>
+
 	<body>
 		<form name="uploadForm" id="uploadForm" action="<%=contextPath%>/<%=basePath%>/Servlet?method=uploadFile" enctype="multipart/form-data" method="post">
 
@@ -88,7 +75,7 @@
 						制单人:
 					</td>
 					<td>
-						<input type="text" id="cbill" name="cbill" value="财务操作员">
+						<input type="text" id="cbill" name="cbill" value="">
 						<font color="red">*</font>
 					</td>
 				</tr>
@@ -131,5 +118,28 @@
 			</td></tr>
 			</table>
 		</form>
+		
+		<script type="text/javascript">
+		
+		// 取cookie
+		$("#cbill").val($.cookie("cbill"));
+		
+		function preview() 
+		{	 
+			// 做必要的检查 
+			if(!checkNull("dbill_date","<%=domainInstance.getPropertyCnName("dbill_date")%>")) return false; 
+			if(!checkNull("cbill","<%=domainInstance.getPropertyCnName("cbill")%>")) return false; 
+			if(!checkNull("idoc","<%=domainInstance.getPropertyCnName("idoc")%>")) return false; 
+			if(!isNumber($('#idoc').val())) {alert("<%=domainInstance.getPropertyCnName("idoc")%>"+"必须是数字"); return false;}
+			if(!checkNull("file_upload","要导入的文件")) return false; 
+			
+			if(!confirm("本次导入将生成的是'<%=wbSourceName%>'的凭证，您确定要将文件'"+$("#file_upload").val()+"'生成此类凭证吗?")) return false;
+			
+			// 设置cookie
+			$.cookie("cbill",$("#cbill").val(), { expires: 10000 });
+			
+			$("#uploadForm").submit();
+		} 
+		</script>
 	</body>
 </html>

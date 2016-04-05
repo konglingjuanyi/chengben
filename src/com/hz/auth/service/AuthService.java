@@ -133,7 +133,7 @@ public class AuthService implements IAuthService
 		AuthUser userInfo = (AuthUser) userBaseDAO.searchByKey(AuthUser.class, id + "");
 		if (!userInfo.getPassword().equals(oldPassword))
 		{
-			return "ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ë²»ï¿½ï¿½È·";
+			return "ÏÖÔÚµÄÃÜÂë²»ÕýÈ·";
 		} else
 		{
 			userInfo.setPassword(newPasswod);
@@ -143,10 +143,10 @@ public class AuthService implements IAuthService
 
 		if (rst)
 		{
-			return "ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Ä³É¹ï¿½";
+			return "ÃÜÂëÐÞ¸Ä³É¹¦";
 		} else
 		{
-			return "ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½Ê§ï¿½ï¿½";
+			return "ÃÜÂëÐÞ¸ÄÊ§°Ü";
 		}
 	}
 
@@ -176,15 +176,15 @@ public class AuthService implements IAuthService
 
 			TreeBuilder treeBuilder = TreeBuilder.getInstance();
 
-			TreeObj treeObj = treeBuilder.getTreeObjByName("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½");
+			TreeObj treeObj = treeBuilder.getTreeObjByName("²¿ÃÅÈËÔ±Ê÷");
 			if (!StringUtil.isEmpty(toSubTree))
 			{
 				treeObj.onlyToSubTree(toSubTree);
 			}
 
-			treeObj.setShowLeafCount(false);// ï¿½ï¿½ï¿½ï¿½Ê¾Ò¶ï¿½Ó½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			treeObj.setShowLeafCount(false);// ²»ÏÔÊ¾Ò¶×Ó½ÚµãµÄÊýÁ¿
 
-			// ï¿½Þ¶ï¿½ï¿½ï¿½ï¿½ï¿½
+			// ÏÞ¶¨Ìõ¼þ
 			if (!StringUtil.isEmpty(district))
 			{
 				treeObj.setSubTreeIncludeKeyValueNested("district", district);
@@ -198,7 +198,7 @@ public class AuthService implements IAuthService
 				treeObj.setSubTreeIncludeKeyValueNested("user", userAccount);
 			}
 
-			rootNode = treeBuilder.buildTree(treeObj, conn, false);// falseï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
+			rootNode = treeBuilder.buildTree(treeObj, conn, false);// false±íÊ¾²»ÓÃ»º´æ
 		} catch (Exception e)
 		{
 			logger.error(e.getMessage(), e);

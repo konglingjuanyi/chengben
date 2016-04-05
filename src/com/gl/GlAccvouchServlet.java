@@ -34,8 +34,8 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 {
 	private Logger logger = Logger.getLogger(getClass());
 
-	private String UF_DB_NAME = "uf_db";
-	private IBaseDAO UF_glAccvouchDao = new DefaultBaseDAO(GlAccvouchObj.class, UF_DB_NAME);
+	private String U8_DB = com.hz.util.SystemConstant.U8_DB;
+	private IBaseDAO UF_glAccvouchDao = new DefaultBaseDAO(GlAccvouchObj.class, U8_DB);
 
 	@Override
 	public String getBasePath()
@@ -115,7 +115,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 	{
 		// 查询
 		domainSearchCondition.setPageCount(SystemConstant.PAGE_ROWS);// 恢复每页20行记录
-		IBaseDAO zzDao = new DefaultBaseDAO(domainInstance, UF_DB_NAME);
+		IBaseDAO zzDao = new DefaultBaseDAO(domainInstance, U8_DB);
 		PaginationObj domainPagination = zzDao.searchPaginationByDomainInstance(domainInstance, "iperiod,ino_id,inid", domainSearchCondition.getPageNo(), domainSearchCondition.getPageCount());
 
 		request.setAttribute(DOMAIN_INSTANCE, domainInstance);
@@ -183,7 +183,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 
 				// 生成对方凭证
 				logger.info("生成对方凭证");
-				List pingZhangGlavList = getPingZhangGlavList(glavInput);
+				List pingZhangGlavList = getReverseGlavList(glavInput);
 				logger.info("对方凭证入库:" + pingZhangGlavList.size() + "条");
 				getDomainDao().save(pingZhangGlavList);
 			} else
@@ -280,7 +280,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		return glAccvouchList;
 	}
 
-	private List getPingZhangGlavList(GlAccvouchObj glavInput) throws Exception
+	private List getReverseGlavList(GlAccvouchObj glavInput) throws Exception
 	{
 		List pingZhangGlavList = new ArrayList();
 		Connection conn = null;
@@ -320,7 +320,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		glAccvouchObj.setIno_id(glavInput.getIno_id()); // 制单日期
 		glAccvouchObj.setIdoc(glavInput.getIdoc()); // 附单据数
 		glAccvouchObj.setCdigest(glavInput.getCdigest()); // 摘要
-		glAccvouchObj.setRowguid("还不知道如何获取");
+		glAccvouchObj.setRowguid("9AF833A1441712BAF6426C942600ED7000000000");//先固定一个值
 
 		// 默认值设置
 		glAccvouchObj.setCsign("记");
@@ -343,7 +343,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		Connection conn = null;
 		try
 		{
-			conn = MySqlUtil.getConnection(UF_DB_NAME);
+			conn = MySqlUtil.getConnection(U8_DB);
 			ResultSet rst = conn.createStatement().executeQuery("select max(ino_id) from gl_Accvouch where iperiod='" + o.getIperiod() + "'");
 			if (rst.next())
 			{

@@ -72,14 +72,15 @@
 			<form id="loginForm" name="loginForm" method="post" action="Auth/Servlet?method=login">
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 					<tr>
-						<td align="center" height="100"><%=info%></td>
+						<td align="center" height="100"><font color="red"><%=info%></font></td>
 					</tr>
 				</table>
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 					<tr>
 						<td width="15%" height="60"></td>
-						<td align="left">
-							<img src="images/SystemName.png" width="296" height="56">
+						<td align="left" class="little_gray_font">
+							<img style="vertical-align:middle" src="images/SystemName.png" width="296" height="56">
+							(<%=licensedMachine.getSystemVersion() %>版)
 						</td>
 						<td align="right" class="little_gray_font"><%=licensedMachine.getSlogan()%></td>
 						<td width="15%"></td>
@@ -90,7 +91,7 @@
 						<td class="loginBg">
 							<table width="100%" border="0" cellpadding="0" cellspacing="0">
 								<tr>
-									<td width="15%" height="460"></td>
+									<td width="15%" height="420"></td>
 									<td colspan="2" align="right" valign="middle">
 										<table width="320" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 											<tr>

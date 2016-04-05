@@ -25,7 +25,7 @@ public class MySqlUtil
 	// return getConnection(SystemConstant.DEFAULT_DB);
 	// }
 
-	public static synchronized Connection getConnection(String dbName) throws SQLException
+	public static synchronized Connection getConnection(String dbName) throws Exception
 	{
 		
 
@@ -42,7 +42,7 @@ public class MySqlUtil
 		return conn;
 	}
 	
-	public static synchronized DataSource getDataSource(String dbName) throws SQLException
+	public static synchronized DataSource getDataSource(String dbName) throws Exception
 	{
 		BasicDataSource ds = dsMap.get(dbName);
 

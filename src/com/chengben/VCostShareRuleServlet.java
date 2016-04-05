@@ -91,9 +91,18 @@ public class VCostShareRuleServlet extends AbstractBaseServletTemplate
 			o.setShare_rate_level_1(StringUtil.parseDouble(share_rate_level1s[i]));
 			o.setShare_rate_level_2(StringUtil.parseDouble(share_rate_level2s[i]));
 			o.setShare_rate_level_3(StringUtil.parseDouble(share_rate_level3s[i]));
-			o.setIncome(StringUtil.parseDouble(incomes[i]));
-			o.setCost_per_bed(StringUtil.parseDouble(cost_per_beds[i]));
-			o.setCost_per_treat(StringUtil.parseDouble(cost_per_treats[i]));
+			if (incomes != null)
+			{
+				o.setIncome(StringUtil.parseDouble(incomes[i]));
+			}
+			if (cost_per_beds != null)
+			{
+				o.setCost_per_bed(StringUtil.parseDouble(cost_per_beds[i]));
+			}
+			if (cost_per_treats != null)
+			{
+				o.setCost_per_treat(StringUtil.parseDouble(cost_per_treats[i]));
+			}
 
 			o.setDate_month(date_month);
 

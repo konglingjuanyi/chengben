@@ -10,7 +10,10 @@ import org.apache.commons.beanutils.MethodUtils;
 import org.apache.log4j.Logger;
 
 import com.chengben.obj.AccountingSubjectObj;
+import com.chengben.obj.DepartmentObj;
 import com.chengben.obj.SourceDeptMapObj;
+import com.hz.util.SystemConstant;
+import com.u8.obj.CodeObj;
 import com.wuyg.common.dao.DefaultBaseDAO;
 import com.wuyg.common.dao.IBaseDAO;
 import com.wuyg.common.obj.PaginationObj;
@@ -111,6 +114,58 @@ public class AccountingSubjectServlet extends AbstractBaseServletTemplate
 		// 转向
 
 		request.getRequestDispatcher("/" + getBasePath() + "/" + BASE_METHOD_LIST + ".jsp").forward(request, response);
+	}
+	
+	// 从总账系统同步科目列表
+	public void sync(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		// 查询总账系统科目列表
+		IBaseDAO u8AccDao = new DefaultBaseDAO(CodeObj.class, SystemConstant.U8_DB);
+		List<CodeObj> u8AccList = u8AccDao.searchAll(CodeObj.class);
+		logger.info("查询总账系统科目列表:" + u8AccList.size() + "个");
+		
+		// 构造成本系统中新的科目列表
+		List<AccountingSubjectObj> accOldList=getDomainDao().searchAll(AccountingSubjectObj.class);
+		List<AccountingSubjectObj> accNewList = new ArrayList<AccountingSubjectObj>();
+		for (int i = 0; i < u8AccList.size(); i++)
+		{
+			CodeObj u8Acc = u8AccList.get(i);
+			
+			AccountingSubjectObj acc = new AccountingSubjectObj();
+			acc.setAcc_code(u8Acc.getCcode().trim());
+			acc.setAcc_name(u8Acc.getCcode_name().trim());
+			acc.setDebit_or_credit(u8Acc.getBproperty()?"贷":"借");
+			acc.setOpposite_acc_code(getOpposite_acc_code(accOldList,u8Acc.getCcode().trim()));// 保留原来已经设置的对方科目
+			
+			accNewList.add(acc);
+		}
+		
+		if (accNewList.size()>0)
+		{
+			// 删除成本系统中的老的科目信息
+			getDomainDao().deleteByClause("1=1");
+			logger.info("删除成本系统中的老的科目信息");
+			
+			// 保存从总账系统同步过来的新的科目信息
+			getDomainDao().save(accNewList);
+			logger.info("保存从总账系统同步过来的新的科目信息");
+		}
+
+		// 列表展示
+		request.setAttribute("message", "会计科目同步成功，共同步" + u8AccList.size() + "个科目，请设置对方科目。");
+		list(request, response);
+	}
+
+	private String getOpposite_acc_code(List<AccountingSubjectObj> accOldList, String code)
+	{
+		for (int i = 0; i < accOldList.size(); i++)
+		{
+			if (code.equalsIgnoreCase(accOldList.get(i).getAcc_code()))
+			{
+				return accOldList.get(i).getOpposite_acc_code();
+			}
+		}
+		return null;
 	}
 
 }

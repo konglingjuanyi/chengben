@@ -88,9 +88,9 @@ public class SourceDeptAccMapServlet extends AbstractBaseServletTemplate
 		request.setAttribute(source_system, request.getParameter(source_system));
 
 		// 查询该外部接口的所有对照关系
-		List<SourceDeptAccMapObj> sourceDepMapList = getDomainDao().searchByClause(SourceDeptAccMapObj.class, "source_system='" + request.getParameter(source_system) + "'", domainInstance.findDefaultOrderBy(), 0, Integer.MAX_VALUE);
+		List<SourceDeptAccMapObj> domainInstanceList = getDomainDao().searchByClause(SourceDeptAccMapObj.class, "source_system='" + request.getParameter(source_system) + "'", domainInstance.findDefaultOrderBy(), 0, Integer.MAX_VALUE);
 
-		request.setAttribute("sourceDepMapList", sourceDepMapList);
+		request.setAttribute("domainInstanceList", domainInstanceList);
 
 		request.getRequestDispatcher("/" + getBasePath() + "/" + BASE_METHOD_ADD_OR_MODIFY + "4Batch.jsp").forward(request, response);
 	}

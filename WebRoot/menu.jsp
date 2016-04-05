@@ -1,5 +1,4 @@
-<%@ page contentType="text/html; charset=utf-8" language="java"
-	import="java.sql.*" errorPage=""%>
+<%@ page contentType="text/html; charset=utf-8" language="java" import="java.sql.*" errorPage=""%>
 <%@page import="com.hz.auth.obj.AuthUser"%>
 <%@page import="com.hz.util.SystemConstant"%>
 <%@page import="java.net.URLEncoder"%>
@@ -45,18 +44,16 @@ function toggleMenuGroup(td,menuGroupId)
 	%>
 	<body class="menu_bg">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0">
-		
-		<tr>
-				<td class="menu_header_expand"
-					onclick="toggleMenuGroup(this,'04')">
-					数据导入
+
+			<tr>
+				<td class="menu_header_expand" onclick="toggleMenuGroup(this,'04')">
+					导入凭证
 				</td>
 			</tr>
 			<tr>
 				<td>
 
-					<table id="menu_group_04" width="100%" cellpadding="0"
-						cellspacing="0" border="0">
+					<table id="menu_group_04" width="100%" cellpadding="0" cellspacing="0" border="0">
 						<!-- 
 						<tr>
 							<td class="menu_not_selected"
@@ -68,66 +65,45 @@ function toggleMenuGroup(td,menuGroupId)
 						</tr>
 						 -->
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=002&debitORcredit=credit')">
-								<img src="images/excel.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=002&debitORcredit=credit')">
+								<img src="images/excel.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;门诊收入转凭证
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=003&debitORcredit=credit')">
-								<img src="images/excel.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=003&debitORcredit=credit')">
+								<img src="images/excel.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;住院收入转凭证
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=004&debitORcredit=debit')">
-								<img src="images/excel.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=004&debitORcredit=debit')">
+								<img src="images/excel.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;药房成本转凭证
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=005&debitORcredit=debit')">
-								<img src="images/excel.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=005&debitORcredit=debit')">
+								<img src="images/excel.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;卫生材料成本转凭证
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=006&debitORcredit=debit')">
-								<img src="images/excel.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=006&debitORcredit=debit')">
+								<img src="images/excel.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;其他材料成本转凭证
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=007&debitORcredit=debit')">
-								<img src="images/excel.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/uploadFile.jsp?wbSource=007&debitORcredit=debit')">
+								<img src="images/excel.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;行政后勤成本转凭证
 							</td>
 						</tr>
+
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/CostDirect/uploadFile.jsp')">
-								<img src="images/excel.png" width="18"
-									height="18" align="middle" />
-								&nbsp;&nbsp;各科室直接成本表导入
-							</td>
-						</tr>
-						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/Servlet?method=zzlist')">
-								<img src="images/svg/heavy/green/list.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/GlAccvouch/Servlet?method=zzlist')">
+								<img src="images/svg/heavy/green/stats.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;总账凭证查询
 							</td>
 						</tr>
@@ -136,45 +112,41 @@ function toggleMenuGroup(td,menuGroupId)
 				</td>
 			</tr>
 			<tr>
-				<td class="menu_header_expand"
-					onclick="toggleMenuGroup(this,'01')">
+				<td class="menu_header_expand" onclick="toggleMenuGroup(this,'01')">
 					成本分摊
 				</td>
 			</tr>
 			<tr>
 				<td>
 
-					<table id="menu_group_01" width="100%" cellpadding="0"
-						cellspacing="0" border="0">
+					<table id="menu_group_01" width="100%" cellpadding="0" cellspacing="0" border="0">
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostShareRule/Servlet?method=preModify4this&date_month=<%=TimeUtil.nowTime2str("yyyy-MM") %>')">
-								<img src="images/svg/heavy/green/list.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostShareRule/Servlet?method=preModify4this&date_month=<%=TimeUtil.nowTime2str("yyyy-MM")%>')">
+								<img src="images/svg/heavy/green/list.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;成本分摊规则管理
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostDirectSumbyDepttype/Servlet?method=report&date_month=<%=TimeUtil.nowTime2str("yyyy-MM") %>')">
-								<img src="images/svg/heavy/green/stats.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/CostDirect/uploadFile.jsp')">
+								<img src="images/excel.png" width="18" height="18" align="middle" />
+								&nbsp;&nbsp;各科室直接成本表导入
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostDirectSumbyDepttype/Servlet?method=report&date_month=<%=TimeUtil.nowTime2str("yyyy-MM")%>')">
+								<img src="images/svg/heavy/green/stats.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;各科室直接成本报表
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostFinal/Servlet?method=report&reportId=1-2&date_month=<%=TimeUtil.nowTime2str("yyyy-MM") %>')">
-								<img src="images/svg/heavy/green/stats.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostFinal/Servlet?method=report&reportId=1-2&date_month=<%=TimeUtil.nowTime2str("yyyy-MM")%>')">
+								<img src="images/svg/heavy/green/stats.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;临床科室全成本报表
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostFinal/Servlet?method=report&reportId=1-3&date_month=<%=TimeUtil.nowTime2str("yyyy-MM") %>')">
-								<img src="images/svg/heavy/green/pie_chart.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VCostFinal/Servlet?method=report&reportId=1-3&date_month=<%=TimeUtil.nowTime2str("yyyy-MM")%>')">
+								<img src="images/svg/heavy/green/stats.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;临床科室全成本构成分析表
 							</td>
 						</tr>
@@ -182,7 +154,7 @@ function toggleMenuGroup(td,menuGroupId)
 
 				</td>
 			</tr>
-			
+
 			<!-- 
 			<tr>
 				<td class="menu_header_expand"
@@ -209,16 +181,14 @@ function toggleMenuGroup(td,menuGroupId)
 			</tr>
 			 -->
 			<tr>
-				<td class="menu_header_expand"
-					onclick="toggleMenuGroup(this,'03')">
-					基础档案管理
+				<td class="menu_header_expand" onclick="toggleMenuGroup(this,'03')">
+					基础信息
 				</td>
 			</tr>
 			<tr>
 				<td>
 
-					<table id="menu_group_03" width="100%" cellpadding="0"
-						cellspacing="0" border="0">
+					<table id="menu_group_03" width="100%" cellpadding="0" cellspacing="0" border="0">
 						<!-- 
 						<tr>
 							<td class="menu_not_selected"
@@ -265,21 +235,23 @@ function toggleMenuGroup(td,menuGroupId)
 							</td>
 						</tr>
 						 -->
-						 
+
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/Department/Servlet?method=list4this')">
-								<img src="images/svg/heavy/green/list.png" width="18"
-									height="18" align="middle" />
-								&nbsp;&nbsp;医院科室
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'System/Servlet?method=preDbAddOrModify')">
+								<img src="images/svg/heavy/green/receipt.png" width="18" height="18" align="middle" />
+								&nbsp;&nbsp;总账账套管理
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/AccountingSubject/Servlet?method=list4this')">
-								<img src="images/svg/heavy/green/list.png" width="18"
-									height="18" align="middle" />
-								&nbsp;&nbsp;会计科目
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/Department/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/receipt.png" width="18" height="18" align="middle" />
+								&nbsp;&nbsp;总账医院科室
+							</td>
+						</tr>
+						<tr>
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/AccountingSubject/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/receipt.png" width="18" height="18" align="middle" />
+								&nbsp;&nbsp;总账会计科目
 							</td>
 						</tr>
 						<!-- 
@@ -345,26 +317,20 @@ function toggleMenuGroup(td,menuGroupId)
 						</tr>
 						-->
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostWbsource/Servlet?method=list4this')">
-								<img src="images/svg/heavy/green/list.png" width="18"
-									height="18" align="middle" />
-								&nbsp;&nbsp;外部接口
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/EfCostWbsource/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/list.png" width="18" height="18" align="middle" />
+								&nbsp;&nbsp;外部接口管理
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VSourceDeptMapInfo/Servlet?method=list4this')">
-								<img src="images/svg/heavy/green/list.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VSourceDeptMapInfo/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/list.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;外部接口科室对照
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VSourceDeptAccMapInfo/Servlet?method=list4this')">
-								<img src="images/svg/heavy/green/list.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'<%=request.getContextPath()%>/VSourceDeptAccMapInfo/Servlet?method=list4this')">
+								<img src="images/svg/heavy/green/list.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;外部接口科目对照
 							</td>
 						</tr>
@@ -372,37 +338,31 @@ function toggleMenuGroup(td,menuGroupId)
 
 				</td>
 			</tr>
-			
-			
-			
-			
+
+
+
+
 			<tr>
-				<td class="menu_header_expand"
-					onclick="toggleMenuGroup(this,'99')">
+				<td class="menu_header_expand" onclick="toggleMenuGroup(this,'99')">
 					个人管理
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<table id="menu_group_99" width="100%" cellpadding="0"
-						cellspacing="0" border="0" class="hidden">
+					<table id="menu_group_99" width="100%" cellpadding="0" cellspacing="0" border="0" class="hidden">
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'Auth/Servlet?method=userDetail&account=<%=user.getAccount()%>')">
-								<img src="images/svg/heavy/green/user.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'Auth/Servlet?method=userDetail&account=<%=user.getAccount()%>')">
+								<img src="images/svg/heavy/green/user.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;我的账号
 							</td>
 						</tr>
 						<tr>
-							<td class="menu_not_selected"
-								onclick="openInMainFrame(this,'Auth/modifyPassword.jsp')">
-								<img src="images/svg/heavy/green/locked.png" width="18"
-									height="18" align="middle" />
+							<td class="menu_not_selected" onclick="openInMainFrame(this,'Auth/modifyPassword.jsp')">
+								<img src="images/svg/heavy/green/locked.png" width="18" height="18" align="middle" />
 								&nbsp;&nbsp;修改密码
 							</td>
 						</tr>
-						
+
 						<%
 							if (isAdmin)
 							{
@@ -414,9 +374,7 @@ function toggleMenuGroup(td,menuGroupId)
   <tr>
     <td class="menu_not_selected" onclick="openInMainFrame(this,'Auth/Servlet?method=userList')"><img src="images/4917/18.png" width="18" height="18" align="middle" />&nbsp;&nbsp;管理账号</td>
    </tr>
-  <tr>
-    <td class="menu_not_selected" onclick="openInMainFrame(this,'System/Servlet?method=preDbAddOrModify')"><img src="images/4917/18.png" width="18" height="18" align="middle" />&nbsp;&nbsp;管理账套</td>
-  </tr>
+
    -->
 						<%
 							}

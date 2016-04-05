@@ -31,6 +31,7 @@ public class SystemConstant
 	public static final String DB_MYSQL="MYSQL";
 	public static final String DB_SQLSERVER="SQLSERVER";	
 	public static final String BUSINESS_DB="business_db";
+	public static final String U8_DB="U8_DB";
 	
 	// 处理主体类型
 	public static final String SUBJECT_TYPE_PERSON = "SUBJECT_TYPE_PERSON";

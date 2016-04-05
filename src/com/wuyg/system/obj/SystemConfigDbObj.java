@@ -1,12 +1,15 @@
 package com.wuyg.system.obj;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import com.wuyg.common.dao.BaseDbObj;
 
 public class SystemConfigDbObj extends BaseDbObj
 {
-	private String key;
+	private Long id;
+	private String name;
 	private String value;
 
 	public SystemConfigDbObj()
@@ -14,9 +17,9 @@ public class SystemConfigDbObj extends BaseDbObj
 		// TODO Auto-generated constructor stub
 	}
 	
-	public SystemConfigDbObj(String key, String value)
+	public SystemConfigDbObj(String name, String value)
 	{
-		this.key = key;
+		this.name = name;
 		this.value = value;
 	}
 
@@ -24,7 +27,7 @@ public class SystemConfigDbObj extends BaseDbObj
 	public String findKeyColumnName()
 	{
 		// TODO Auto-generated method stub
-		return "key";
+		return "id";
 	}
 
 	@Override
@@ -41,14 +44,25 @@ public class SystemConfigDbObj extends BaseDbObj
 		return "system_config";
 	}
 
-	public String getKey()
+	public Long getId()
 	{
-		return key;
+		return id;
 	}
 
-	public void setKey(String key)
+	public void setId(Long id)
 	{
-		this.key = key;
+		this.id = id;
+	}
+
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 
 	public String getValue()
@@ -64,7 +78,7 @@ public class SystemConfigDbObj extends BaseDbObj
 	@Override
 	public String toString()
 	{
-		return key + "=" + value;
+		return name + "=" + value;
 	}
 
 	@Override
@@ -86,6 +100,14 @@ public class SystemConfigDbObj extends BaseDbObj
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public List<String> getUniqueIndexProperties()
+	{
+		List<String> l = new ArrayList<String>();
+		l.add("name");
+		return l;
 	}
 
 }

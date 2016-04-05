@@ -328,5 +328,4 @@ public class AuthUser extends BaseDbObj
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

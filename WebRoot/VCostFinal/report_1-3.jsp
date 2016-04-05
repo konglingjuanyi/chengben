@@ -221,6 +221,7 @@
                 <td><%=StringUtil.formatDouble(sum.getTotal(),2) %></td>
                 <td><%=StringUtil.formatDouble(sum.getTotal_rate(),2) %></td>
               </tr>
+               <!-- 
               <tr>
                 <td style="word-break:keep-all">科室收入</td>
                 <%
@@ -273,6 +274,7 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
               </tr>
+               -->
             </table>
             </div>
             

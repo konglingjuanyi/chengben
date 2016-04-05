@@ -17,6 +17,8 @@
 	AccountingSubjectObj domainInstance = (AccountingSubjectObj) request.getAttribute("domainInstance"); 
 	// 该功能路径 
 	String basePath = domainInstance.getBasePath(); 
+	// 同步结果信息
+	Object message = request.getAttribute("message");
 %> 
 <html> 
 	<head> 
@@ -51,11 +53,18 @@
 						<input name="searchButton" type="button" class="button button_search" value="查询" onClick="toPage(1)"> 
 					</td> 
 					<td align="right"> 
+					<!-- 
 						<input name="addButton" type="button" class="button button_add" value="增加" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4this')"> 
-						<input name="uploadButton" type="button" class="button button_upload" value="导入" onClick="openBigModalDialog('<%=contextPath%>/ExcelParser/uploadFile.jsp?basedbobj_class=<%=domainInstance.getClass().getCanonicalName()%>')">
+					 -->
+					 	<input name="uploadButton" type="button" class="button button_sync" value="同步" onClick="sync()">
 					</td> 
 				</tr> 
 			</table> 
+			
+			<!-- 同步结果信息 -->
+			<%if(!StringUtil.isEmpty(message+"")){ %>
+			<div align="center"><font color="#ff6600"><%=message %></font></div>
+			<%} %>
  
 			<!-- 查询结果 --> 
 			<% 
@@ -100,12 +109,14 @@
 					<td><%=new DictionaryService().getDictValueByDictKey("会计科目字典",o.getOpposite_acc_code(),true)%></td> 
 					<td align="left" style="cursor: pointer"> 
 						<input type="button" class="button button_modify" title="修改" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4this&<%=o.findKeyColumnName()%>=<%=o.getKeyValue()%>')" /> 
-						&nbsp; 
+						
+						<!-- &nbsp; 
 						<input type="button" class="button button_delete" title="删除" 
 							onClick="javascript: 
 								$('#pageForm').attr('action','<%=contextPath%>/<%=basePath%>/Servlet?method=delete4this&<%=o.findKeyColumnName()%>_4del=<%=o.getKeyValue()%>'); 
 								$('#pageForm').submit(); 
 								" /> 
+						 -->
 					</td> 
 				</tr> 
 				<% 
@@ -122,6 +133,12 @@
 				} 
 			%> 
 		</form>  
- 
+  	<script type="text/javascript">
+ 	function sync()
+ 	{
+ 		$('#pageForm').attr('action','<%=contextPath%>/<%=basePath%>/Servlet?method=sync'); 
+		$('#pageForm').submit(); 
+ 	}
+ 	</script>
 	</body> 
 </html> 

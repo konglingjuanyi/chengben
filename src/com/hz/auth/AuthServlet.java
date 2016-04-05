@@ -314,6 +314,7 @@ public class AuthServlet extends HttpServlet
 
 		String message = authService.modifyPassword(userInfo.getId(), oldPwd, newPwd);
 
+
 		request.setAttribute("message", message);
 
 		request.getRequestDispatcher("modifyPassword-result.jsp").forward(request, response);

@@ -74,6 +74,15 @@ public interface IBaseDAO
 	public List searchBySql(Class clz, String sql);
 	
 	/**
+	 * 从数据库中查询所有数据
+	 * 
+	 * @param orderBy
+	 * @param sql
+	 * @return
+	 */
+	public List searchAll(Class clz);
+	
+	/**
 	 * 分页从数据库中查询符合条件的数据
 	 * 
 	 * @param orderBy
@@ -129,7 +138,7 @@ public interface IBaseDAO
 	 * @param instances
 	 * @return
 	 */
-	public boolean save(Object instance);
+	public boolean save(BaseDbObj instance);
 	
 	/**
 	 * 将对象实例保存入库或更新，更新的条件是根据主键能够查询到该对象
@@ -137,7 +146,7 @@ public interface IBaseDAO
 	 * @param instances
 	 * @return
 	 */
-	public boolean saveOrUpdate(Object instance);
+	public boolean saveOrUpdate(BaseDbObj instance);
 
 	/**
 	 * 根据主键更新数据中一组对象实例的数据，只要实例中的值不是null的字段都做更新
@@ -200,6 +209,13 @@ public interface IBaseDAO
 	 * @return
 	 */
 	public PaginationObj searchPaginationByCondition(Object condition);
+	
+	/**
+	 * 根据unique index查询对象
+	 * @param domainInstance
+	 * @return
+	 */
+	public BaseDbObj searchByUniqueIndex(BaseDbObj domainInstance);
 	
 	/**
 	 * 获取具体实现类对应的数据库名

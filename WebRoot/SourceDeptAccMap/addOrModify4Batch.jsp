@@ -26,11 +26,11 @@
 		domainInstance = (SourceDeptAccMapObj) domainInstanceObj;
 	}
 
-	List<SourceDeptAccMapObj> sourceDepMapList = new ArrayList<SourceDeptAccMapObj>();
-	Object sourceDepMapListObj = request.getAttribute("sourceDepMapList");
-	if (sourceDepMapListObj != null)
+	List<SourceDeptAccMapObj> domainInstanceList = new ArrayList<SourceDeptAccMapObj>();
+	Object domainInstanceListObj = request.getAttribute("domainInstanceList");
+	if (domainInstanceListObj != null)
 	{
-		sourceDepMapList = (List<SourceDeptAccMapObj>) sourceDepMapListObj;
+		domainInstanceList = (List<SourceDeptAccMapObj>) domainInstanceListObj;
 	}
 %>
 <html>
@@ -114,9 +114,9 @@
 								</tr>
 							</thead>
 							<%
-								for (int i = 0; i < sourceDepMapList.size(); i++)
+								for (int i = 0; i < domainInstanceList.size(); i++)
 								{
-									SourceDeptAccMapObj o = sourceDepMapList.get(i);
+									SourceDeptAccMapObj o = domainInstanceList.get(i);
 							%>
 							<tr>
 								<td>

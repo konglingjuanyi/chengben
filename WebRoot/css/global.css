@@ -100,6 +100,12 @@ body {
 .button_set:hover {
   background-image: url(../images/svg/light/orange/16/settings.png);
 }
+.button_sync {
+  background-image: url(../images/svg/light/gray/16/replay.png);
+}
+.button_sync:hover {
+  background-image: url(../images/svg/light/orange/16/replay.png);
+}
 .green_button {
   background: #38B162;
   padding: 6px;
@@ -208,12 +214,12 @@ td.little_gray_font {
   color: #3daeb6;
   background: #FFF;
   cursor: pointer;
-  padding: 10px 5px 10px 10px;
+  padding: 8px 4px 8px 10px;
 }
 .menu_not_selected {
   color: #000;
   cursor: pointer;
-  padding: 10px 5px 10px 10px;
+  padding: 8px 4px 8px 10px;
 }
 /*-----------------------------------*\
   input style

@@ -1,7 +1,7 @@
-<%@ page contentType="text/html; charset=gb2312" language="java"
-	import="java.sql.*" errorPage=""%>
+<%@ page contentType="text/html; charset=gb2312" language="java" import="java.sql.*" errorPage=""%>
 <%@page import="com.hz.auth.obj.AuthUser"%>
 <%@page import="com.hz.util.SystemConstant"%>
+<%@page import="com.wuyg.common.licence.LicenceUtil"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -9,14 +9,19 @@
 		<title></title>
 		<link href="css/global.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="js/css-1.7.0.min.js"></script>
-		<style type="text/css"> 
+		<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+		<style type="text/css">
 <!--
-a
-{
+a {
 	color: #fff;
-	text-decoration:none;
+	text-decoration: none;
 }
-.STYLE2 {color: #000000; line-height:20px;}
+
+.STYLE2 {
+	color: #000000;
+	line-height: 20px;
+}
+
 .STYLE3 {
 	font-size: 24px;
 	font-family: Aldhabi, "黑体";
@@ -24,35 +29,53 @@ a
 	color: #FF0000;
 }
 -->
-        </style>
-<script type="text/javascript" src="js/utils.js"></script>
+</style>
+		<script type="text/javascript" src="js/utils.js"></script>
 	</head>
 	<%
 		AuthUser user = (AuthUser) request.getSession().getAttribute(SystemConstant.AUTH_USER_INFO);
 	%>
 	<body>
-		<table width="100%" border="0" cellpadding="0" cellspacing="0"
-			bgcolor="#FFFFFF">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 			<tr>
-				<td width="300" height="65" valign="middle"><img src="images/SystemName.png" width="340" height="65" /></td>
-				<td align="right" valign="bottom" style="background-image:url(images/background/bg_header_cloud.png); background-position:right; background-repeat:no-repeat; padding:0px 20px 5px 0px">
-						
-						<table width="100%" border="0" cellspacing="0" cellpadding="0">
-                          <tr>
-						  	<td align="center"></td>
-                            <td align="right"><a href="#"
-						onclick="openBigModalDialog('<%=request.getContextPath()%>/Auth/Servlet?method=userDetail&account=<%=user.getAccount()%>')"><span class="STYLE2"><%=user.getName()+"</br>"+user.getDistrict()%></span></a></td>
-                            <td width="20" align="right"></td>
-                            <td width="1" align="right" bgcolor="#999999"></td>
-                            <td width="20" align="right"></td>
-                            <td width="25" align="right"><a href="Auth/Servlet?method=logout" target="_parent"><span class="STYLE2">退出</span></a></td>
-                          </tr>
-                        </table>
-			  </td>
+				<td width="400" height="65" valign="middle" style="vertical-align: middle" class="little_gray_font">
+					<img style="vertical-align: middle" src="images/SystemName.png" width="340" height="65" />
+					(<%=LicenceUtil.getLicencedMachine().getSystemVersion()%>版)
+				</td>
+				<td align="right" valign="bottom" style="background-image: url(images/background/bg_header_cloud.png); background-position: right; background-repeat: no-repeat; padding: 0px 10px 5px 0px">
+
+					<table width="100%" border="0" align="right" cellpadding="0" cellspacing="0">
+						<tr>
+							<td align="center"></td>
+							<td align="right">
+								<span class="STYLE2"><%=user.getName() + "</br>" + user.getDepartmentName()%></span>
+							</td>
+							<td width="20" align="right"></td>
+							<td width="1" align="right" bgcolor="#999999"></td>
+							<td width="30" align="right">
+								<img src="images/svg/light/green/16/comment.png" title="系统信息" style="cursor: pointer" onclick="openBigModalDialog('system_info.jsp')"></img>
+							</td>
+							<td width="30" align="right">
+								<form id="downloadForm" action="<%=request.getContextPath()%>/System/Servlet?method=downloadManual" method="post">
+									<img src="images/svg/light/green/16/text_document.png" title="使用手册" style="cursor: pointer" onclick="$('#downloadForm').submit()"></img>
+								</form>
+							</td>
+							<td width="30" align="right">
+								<img src="images/svg/light/green/16/arrow_left.png" title="退出" style="cursor: pointer" onclick="logout()"></img>
+							</td>
+						</tr>
+					</table>
+				</td>
 			</tr>
 			<tr>
 				<td height="8" colspan="2" class="header_bottom"></td>
 			</tr>
-	</table>
+		</table>
+		<script>
+	function logout()
+	{
+		parent.location.href="Auth/Servlet?method=logout";
+	}
+	</script>
 	</body>
 </html>

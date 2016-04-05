@@ -121,6 +121,7 @@ public abstract class BaseDbObj
 	public List<String> getUniqueIndexProperties()
 	{
 		List<String> uniqueIndexProperties = new ArrayList<String>();
+		uniqueIndexProperties.add(findKeyColumnName());// 默认用主键
 		return uniqueIndexProperties;
 	}
 }

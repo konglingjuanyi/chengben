@@ -24,7 +24,7 @@ public class ConfigReader
 	 */
 	private synchronized static void loadProperties()
 	{
-//		if (properties == null)
+		// if (properties == null)
 		{
 			// Create a manager with the full path to the xml config file.
 			try
@@ -55,7 +55,8 @@ public class ConfigReader
 		String value = properties.getPorperty(key);
 		if (StringUtil.isEmpty(value))
 		{
-			SystemConfigDbObj keyValue = (SystemConfigDbObj) configDao.searchByKey(SystemConfigDbObj.class, key);
+			SystemConfigDbObj o = new SystemConfigDbObj(key, null);
+			SystemConfigDbObj keyValue = (SystemConfigDbObj) configDao.searchByUniqueIndex(o);
 			if (keyValue != null)
 			{
 				value = keyValue.getValue();

@@ -101,6 +101,7 @@
 					</td>
 				</tr>
 			</table>
+		
 			<!-- 查询条件 -->
 			<table class="search_table" align="center" width="800">
 				<tr>
@@ -118,11 +119,15 @@
 					</td>
 				</tr>
 			</table>
+			<!-- 保存成功提示信息 -->
+			<%if("true".equalsIgnoreCase(request.getAttribute("needRefresh")+"")){ %>
+			<div align="center"><font color="#ff6600">分摊规则保存成功</font></div>
+			<%} %>
 			<!-- 详细信息 -->
-			<table class="table table-bordered" align="center" width="800">
+			<table class="table report_table table-bordered" align="center" width="800">
 				<thead>
 					<tr>
-						<th colspan="9">成本分摊规则<br><font color="#ff9900"><%=date_month %></font></th>
+						<th colspan="6">成本分摊规则<br><font color="#ff9900"><%=date_month %></font></th>
 					</tr>
 					<tr>
 						<th><%=domainInstance.getPropertyCnName("department_type")%></th>
@@ -131,9 +136,11 @@
 						<th><%=domainInstance.getPropertyCnName("share_rate_level_1")%></th>
 						<th><%=domainInstance.getPropertyCnName("share_rate_level_2")%></th>
 						<th><%=domainInstance.getPropertyCnName("share_rate_level_3")%></th>
+						<!-- 
 						<th><%=domainInstance.getPropertyCnName("income")%></th>
 						<th><%=domainInstance.getPropertyCnName("cost_per_bed")%></th>
 						<th><%=domainInstance.getPropertyCnName("cost_per_treat")%></th>
+						 -->
 					</tr>
 				</thead>
 				<%
@@ -179,6 +186,7 @@
 					<td style="text-align: right">
 						<input class="<%=o.getDepartment_type_code() + "_level3"%>" name="share_rate_level3" type="<%=o.isLevel3()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_3())%>">
 					</td>
+					<!-- 
 					<td style="text-align: right">
 						<input name="income" type="<%=o.isLevel3()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getIncome())%>">
 					</td>
@@ -188,6 +196,7 @@
 					<td style="text-align: right">
 						<input name="cost_per_treat" type="<%=o.isLevel3()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getCost_per_treat())%>">
 					</td>
+					 -->
 				</tr>
 				<%
 					if (change)
@@ -215,9 +224,11 @@
 							}
 						%>
 					</td>
+					<!-- 
 					<td></td>
 					<td></td>
 					<td></td>
+					 -->
 				</tr>
 				<%
 					level1SubTotal = 0;
@@ -235,9 +246,11 @@
 					<td id="level1_total"><%=level1Total%></td>
 					<td id="level2_total"><%=level2Total%></td>
 					<td id="level3_total"><%=level3Total%></td>
+					<!-- 
 					<td></td>
 					<td></td>
 					<td></td>
+					 -->
 				</tr>
 			</table>
 
@@ -304,11 +317,7 @@
 			   }
 			});
 			
-		// 保存成功提示
-		if("true"=="<%=request.getAttribute("needRefresh")%>")
-		{
-			alert("保存成功");
-		}
+
 		
 		// 重新查询
 		function searchShareRule(){

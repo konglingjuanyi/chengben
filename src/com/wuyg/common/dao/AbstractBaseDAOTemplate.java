@@ -281,6 +281,11 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		}
 		return list;
 	}
+	
+	public List searchAll(Class clz)
+	{
+		return searchByClause(clz, null, null, 0, Integer.MAX_VALUE);
+	}
 
 	private Object getDomainObjFromResultSet(Class clz, ResultSet rst, List<PropertyDescriptor> propertyDescriptors) throws Exception
 	{
@@ -456,12 +461,12 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			for (int j = 0; j < instances.size(); j++)
 			{
 				Object instance = instances.get(j);
-				Object key = BeanUtils.getProperty(instance, getKeyColumnName());
-				if (key == null)
-				{
-					logger.info("Db 对象的主键为空无法更新，忽略该对象。");
-					continue;
-				}
+//				Object key = BeanUtils.getProperty(instance, getKeyColumnName());
+//				if (key == null)
+//				{
+//					logger.info("Db 对象的主键为空无法更新，忽略该对象。");
+//					continue;
+//				}
 				// 设置值
 				for (int i = 0; i < propertyDescriptors.size(); i++)
 				{
@@ -481,9 +486,8 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 				// 设置索引值
 				for (int i = 1; i <= uniqueIndexColumns.size(); i++)
 				{
-					pstmt.setString(propertyDescriptors.size() + i, BeanUtils.getProperty(instance, uniqueIndexColumns.get(i-1)));
+					pstmt.setString(propertyDescriptors.size() + i, BeanUtils.getProperty(instance, uniqueIndexColumns.get(i - 1)));
 				}
-				
 
 				pstmt.addBatch();
 
@@ -611,7 +615,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 	 * @return
 	 * @throws SQLException
 	 */
-	public Connection getDbConnection() throws SQLException
+	public Connection getDbConnection() throws Exception
 	{
 
 		return MySqlUtil.getConnection(dbName);
@@ -662,7 +666,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		return this.deleteByParentKeys(parentKeys);
 	}
 
-	public boolean save(Object instance)
+	public boolean save(BaseDbObj instance)
 	{
 		// 如果instance的编号<=0，则主动获取编号
 		BaseDbObj dbObj = (BaseDbObj) instance;
@@ -685,11 +689,13 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		return this.save(instances);
 	}
 
-	public boolean saveOrUpdate(Object instance)
+	public boolean saveOrUpdate(BaseDbObj instance)
 	{
 		try
 		{
-			if (this.searchByKey(instance.getClass(), BeanUtils.getProperty(instance, ((BaseDbObj) instance).findKeyColumnName())) != null)
+			String id = StringUtil.getNotEmptyStr(BeanUtils.getProperty(instance, ((BaseDbObj) instance).findKeyColumnName()), "-1");
+
+			if (this.searchByKey(instance.getClass(), id) != null || this.searchByUniqueIndex(instance) != null)
 			{
 				return this.update(instance);
 			} else
@@ -759,6 +765,33 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			releaseDbConnection(conn);
 		}
 		return true;
+	}
+
+	public BaseDbObj searchByUniqueIndex(BaseDbObj domainInstance)
+	{
+		try
+		{
+			List<String> uniqueIndexColumns = getUniqueIndexColumns();
+
+			String where = " 1=1 ";
+			for (int i = 0; i < uniqueIndexColumns.size(); i++)
+			{
+				String column = uniqueIndexColumns.get(i);
+				where += " and " + column + "='" + BeanUtils.getProperty(domainInstance, column) + "'";
+			}
+
+			List<BaseDbObj> list = searchByClause(domainInstance.getClass(), where, null, 0, 1);
+
+			if (list.size() > 0)
+			{
+				return list.get(0);
+			}
+		} catch (Exception e)
+		{
+			logger.error(e.getMessage(), e);
+		}
+
+		return null;
 	}
 
 	public String getDbType()

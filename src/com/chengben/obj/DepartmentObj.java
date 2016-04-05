@@ -15,6 +15,7 @@ public class DepartmentObj extends BaseDbObj
 	private String department_code;
 	private String department_name;
 	private String department_type_code;
+	private Boolean be_end;
 
 	@Override
 	public String findKeyColumnName()
@@ -38,7 +39,7 @@ public class DepartmentObj extends BaseDbObj
 	@Override
 	public String findDefaultOrderBy()
 	{
-		return super.findDefaultOrderBy();
+		return "department_code";
 	}
 
 	@Override
@@ -69,6 +70,7 @@ public class DepartmentObj extends BaseDbObj
 		pros.put("department_code", "科室编码");
 		pros.put("department_name", "科室名称");
 		pros.put("department_type_code", "科室类别");
+		pros.put("be_end", "是否末级");
 		return pros;
 	}
 
@@ -80,6 +82,16 @@ public class DepartmentObj extends BaseDbObj
 	public void setId(Long id)
 	{
 		this.id = id;
+	}
+
+	public Boolean getBe_end()
+	{
+		return be_end;
+	}
+
+	public void setBe_end(Boolean be_end)
+	{
+		this.be_end = be_end;
 	}
 
 	public String getDepartment_code()

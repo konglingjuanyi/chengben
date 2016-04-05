@@ -1,6 +1,8 @@
 package com.wuyg.system;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,8 @@ import com.hz.util.SystemConstant;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.wuyg.common.dao.DefaultBaseDAO;
 import com.wuyg.common.dao.IBaseDAO;
+import com.wuyg.common.util.MySqlUtil;
+import com.wuyg.common.util.RequestUtil;
 import com.wuyg.common.util.StringUtil;
 import com.wuyg.system.obj.SystemConfigDbObj;
 
@@ -21,6 +25,8 @@ public class SystemServlet extends HttpServlet
 	private Logger logger = Logger.getLogger(getClass());
 
 	private IBaseDAO systemConfigDao = new DefaultBaseDAO(SystemConfigDbObj.class, SystemConstant.INNER_DB);
+
+	private String U8_DB = SystemConstant.U8_DB;
 
 	/**
 	 * Destruction of the servlet. <br>
@@ -80,6 +86,10 @@ public class SystemServlet extends HttpServlet
 			{
 				dbAddOrModify(request, response);
 			}
+			else if (method.equals("downloadManual"))
+			{
+				downloadManual(request, response);
+			}
 
 		} catch (Exception e)
 		{
@@ -92,24 +102,37 @@ public class SystemServlet extends HttpServlet
 		String ip = StringUtil.getNotEmptyStr(request.getParameter("ip"));
 		String port = StringUtil.getNotEmptyStr(request.getParameter("port"));
 		String dbName = StringUtil.getNotEmptyStr(request.getParameter("dbName"));
-		
+
 		String dbUser = StringUtil.getNotEmptyStr(request.getParameter("dbUser"));
 		String dbPassword = StringUtil.getNotEmptyStr(request.getParameter("dbPassword"));
-		
 
 		String dbUrl = "jdbc:sqlserver://" + ip + ":" + port + ";DatabaseName=" + dbName;
-		systemConfigDao.saveOrUpdate(new SystemConfigDbObj("db.dbUrl",dbUrl));
-		systemConfigDao.saveOrUpdate(new SystemConfigDbObj("db.dbUser",dbUser));
-		systemConfigDao.saveOrUpdate(new SystemConfigDbObj("db.dbPassword",dbPassword));
-		
-		request.setAttribute("message", "账套设置成功");
+		systemConfigDao.saveOrUpdate(new SystemConfigDbObj(U8_DB + ".dbUrl", dbUrl));
+		systemConfigDao.saveOrUpdate(new SystemConfigDbObj(U8_DB + ".dbUser", dbUser));
+		systemConfigDao.saveOrUpdate(new SystemConfigDbObj(U8_DB + ".dbPassword", dbPassword));
+		systemConfigDao.saveOrUpdate(new SystemConfigDbObj(U8_DB + ".dbDriverClassName", "com.microsoft.sqlserver.jdbc.SQLServerDriver"));
+
+		request.setAttribute("message", "数据库连接成功，账套设置成功");
+
+		Connection conn = null;
+		try
+		{
+			conn = MySqlUtil.getConnection(U8_DB);
+		} catch (Exception e)
+		{
+			request.setAttribute("message", "数据库连接失败，请重新设置！" + e.getMessage());
+		} finally
+		{
+			MySqlUtil.closeConnection(conn);
+		}
 
 		request.getRequestDispatcher("result.jsp").forward(request, response);
 	}
 
 	private void preDbAddOrModify(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Object o = systemConfigDao.searchByKey(SystemConfigDbObj.class, "db.dbUrl");
+		SystemConfigDbObj o = new SystemConfigDbObj(U8_DB + ".dbUrl", null);
+		o = (SystemConfigDbObj) systemConfigDao.searchByUniqueIndex(o);
 		if (o != null)
 		{
 			// jdbc:sqlserver://115.29.146.96:1433;DatabaseName=UFDATA_888_2010
@@ -123,19 +146,28 @@ public class SystemServlet extends HttpServlet
 			request.setAttribute("dbName", dbName);
 		}
 
-		o = systemConfigDao.searchByKey(SystemConfigDbObj.class, "db.dbUser");
+		o = new SystemConfigDbObj(U8_DB + ".dbUser", null);
+		o = (SystemConfigDbObj) systemConfigDao.searchByUniqueIndex(o);
 		if (o != null)
 		{
 			request.setAttribute("dbUser", ((SystemConfigDbObj) o).getValue());
 		}
 
-		o = systemConfigDao.searchByKey(SystemConfigDbObj.class, "db.dbPassword");
+		o = new SystemConfigDbObj(U8_DB + ".dbPassword", null);
+		o = (SystemConfigDbObj) systemConfigDao.searchByUniqueIndex(o);
 		if (o != null)
 		{
 			request.setAttribute("dbPassword", ((SystemConfigDbObj) o).getValue());
 		}
 
 		request.getRequestDispatcher("/System/dbAddOrModify.jsp").forward(request, response);
+	}
+	
+	// 下载凭证导入的模板
+	public void downloadManual (HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		String templeteFile = getServletContext().getRealPath("/System") + "/使用手册.docx";
+		RequestUtil.downloadFile(response, templeteFile);
 	}
 
 	public static void main(String[] args)
