@@ -77,8 +77,8 @@
 	</head>
 	<body>
 		<form name="addOrModifyForm" id="addOrModifyForm" action="<%=contextPath%>/<%=basePath%>/Servlet?method=addOrModify4Batch" method="post">
-			<input type="hidden" id="source_system" name="source_system" value="<%=request.getAttribute("source_system") %>">
-			
+			<input type="hidden" id="source_system" name="source_system" value="<%=request.getAttribute("source_system")%>">
+
 			<!-- 表格标题 -->
 			<table width="700" align="center" class="title_table">
 				<tr>
@@ -100,16 +100,16 @@
 							<thead>
 								<tr>
 									<th>
-										<input type="checkbox" name="checkAllBox" id="checkAllBox" value="checkbox" >
+										<input type="checkbox" name="checkAllBox" id="checkAllBox" value="checkbox">
 									</th>
 									<th>
-										<%=domainInstance.getPropertyCnName("dept_share_type") %>
+										<%=domainInstance.getPropertyCnName("dept_share_type")%>
 									</th>
 									<th>
-										<%=domainInstance.getPropertyCnName("source_acc_subject") %>
+										<%=domainInstance.getPropertyCnName("source_acc_subject")%>
 									</th>
 									<th>
-										<%=domainInstance.getPropertyCnName("dest_acc_subject") %>
+										<%=domainInstance.getPropertyCnName("dest_acc_subject")%>
 									</th>
 								</tr>
 							</thead>
@@ -120,7 +120,7 @@
 							%>
 							<tr>
 								<td>
-									<input type="checkbox" name="source_dept_acc_id" id="source_dept_acc_id" value="<%=o.getId()%>" >
+									<input type="checkbox" name="source_dept_acc_id" id="source_dept_acc_id" value="<%=o.getId()%>">
 								</td>
 								<td><%=new DictionaryService().getDictValueByDictKey("科室类别字典", o.getDept_share_type())%></td>
 								<td><%=o.getSource_acc_subject()%></td>
@@ -136,13 +136,15 @@
 							<tr>
 								<td>
 									<h3>
-										设置对应的总账系统会计科目
+										设置对应的总账会计科目
 									</h3>
 								</td>
 							<tr>
 								<td>
-									总账会计科目<input type="hidden" name="dest_acc_subject" id="dest_acc_subject" onClick="openDictTable('dest')">
+									总账会计科目
+									<input type="hidden" name="dest_acc_subject" id="dest_acc_subject" onClick="openDictTable('dest')">
 									<input type="text" name="dest_acc_subject_name" id="dest_acc_subject_name" onClick="openDictTable('dest')">
+									
 									<!-- 总账会计科目字典信息表 -->
 									<table width="100%" id="dest_dict_table" style="display: none; background-color: #ff9900; margin-left: auto; margin-right: auto; padding: 4px;" border="0" align="center" cellpadding="0" cellspacing="0">
 										<tr>
@@ -202,8 +204,8 @@
 											</td>
 										</tr>
 									</table>
-							<!-- 总账会计科目字典信息表结束 -->
-							</td>
+									<!-- 总账会计科目字典信息表结束 -->
+								</td>
 							</tr>
 						</table>
 					</td>

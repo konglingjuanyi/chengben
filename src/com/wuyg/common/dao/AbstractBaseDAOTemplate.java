@@ -184,6 +184,41 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		return null;
 	}
 
+	public List searchByInstanceList(List<BaseDbObj> instanceList)
+	{
+		List list = new ArrayList();
+		if (instanceList.size() == 0)
+		{
+			logger.info("无任何需要查询的对象，直接返回空列表。");
+			return list;
+		}
+
+		try
+		{
+			Class clz = instanceList.get(0).getClass();
+
+			String where = "";
+
+			for (int i = 0; i < instanceList.size(); i++)
+			{
+				if (i > 0)
+				{
+					where += " or ";
+				}
+
+				where += instanceList.get(i).getUniqueIndexClause();
+			}
+
+			list = searchByClause(clz, where, null, 0, Integer.MAX_VALUE);
+
+		} catch (Exception e)
+		{
+			logger.error(e.getMessage(), e);
+		}
+
+		return list;
+	}
+
 	public List searchByClause(Class clz, String clause, String orderBy, int offset, int rows)
 	{
 		// 构造sql
@@ -281,7 +316,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		}
 		return list;
 	}
-	
+
 	public List searchAll(Class clz)
 	{
 		return searchByClause(clz, null, null, 0, Integer.MAX_VALUE);
@@ -411,7 +446,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		return searchPaginationByDomainInstance(domainInstance, true, orderBy, pageNo, pageCount);
 	}
 
-	public boolean update(List instances)
+	public boolean update(List<BaseDbObj> instances)
 	{
 		if (instances.size() == 0)
 		{
@@ -461,12 +496,13 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			for (int j = 0; j < instances.size(); j++)
 			{
 				Object instance = instances.get(j);
-//				Object key = BeanUtils.getProperty(instance, getKeyColumnName());
-//				if (key == null)
-//				{
-//					logger.info("Db 对象的主键为空无法更新，忽略该对象。");
-//					continue;
-//				}
+				// Object key = BeanUtils.getProperty(instance,
+				// getKeyColumnName());
+				// if (key == null)
+				// {
+				// logger.info("Db 对象的主键为空无法更新，忽略该对象。");
+				// continue;
+				// }
 				// 设置值
 				for (int i = 0; i < propertyDescriptors.size(); i++)
 				{
@@ -512,6 +548,46 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 			releaseDbConnection(conn);
 		}
 		return false;
+	}
+
+	public boolean saveOrUpdate(List<BaseDbObj> instanceList)
+	{
+		// 查询出已经在数据库中的对象
+		List inDbList = searchByInstanceList(instanceList);
+
+		List<BaseDbObj> insertList = new ArrayList<BaseDbObj>();
+		List<BaseDbObj> updateList = new ArrayList<BaseDbObj>();
+
+		// 找出不在数据库中的对象
+		for (int i = 0; i < instanceList.size(); i++)
+		{
+			BaseDbObj instance = instanceList.get(i);
+
+			if (inDbList.contains(instance))
+			{
+				updateList.add(instance);
+			} else
+			{
+				insertList.add(instance);
+			}
+		}
+
+		boolean result = true;
+
+		// 更新
+		if (updateList.size()>0)
+		{
+			result &= update(updateList);
+		}
+		
+		// 入库
+		if (insertList.size()>0)
+		{
+			result &= save(insertList);
+		}
+		
+
+		return result;
 	}
 
 	/**
@@ -684,7 +760,7 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		}
 
 		// 保存入库
-		List<Object> instances = new ArrayList<Object>();
+		List<BaseDbObj> instances = new ArrayList<BaseDbObj>();
 		instances.add(instance);
 		return this.save(instances);
 	}
@@ -693,15 +769,22 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 	{
 		try
 		{
-			String id = StringUtil.getNotEmptyStr(BeanUtils.getProperty(instance, ((BaseDbObj) instance).findKeyColumnName()), "-1");
+			// String id =
+			// StringUtil.getNotEmptyStr(BeanUtils.getProperty(instance,
+			// ((BaseDbObj) instance).findKeyColumnName()), "-1");
+			//
+			// if (this.searchByKey(instance.getClass(), id) != null ||
+			// this.searchByUniqueIndex(instance) != null)
+			// {
+			// return this.update(instance);
+			// } else
+			// {
+			// return this.save(instance);
+			// }
 
-			if (this.searchByKey(instance.getClass(), id) != null || this.searchByUniqueIndex(instance) != null)
-			{
-				return this.update(instance);
-			} else
-			{
-				return this.save(instance);
-			}
+			List<BaseDbObj> instanceList = new ArrayList<BaseDbObj>();
+			instanceList.add(instance);
+			return saveOrUpdate(instanceList);
 		} catch (Exception e)
 		{
 			logger.error(e.getMessage(), e);
@@ -709,9 +792,9 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 		return false;
 	}
 
-	public boolean update(Object instance)
+	public boolean update(BaseDbObj instance)
 	{
-		List<Object> instances = new ArrayList<Object>();
+		List<BaseDbObj> instances = new ArrayList<BaseDbObj>();
 		instances.add(instance);
 		return this.update(instances);
 	}

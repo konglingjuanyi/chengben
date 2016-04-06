@@ -52,7 +52,7 @@ public LinkedHashMap<String, String> getProperties()
 		pros.put("id", "ID");
 		pros.put("acc_code", "会计科目编号");
 		pros.put("acc_name", "会计科目名称");
-		pros.put("debit_or_credit", "余额方向");
+		pros.put("debit_or_credit", "科目性质");
 		pros.put("opposite_acc_code", "对方会计科目");
 		return pros;
 }

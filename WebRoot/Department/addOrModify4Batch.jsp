@@ -82,7 +82,7 @@
 				<tr>
 					<td>
 						<img src="../images/svg/heavy/green/list.png" width="18" height="18" align="absmiddle">
-						&nbsp;&nbsp;批量设置<%=domainInstance.getCnName()%>
+						&nbsp;&nbsp;批量设置<%=domainInstance.getCnName()%>类型
 					</td>
 				</tr>
 			</table>

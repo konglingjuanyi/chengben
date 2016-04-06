@@ -65,6 +65,14 @@ public interface IBaseDAO
 	public List searchByClause(Class clz, String where, String orderBy, int offset, int rows);
 	
 	/**
+	 * 根据对象实例列表从数据库中查询出已经存在的实例，查询的条件是根据唯一索引进行查询
+	 * 
+	 * @param instanceList
+	 * @return
+	 */
+	public List searchByInstanceList(List<BaseDbObj> instanceList);
+	
+	/**
 	 * 根据外部构造的sql从数据库中查询数据
 	 * 
 	 * @param orderBy
@@ -141,12 +149,20 @@ public interface IBaseDAO
 	public boolean save(BaseDbObj instance);
 	
 	/**
-	 * 将对象实例保存入库或更新，更新的条件是根据主键能够查询到该对象
+	 * 将对象实例保存入库或更新，更新的条件是根据主键或唯一索引能够查询到该对象
 	 * 
 	 * @param instances
 	 * @return
 	 */
 	public boolean saveOrUpdate(BaseDbObj instance);
+	
+	/**
+	 * 将一组对象实例保存入库或更新，更新的条件是根据主键能够查询到该对象
+	 * 
+	 * @param instances
+	 * @return
+	 */
+	public boolean saveOrUpdate(List<BaseDbObj> instance);
 
 	/**
 	 * 根据主键更新数据中一组对象实例的数据，只要实例中的值不是null的字段都做更新
@@ -154,7 +170,7 @@ public interface IBaseDAO
 	 * @param instance
 	 * @return
 	 */
-	public boolean update(List instances);
+	public boolean update(List<BaseDbObj> instances);
 
 	/**
 	 * 根据主键更新数据中对象实例的数据，只要实例中的值不是null的字段都做更新
@@ -162,7 +178,7 @@ public interface IBaseDAO
 	 * @param instance
 	 * @return
 	 */
-	public boolean update(Object instance);
+	public boolean update(BaseDbObj instance);
 
 	/**
 	 * 根据一组对象实例的主键删除数据库中对应的数据

@@ -140,7 +140,7 @@
     <td align="right"><input type="button" name="close_btn" class="button button_close"  value="" onclick="closeDictTable()"><br></td>
   </tr>
   <tr>
-    <td align="center"><h3>请从下表中选择总账会计科目</h3><br></td>
+    <td align="center"><h3>请从下表中选择总账科室</h3><br></td>
   </tr>
   <tr>
     <td align="center"><input type="text" id="dest_dict_search_input" name="dest_dict_search_input" size="20"><br></td>

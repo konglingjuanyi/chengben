@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 
 import com.wuyg.common.util.StringUtil;
 
@@ -17,6 +18,8 @@ import com.wuyg.common.util.StringUtil;
  */
 public abstract class BaseDbObj
 {
+	private Logger logger = Logger.getLogger(getClass());
+
 	/**
 	 * 获取该对象对应的表名
 	 * 
@@ -123,5 +126,77 @@ public abstract class BaseDbObj
 		List<String> uniqueIndexProperties = new ArrayList<String>();
 		uniqueIndexProperties.add(findKeyColumnName());// 默认用主键
 		return uniqueIndexProperties;
+	}
+
+	/**
+	 * 获取根据唯一所以查询时构造的查询条件，即 (a='1' and b='2') 这样的样式
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String getUniqueIndexClause() throws Exception
+	{
+		String clause = "";
+
+		List<String> uniqueIndexProperties = getUniqueIndexProperties();
+
+		for (int i = 0; i < uniqueIndexProperties.size(); i++)
+		{
+			String property = uniqueIndexProperties.get(i);
+			String value = BeanUtils.getProperty(this, property);
+
+			if (i > 0)
+			{
+				clause += " and ";
+			}
+
+			clause += " " + property + "='" + value + "' ";
+		}
+
+		return "(" + clause + ")";
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		boolean isEquals = true;
+		try
+		{
+			List<String> uniqueIndexProperties = getUniqueIndexProperties();
+
+			for (int i = 0; i < uniqueIndexProperties.size(); i++)
+			{
+				String property = uniqueIndexProperties.get(i);
+				String thisPropertyValue = BeanUtils.getProperty(this, property);
+				String otherPropertyValue = BeanUtils.getProperty(other, property);
+
+				if (thisPropertyValue == null && otherPropertyValue == null)
+				{
+					// 均为空
+					isEquals &= true;
+				} else if (thisPropertyValue != null && thisPropertyValue.equals(otherPropertyValue))
+				{
+					// 相等
+					isEquals &= true;
+				} else
+				{
+					// 不相等
+					isEquals &= false;
+				}
+
+				if (!isEquals)
+				{
+					break;
+				}
+			}
+
+			return isEquals;
+
+		} catch (Exception e)
+		{
+			logger.error(e.getMessage(), e);
+		}
+
+		return false;
 	}
 }
