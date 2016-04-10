@@ -13,7 +13,8 @@
 			$(window).unload(function(){
 			  	// 父窗口刷新
 				var parent = window.dialogArguments; 
-				parent.execScript("freshCurrentPage()","javascript"); 
+				//parent.execScript("freshCurrentPage()","javascript"); 
+				parent.eval("freshCurrentPage()"); 
 			});
 		<%}%>
 </script>

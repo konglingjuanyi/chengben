@@ -333,6 +333,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		glAccvouchObj.setNc_s(0d);
 		glAccvouchObj.setNfrat(0d);
 		glAccvouchObj.setBflagout(false);
+		glAccvouchObj.setIsignseq(1l);
 
 		return glAccvouchObj;
 	}
