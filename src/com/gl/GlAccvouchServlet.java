@@ -323,7 +323,8 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		glAccvouchObj.setRowguid("9AF833A1441712BAF6426C942600ED7000000000");//先固定一个值
 
 		// 默认值设置
-		glAccvouchObj.setCsign("记");
+//		glAccvouchObj.setCsign("记");
+		glAccvouchObj.setCsign(glavInput.getCsign());
 		glAccvouchObj.setIbook(0);
 		glAccvouchObj.setMd(BigDecimal.valueOf(0));
 		glAccvouchObj.setMd_f(0d);
@@ -345,7 +346,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		try
 		{
 			conn = MySqlUtil.getConnection(U8_DB);
-			ResultSet rst = conn.createStatement().executeQuery("select max(ino_id) from gl_Accvouch where iperiod='" + o.getIperiod() + "'");
+			ResultSet rst = conn.createStatement().executeQuery("select max(ino_id) from gl_Accvouch where iperiod='" + o.getIperiod() + "' and csign='"+o.getCsign()+"'");
 			if (rst.next())
 			{
 				ino_id = rst.getLong(1) + 1;

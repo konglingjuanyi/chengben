@@ -377,7 +377,7 @@ public abstract class AbstractBaseServletTemplate extends HttpServlet
 				} else if (this.savedFile == null)
 				{
 					// 文件保存,每次请求只保存第一个文件
-					String fileName = item.getName();
+					String fileName = new File(item.getName()).getName();
 					if (fileName == null || fileName.trim().equals(""))
 					{
 						continue;

@@ -72,6 +72,15 @@
 				</tr>
 				<tr>
 					<td>
+						凭证类别字:
+					</td>
+					<td>
+						<%=DictionaryUtil.getSelectHtml(new DictionaryService().getDictItemsByDictName("凭证类别字字典", false), "csign", "", StringUtil.getNotEmptyStr(domainInstance.getCsign(), ""), "notEmpty")%> 
+					<font color="red">*</font>
+					</td>
+				</tr>
+				<tr>
+					<td>
 						制单人:
 					</td>
 					<td>
@@ -128,6 +137,7 @@
 		{	 
 			// 做必要的检查 
 			if(!checkNull("dbill_date","<%=domainInstance.getPropertyCnName("dbill_date")%>")) return false; 
+			if(!checkNull("csign","<%=domainInstance.getPropertyCnName("csign")%>")) return false; 
 			if(!checkNull("cbill","<%=domainInstance.getPropertyCnName("cbill")%>")) return false; 
 			if(!checkNull("idoc","<%=domainInstance.getPropertyCnName("idoc")%>")) return false; 
 			if(!isNumber($('#idoc').val())) {alert("<%=domainInstance.getPropertyCnName("idoc")%>"+"必须是数字"); return false;}

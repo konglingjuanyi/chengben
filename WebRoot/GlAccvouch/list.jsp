@@ -56,6 +56,8 @@
 						<input name="ino_id" type="hidden" id="ino_id" value="<%=StringUtil.getNotEmptyStr(domainInstance.getIno_id())%>" size="5" > 
 						
 						<input name="ccode" type="hidden" id="ccode" value="<%=StringUtil.getNotEmptyStr(domainInstance.getCcode())%>" size="20" > 
+						
+						<input name="csign" type="hidden" id="csign" value="<%=StringUtil.getNotEmptyStr(domainInstance.getCsign())%>" size="20" > 
 						  
 						<!--  
 						<input name="searchButton" type="button" class="button button_search" value="查询" onClick="toPage(1)"> 

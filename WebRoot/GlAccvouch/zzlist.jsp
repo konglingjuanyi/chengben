@@ -39,6 +39,9 @@
 						<%=domainInstance.getPropertyCnName("iperiod") %> 
 						<input name="iperiod" type="text" id="iperiod" value="<%=StringUtil.getNotEmptyStr(domainInstance.getIperiod())%>" size="5" > 
 						&nbsp;
+						<%=domainInstance.getPropertyCnName("csign") %> 
+						<input name="csign" type="text" id="csign" value="<%=StringUtil.getNotEmptyStr(domainInstance.getCsign())%>" size="5" > 
+						&nbsp;
 						<%=domainInstance.getPropertyCnName("ino_id") %> 
 						<input name="ino_id" type="text" id="ino_id" value="<%=StringUtil.getNotEmptyStr(domainInstance.getIno_id())%>" size="5" > 
 						&nbsp;  

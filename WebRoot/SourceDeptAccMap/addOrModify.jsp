@@ -222,7 +222,7 @@
 	$('#dest_dict_search_input').bind('input propertychange',function(){dictSearch('dest');});
 	
 	function dictSearch(sourceOrDest){
-		var search_value = $('#'+sourceOrDest+'_dict_search_input').val().trim();
+		var search_value = $.trim($('#'+sourceOrDest+'_dict_search_input').val());
 		if(search_value!=""){
 		
 			$('#'+sourceOrDest+'_dict_table_list tr').each(function(){
