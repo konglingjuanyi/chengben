@@ -228,6 +228,12 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 			{
 				// 从第2行开始是每个科室的数据
 				List<String> cells = matrix.get(i);
+				
+				// 空行不处理
+				if (cells.size()==0)
+				{
+					continue;
+				}
 
 				String wbDeptName = cells.get(0);// 第1列为 科室
 				if (StringUtil.isEmpty(wbDeptName) || "合计".endsWith(wbDeptName))

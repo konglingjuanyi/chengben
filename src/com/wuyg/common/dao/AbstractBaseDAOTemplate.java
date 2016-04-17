@@ -2,6 +2,7 @@ package com.wuyg.common.dao;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -132,7 +133,24 @@ public abstract class AbstractBaseDAOTemplate implements IBaseDAO
 						{
 							// 时间类型，DB对象中一定要用java.sql.TimeStamp类型
 							pstmt.setTimestamp(j + 1, TimeUtil.getTimeStamp(pValue.toString()));
-						} else
+						}
+						else if (pValue.getClass().equals(BigDecimal.class))
+						{
+							pstmt.setBigDecimal(j + 1, BigDecimal.valueOf(StringUtil.parseDouble(pValue+"")));
+						}
+						else if (pValue.getClass().equals(Integer.class)||pValue.getClass().equals(Long.class))
+						{
+							pstmt.setLong(j + 1, StringUtil.parseLong(pValue+""));
+						}
+						else if (pValue.getClass().equals(Float.class)||pValue.getClass().equals(Double.class))
+						{
+							pstmt.setDouble(j + 1, StringUtil.parseDouble(pValue+""));
+						}
+						else if (pValue.getClass().equals(Boolean.class))
+						{
+							pstmt.setBoolean(j+1, "true".equalsIgnoreCase(pValue+"")?true:false);
+						}
+						else
 						{
 							pstmt.setString(j + 1, pValue.toString());
 						}

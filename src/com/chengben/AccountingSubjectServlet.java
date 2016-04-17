@@ -79,6 +79,30 @@ public class AccountingSubjectServlet extends AbstractBaseServletTemplate
 		super.preModify(request,response);
 	}
 
+	// 批量修改前查询领域对象信息
+	public void preModify4Batch(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		// 查询所有科目
+		List<AccountingSubjectObj> domainInstanceList = getDomainDao().searchByClause(AccountingSubjectObj.class, null, domainInstance.findDefaultOrderBy(), 0, Integer.MAX_VALUE);
+
+		request.setAttribute("domainInstanceList", domainInstanceList);
+
+		request.getRequestDispatcher("/" + getBasePath() + "/" + BASE_METHOD_ADD_OR_MODIFY + "4Batch.jsp").forward(request, response);
+	}
+	// 批量修改前查询领域对象信息
+	public void addOrModify4Batch(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		String[] ids = request.getParameterValues("acc_id");
+
+		String opposite_acc_code = request.getParameter("opposite_acc_code");
+
+		String updateSql = "update " + domainInstance.findTableName() + " set opposite_acc_code='" + opposite_acc_code + "' where id in (" + StringUtil.getStringByList(ids, true) + ")";
+
+		boolean success = getDomainDao().executeSql(updateSql);
+		
+		preModify4Batch(request, response);
+	}
+	
 	// 详情
 	public void detail4this(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{

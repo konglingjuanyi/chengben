@@ -57,6 +57,7 @@
 						<input name="addButton" type="button" class="button button_add" value="增加" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4this')"> 
 					 -->
 					 	<input name="uploadButton" type="button" class="button button_sync" value="同步" onClick="sync()">
+						<input name="uploadButton" type="button" class="button button_set" value="批量设置" onClick="openBigModalDialog('<%=contextPath%>/<%=basePath%>/Servlet?method=preModify4Batch')">
 					</td> 
 				</tr> 
 			</table> 
