@@ -19,6 +19,7 @@ import com.chengben.obj.DepartmentObj;
 import com.chengben.obj.SourceDeptAccMapObj;
 import com.chengben.obj.SourceDeptMapObj;
 import com.gl.obj.GlAccvouchObj;
+import com.gl.obj.GlCashtableObj;
 import com.hz.dict.service.DictionaryService;
 import com.wuyg.common.dao.DefaultBaseDAO;
 import com.wuyg.common.dao.IBaseDAO;
@@ -28,6 +29,7 @@ import com.wuyg.common.util.MySqlUtil;
 import com.wuyg.common.util.RequestUtil;
 import com.wuyg.common.util.StringUtil;
 import com.wuyg.common.util.SystemConstant;
+import com.wuyg.common.util.TimeUtil;
 import com.wuyg.excelparser.ExcelParser;
 
 public class GlAccvouchServlet extends AbstractBaseServletTemplate
@@ -36,6 +38,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 
 	private String U8_DB = com.hz.util.SystemConstant.U8_DB;
 	private IBaseDAO UF_glAccvouchDao = new DefaultBaseDAO(GlAccvouchObj.class, U8_DB);
+	private IBaseDAO UF_glCashtableDao = new DefaultBaseDAO(GlCashtableObj.class, U8_DB);
 
 	@Override
 	public String getBasePath()
@@ -132,11 +135,62 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		List<GlAccvouchObj> glAccvouchList = getDomainDao().searchByClause(GlAccvouchObj.class, null, null, 0, Integer.MAX_VALUE);
 		logger.info("查询得到临时凭证:" + glAccvouchList.size() + "条");
 
-		UF_glAccvouchDao.save(glAccvouchList);// 入总账数据库
+		// 入总账数据库
+		UF_glAccvouchDao.save(glAccvouchList);
 		logger.info("凭证导入总账系统:" + glAccvouchList.size() + "条");
+
+		// 入总账现金流量数据表
+		List<GlCashtableObj> glCashList = getGlCashList(glAccvouchList);
+		UF_glCashtableDao.save(glCashList);
+		logger.info("现金流量导入总账系统:" + glCashList.size() + "条");
 
 		// 转到总账凭证查询
 		zzlist(request, response);
+	}
+
+	private List<GlCashtableObj> getGlCashList(List<GlAccvouchObj> glAccvouchList) throws Exception
+	{
+		List<GlCashtableObj> cl = new ArrayList<GlCashtableObj>();
+		for (int i = 0; i < glAccvouchList.size(); i++)
+		{
+			GlAccvouchObj a = glAccvouchList.get(i);
+
+			// 现金是1001,银行是1002开头
+			if (a.getCcode() != null && (a.getCcode().equalsIgnoreCase("1001") || a.getCcode().indexOf("1002") >= 0))
+			{
+				GlCashtableObj c = new GlCashtableObj();
+
+				// 现金在借方ccashitem就是01,在贷方就是11
+				if (a.getMd().longValue() > 0)
+				{
+					c.setCcashitem("01");
+				} else
+				{
+					c.setCcashitem("11");
+				}
+
+				c.setIperiod(a.getIperiod());
+				c.setIsignseq(a.getIsignseq());
+				c.setIno_id(a.getIno_id());
+				c.setInid(a.getInid());
+				c.setCcode(a.getCcode());
+				c.setDbill_date(a.getDbill_date());
+				c.setCsign(a.getCsign());
+				c.setIyear(StringUtil.parseLong(TimeUtil.date2str(a.getDbill_date(), "yyyy")));
+				c.setIyperiod(StringUtil.parseLong(TimeUtil.date2str(a.getDbill_date(), "yyyyMM")));
+				c.setRowguid("E5E45436419DFCAA63268EA423EF9ED500000000");
+				c.setMc(a.getMc());
+				c.setMd(a.getMd());
+				c.setMc_f(a.getMc_f());
+				c.setMd_f(a.getMd_f());
+				c.setNc_s(a.getNc_s());
+				c.setNd_s(a.getNd_s());
+
+				cl.add(c);
+			}
+
+		}
+		return cl;
 	}
 
 	// 上传预览
@@ -169,6 +223,12 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 
 			// 检查映射关系
 			boolean preCheckPassed = preCheck(glAccvouchList, wbSource);
+
+			// 因为执行一遍之后会自动补充一些对照关系，所以这里再用补充好之后对照关系重新检查一遍
+			if (!preCheckPassed)
+			{
+				preCheckPassed = preCheck(glAccvouchList, wbSource);
+			}
 
 			// 检查通过
 			if (preCheckPassed)
@@ -228,9 +288,9 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 			{
 				// 从第2行开始是每个科室的数据
 				List<String> cells = matrix.get(i);
-				
+
 				// 空行不处理
-				if (cells.size()==0)
+				if (cells.size() == 0)
 				{
 					continue;
 				}
@@ -251,13 +311,10 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 					{
 						break;
 					}
-					// String zongzhangKeMu = getZongzhangKeMu(keShi,
-					// keMu);//
-					// 映射到总账科目
 
 					double money = StringUtil.parseDouble(cells.get(k));
 
-					if (money > 0)
+					if (money != 0) // 可能有负数，所以只要不等于0都要处理
 					{
 						// 生成凭证
 						GlAccvouchObj glAccvouchObj = createGlAccvouchObj(glavInput);
@@ -314,22 +371,21 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		return pingZhangGlavList;
 	}
 
-	private GlAccvouchObj createGlAccvouchObj(GlAccvouchObj glavInput)
+	private GlAccvouchObj createGlAccvouchObj(GlAccvouchObj glavInput) throws Exception
 	{
 		GlAccvouchObj glAccvouchObj = new GlAccvouchObj();
 
 		glAccvouchObj.setWbSource(glavInput.getWbSource());// 外部接口
-		glAccvouchObj.setDebitORcredit(glavInput.getDebitORcredit());// 借方 or
-		// 贷方
+		glAccvouchObj.setDebitORcredit(glavInput.getDebitORcredit());// 借方or贷方
 		glAccvouchObj.setDbill_date(glavInput.getDbill_date()); // 制单日期
 		glAccvouchObj.setCbill(glavInput.getCbill());// 制单人
 		glAccvouchObj.setIno_id(glavInput.getIno_id()); // 制单日期
 		glAccvouchObj.setIdoc(glavInput.getIdoc()); // 附单据数
 		glAccvouchObj.setCdigest(glavInput.getCdigest()); // 摘要
-		glAccvouchObj.setRowguid("9AF833A1441712BAF6426C942600ED7000000000");//先固定一个值
+		glAccvouchObj.setRowguid("9AF833A1441712BAF6426C942600ED7000000000");// 先固定一个值
 
 		// 默认值设置
-//		glAccvouchObj.setCsign("记");
+		// glAccvouchObj.setCsign("记");
 		glAccvouchObj.setCsign(glavInput.getCsign());
 		glAccvouchObj.setIbook(0);
 		glAccvouchObj.setMd(BigDecimal.valueOf(0));
@@ -340,7 +396,18 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		glAccvouchObj.setNc_s(0d);
 		glAccvouchObj.setNfrat(0d);
 		glAccvouchObj.setBflagout(false);
-		glAccvouchObj.setIsignseq(1l);
+		glAccvouchObj.setIsignseq(StringUtil.parseLong("转".equalsIgnoreCase(glavInput.getCsign()) ? "5" : glavInput.getCsign()));
+		glAccvouchObj.setBdelete(false);
+		glAccvouchObj.setBvouchedit(true);
+		glAccvouchObj.setBvouchaddordele(false);
+		glAccvouchObj.setBvouchmoneyhold(false);
+		glAccvouchObj.setBvalueedit(true);
+		glAccvouchObj.setBcodeedit(true);
+		glAccvouchObj.setBpcsedit(true);
+		glAccvouchObj.setBdeptedit(true);
+		glAccvouchObj.setBitemedit(true);
+		glAccvouchObj.setBcussupinput(false);
+		glAccvouchObj.setBflagout(false);
 
 		return glAccvouchObj;
 	}
@@ -352,7 +419,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		try
 		{
 			conn = MySqlUtil.getConnection(U8_DB);
-			ResultSet rst = conn.createStatement().executeQuery("select max(ino_id) from gl_Accvouch where iperiod='" + o.getIperiod() + "' and csign='"+o.getCsign()+"'");
+			ResultSet rst = conn.createStatement().executeQuery("select max(ino_id) from gl_Accvouch where iperiod='" + o.getIperiod() + "' and csign='" + o.getCsign() + "'");
 			if (rst.next())
 			{
 				ino_id = rst.getLong(1) + 1;
@@ -389,6 +456,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 			} else
 			{
 				glAccvouchObj.setCdept_id(zzDeptId);
+				glAccvouchObj.setNeedWbDeptMap(false);
 			}
 
 			String zzDeptType = getZzDeptType(zzDeptId);// 总账系统科室类型
@@ -399,6 +467,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 			} else
 			{
 				glAccvouchObj.setZzDeptType(zzDeptType);
+				glAccvouchObj.setNeedZzDeptTyepMap(false);
 			}
 
 			// 第2步：从"外部系统科室类型+科目对照关系"中，根据"外部系统+总账系统科室类型+外部系统会计科目"->总账系统会计科目。如果找不到对应关系则需要提示完善
@@ -410,6 +479,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 			} else
 			{
 				glAccvouchObj.setCcode(zzAccSub);
+				glAccvouchObj.setNeedZzDeptTypeAccSubMap(false);
 			}
 
 			// 第3步：从"总账系统贷借（或贷借）科目对照关系"，用第2步得到的"总账系统会计科目"得出对应的借方（或贷方）科目，如果找不到对应关系则需要提示完善
@@ -421,6 +491,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 			} else
 			{
 				glAccvouchObj.setZzAccSubReverse(zzAccSubReverse);
+				glAccvouchObj.setNeedZzAccSubReverseMap(false);
 			}
 		}
 
@@ -470,7 +541,7 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 		// 补足"总账科室类型+外部会计科目"与"总账会计科目"的对照关系
 		supplementZzDeptTypeAccSubMap(wbSource);
 
-		return warnGlAccvouchMap.size() == 0;
+		return wbDeptMapNeedAddMap.size() == 0 && zzDeptTypeMapNeedAddMap.size() == 0 && zzDeptTypeAccSubMapNeedAddMap.size() == 0 && zzAccSubReverseMapNeedAddMap.size() == 0;
 	}
 
 	private void supplementZzDeptTypeAccSubMap(String wbSource)
@@ -499,18 +570,16 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 	private void supplementWbDeptMap(String wbSource)
 	{
 		logger.info("==补足 总账系统科室 与 科室类型 对照关系(" + wbDeptMapNeedAddMap.size() + "条)==");
-		
-		
+
 		// 取总账科室表
-		IBaseDAO deptDao=new DefaultBaseDAO(DepartmentObj.class);
+		IBaseDAO deptDao = new DefaultBaseDAO(DepartmentObj.class);
 		List<DepartmentObj> deptList = deptDao.searchByClause(DepartmentObj.class, null, null, 0, Integer.MAX_VALUE);
-		Map<String, String> deptMap=new HashMap<String, String>();
+		Map<String, String> deptMap = new HashMap<String, String>();
 		for (int i = 0; i < deptList.size(); i++)
 		{
 			deptMap.put(deptList.get(i).getDepartment_name(), deptList.get(i).getDepartment_code());
 		}
-		
-		
+
 		Object[] wbDeptMapNeedAdd = wbDeptMapNeedAddMap.values().toArray();
 		List<SourceDeptMapObj> sourceDeptMapList = new ArrayList<SourceDeptMapObj>();
 		for (int i = 0; i < wbDeptMapNeedAdd.length; i++)
@@ -526,9 +595,15 @@ public class GlAccvouchServlet extends AbstractBaseServletTemplate
 			{
 				sourceDeptMapList.add(o);
 			}
+			//
+			// if (o.getDest_dept_code() != null)
+			// {
+			// wbDeptMapNeedAddMap.remove(glav.getWbDeptName());// 自动补充了就删除
+			// }
 		}
 
 		sourceDeptMapDao.save(sourceDeptMapList);
+
 	}
 
 	// "外部系统科室"与"总账科室"对照关系

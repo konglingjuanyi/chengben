@@ -96,7 +96,7 @@ public class GlAccvouchObj extends BaseDbObj
 	private Timestamp dbg_audittime;
 	private String cbg_auditopinion;
 	private Boolean bwh_bgflag;
-	private Long ssxznum;
+//	private Long ssxznum;
 	private String cerrreason;
 	private String bg_auditremark;
 	private String cbudgetbuffer;
@@ -1135,16 +1135,16 @@ public class GlAccvouchObj extends BaseDbObj
 	{
 		this.bwh_bgflag = bwh_bgflag;
 	}
-
-	public Long getSsxznum()
-	{
-		return ssxznum;
-	}
-
-	public void setSsxznum(Long ssxznum)
-	{
-		this.ssxznum = ssxznum;
-	}
+//
+//	public Long getSsxznum()
+//	{
+//		return ssxznum;
+//	}
+//
+//	public void setSsxznum(Long ssxznum)
+//	{
+//		this.ssxznum = ssxznum;
+//	}
 
 	public String getCerrreason()
 	{
