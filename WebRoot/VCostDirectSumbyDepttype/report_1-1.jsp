@@ -102,14 +102,14 @@
 				%> 
 				<tr <%=o.getDepartment_name().contains("合计")|o.getDepartment_name().contains("小计")?"style='color:blue'":""%>>
 					<td style="word-break:keep-all"><%=StringUtil.getNotEmptyStr(o.getDepartment_name())%></td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getRenyuan_jingfei())%></td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getWeisheng_cailiao())%></td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getYaopin())%></td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getGuding_zichan_zhejiu())%></td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getWuxing_zichan_tanxiao())%></td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getTiqu_yiliao_fengxian_jijin())%></td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getQita_feiyong())%></td> 
-					<td><%=StringUtil.getNotEmptyStr(o.getHeji())%></td> 
+					<td><%=StringUtil.formatDouble(o.getRenyuan_jingfei(),2)%></td> 
+					<td><%=StringUtil.formatDouble(o.getWeisheng_cailiao(),2)%></td> 
+					<td><%=StringUtil.formatDouble(o.getYaopin(),2)%></td> 
+					<td><%=StringUtil.formatDouble(o.getGuding_zichan_zhejiu(),2)%></td> 
+					<td><%=StringUtil.formatDouble(o.getWuxing_zichan_tanxiao(),2)%></td> 
+					<td><%=StringUtil.formatDouble(o.getTiqu_yiliao_fengxian_jijin(),2)%></td> 
+					<td><%=StringUtil.formatDouble(o.getQita_feiyong(),2)%></td> 
+					<td><%=StringUtil.formatDouble(o.getHeji(),2)%></td> 
 				</tr> 
 				<% 
 					} 

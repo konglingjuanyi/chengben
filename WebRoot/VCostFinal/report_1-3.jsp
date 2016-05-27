@@ -221,60 +221,6 @@
                 <td><%=StringUtil.formatDouble(sum.getTotal(),2) %></td>
                 <td><%=StringUtil.formatDouble(sum.getTotal_rate(),2) %></td>
               </tr>
-               <!-- 
-              <tr>
-                <td style="word-break:keep-all">科室收入</td>
-                <%
-				for (int i = 0; i < list.size(); i++)
-				{
-						VCostFinalObj o = (VCostFinalObj) list.get(i);
-				%>
-                <td><%=StringUtil.formatDouble(o.getIncome(),2) %></td>
-                <td>&nbsp;</td>
-                <%} %>
-                <td><%=StringUtil.formatDouble(sum.getIncome_sum(),2) %></td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td style="word-break:keep-all">收入-成本</td>
-                <%
-				for (int i = 0; i < list.size(); i++)
-				{
-						VCostFinalObj o = (VCostFinalObj) list.get(i);
-				%>
-                <td><%=StringUtil.formatDouble(o.getIncome()-o.getTotal(),2) %></td>
-                <td>&nbsp;</td>
-                <%} %>
-                <td><%=StringUtil.formatDouble(sum.getIncome_sum()-sum.getTotal(),2) %></td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td style="word-break:keep-all">床日成本</td>
-                <%
-				for (int i = 0; i < list.size(); i++)
-				{
-						VCostFinalObj o = (VCostFinalObj) list.get(i);
-				%>
-                <td><%=StringUtil.formatDouble(o.getCost_per_bed(),2) %></td>
-                <td>&nbsp;</td>
-                <%} %>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td style="word-break:keep-all">诊次成本</td>
-                <%
-				for (int i = 0; i < list.size(); i++)
-				{
-						VCostFinalObj o = (VCostFinalObj) list.get(i);
-				%>
-                <td><%=StringUtil.formatDouble(o.getCost_per_treat(),2) %></td>
-                <td>&nbsp;</td>
-                <%} %>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-              </tr>
-               -->
             </table>
             </div>
             

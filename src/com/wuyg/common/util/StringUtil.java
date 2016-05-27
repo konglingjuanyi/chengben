@@ -414,6 +414,7 @@ public class StringUtil
 	public static void main(String[] args)
 	{
 		// System.out.println(toClassName("a_b"));
-		System.out.println(formatDouble(0.1325d, 3));
+		System.out.println(formatDouble(111111111111111111111111111111.123d, 3));
+		System.out.println(111111111111111111111111111111.123d);
 	}
 }

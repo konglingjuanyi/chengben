@@ -67,6 +67,50 @@
 		<script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 		<script type="text/javascript" src="../js/css-1.7.0.min.js"></script>
 		<script> 
+		
+		/**
+		 ** 加法函数，用来得到精确的加法结果
+		 ** 说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的加法结果。
+		 ** 调用：accAdd(arg1,arg2)
+		 ** 返回值：arg1加上arg2的精确结果
+		 **/
+		function accAdd(arg1, arg2) {
+		    var r1, r2, m, c;
+		    try {
+		        r1 = arg1.toString().split(".")[1].length;
+		    }
+		    catch (e) {
+		        r1 = 0;
+		    }
+		    try {
+		        r2 = arg2.toString().split(".")[1].length;
+		    }
+		    catch (e) {
+		        r2 = 0;
+		    }
+		    c = Math.abs(r1 - r2);
+		    m = Math.pow(10, Math.max(r1, r2));
+		    if (c > 0) {
+		        var cm = Math.pow(10, c);
+		        if (r1 > r2) {
+		            arg1 = Number(arg1.toString().replace(".", ""));
+		            arg2 = Number(arg2.toString().replace(".", "")) * cm;
+		        } else {
+		            arg1 = Number(arg1.toString().replace(".", "")) * cm;
+		            arg2 = Number(arg2.toString().replace(".", ""));
+		        }
+		    } else {
+		        arg1 = Number(arg1.toString().replace(".", ""));
+		        arg2 = Number(arg2.toString().replace(".", ""));
+		    }
+		    return (arg1 + arg2) / m;
+		}
+		
+		//给Number类型增加一个add方法，调用起来更加方便。
+		Number.prototype.add = function (arg) {
+		    return accAdd(arg, this);
+		};
+
 		//  新增或修改 
 		function addOrModify() 
 		{	 
@@ -178,13 +222,13 @@
 					<td><%=StringUtil.getNotEmptyStr(o.getDepartment_name())%><input type="hidden" name="department_name" value="<%=o.getDepartment_name()%>">
 					</td>
 					<td style="text-align: right">
-						<input class="<%=o.getDepartment_type_code() + "_level1"%>" name="share_rate_level1" type="text" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_1())%>" />
+						<input class="<%=o.getDepartment_type_code() + "_level1"%>" name="share_rate_level1" type="text" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.formatDouble(o.getShare_rate_level_1(),2)%>" />
 					</td>
 					<td style="text-align: right">
-						<input class="<%=o.getDepartment_type_code() + "_level2"%>" name="share_rate_level2" type="<%=o.isLevel2()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_2())%>">
+						<input class="<%=o.getDepartment_type_code() + "_level2"%>" name="share_rate_level2" type="<%=o.isLevel2()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.formatDouble(o.getShare_rate_level_2(),2)%>">
 					</td>
 					<td style="text-align: right">
-						<input class="<%=o.getDepartment_type_code() + "_level3"%>" name="share_rate_level3" type="<%=o.isLevel3()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.getNotEmptyStr(o.getShare_rate_level_3())%>">
+						<input class="<%=o.getDepartment_type_code() + "_level3"%>" name="share_rate_level3" type="<%=o.isLevel3()?"text":"hidden"%>" size="6" style="text-align: right; padding: 6px 0px" value="<%=StringUtil.formatDouble(o.getShare_rate_level_3(),2)%>">
 					</td>
 					<!-- 
 					<td style="text-align: right">
@@ -205,12 +249,12 @@
 				<tr style="color: blue; text-align: right">
 					<td colspan="3"><%=new DictionaryService().getDictValueByDictKey("科室类别字典",StringUtil.getNotEmptyStr(o.getDepartment_type_code())) %>小计:
 					</td>
-					<td id="<%=o.getDepartment_type_code() + "_level1_subtotal"%>"><%=level1SubTotal%></td>
+					<td id="<%=o.getDepartment_type_code() + "_level1_subtotal"%>"><%=StringUtil.formatDouble(level1SubTotal,2)%></td>
 					<td id="<%=o.getDepartment_type_code() + "_level2_subtotal"%>">
 						<%
 							if (o.isLevel2())
 									{
-						%><%=level2SubTotal%>
+						%><%=StringUtil.formatDouble(level2SubTotal,2)%>
 						<%
 							}
 						%>
@@ -219,7 +263,7 @@
 						<%
 							if (o.isLevel3())
 									{
-						%><%=level3SubTotal%>
+						%><%=StringUtil.formatDouble(level3SubTotal,2)%>
 						<%
 							}
 						%>
@@ -231,7 +275,7 @@
 					 -->
 				</tr>
 				<%
-					level1SubTotal = 0;
+							level1SubTotal = 0;
 							level2SubTotal = 0;
 							level3SubTotal = 0;
 						}
@@ -243,9 +287,9 @@
 					<td colspan="3">
 						合计:
 					</td>
-					<td id="level1_total"><%=level1Total%></td>
-					<td id="level2_total"><%=level2Total%></td>
-					<td id="level3_total"><%=level3Total%></td>
+					<td id="level1_total"><%=StringUtil.formatDouble(level1Total,2)%></td>
+					<td id="level2_total"><%=StringUtil.formatDouble(level2Total,2)%></td>
+					<td id="level3_total"><%=StringUtil.formatDouble(level3Total,2)%></td>
 					<!-- 
 					<td></td>
 					<td></td>
@@ -265,7 +309,7 @@
 
 		</form>
 		<script type="text/javascript">
-		var sum = 0;
+		var sum = 0.00;
 		<%
 			for(int n=1; n<=3 ; n++)
 			{
@@ -276,7 +320,8 @@
 			// 一级分摊小计合计
 			$(".<%=departmentType%>_level<%=n%>").change(function(){
 					$(".<%=departmentType%>_level<%=n%>").each(function(){
-						sum = Number(sum) + Number($(this).val());
+						//sum = Math.round((sum + Number($(this).val()))*100)/100;
+						sum=sum.add(Number($(this).val()));
 						});
 					//更新小计
 					$("#<%=departmentType%>_level<%=n%>_subtotal").text(sum);
@@ -288,7 +333,8 @@
 						{
 							departmentType = departmetTypes[j];
 					%>
-					sum +=  Number($("#<%=departmentType%>_level<%=n%>_subtotal").text());
+					//sum += Math.round(Number($("#<%=departmentType%>_level<%=n%>_subtotal").text()*100)/100);
+					sum=sum.add(Number($("#<%=departmentType%>_level<%=n%>_subtotal").text()));
 					<%}%>
 					if(sum>100)
 					{
